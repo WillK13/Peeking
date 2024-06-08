@@ -32,11 +32,14 @@ struct MainView: View {
                         Spacer()
                         
                         
-                        NavigationLink(destination: EmployeeTierView()) {
+                        
                             VStack {
-                                Text("Tiers").font(.largeTitle).padding(.top, 5.0)
-                                Image(systemName: "bag").font(.system(size: 45)).padding(/*@START_MENU_TOKEN@*/.horizontal, 27.0/*@END_MENU_TOKEN@*/).padding(.bottom, 10.0)
-                            } .background(RoundedRectangle(cornerRadius: 8)   .foregroundColor(.white)     ) }
+                                NavigationLink(destination: EmployeeTierView()) {
+                                    Image(systemName: "bag").foregroundColor(Color.black).font(.system(size: 45)).padding(/*@START_MENU_TOKEN@*/.horizontal, 27.0/*@END_MENU_TOKEN@*/).padding(.bottom, 10.0)
+                                }
+                                Image("adjust")
+                            
+                        }
                     }.padding([.top, .trailing], 20.0)
                     
                     //Main Area

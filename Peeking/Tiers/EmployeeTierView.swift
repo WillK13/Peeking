@@ -11,13 +11,28 @@ struct EmployeeTierView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var selectedPage = 0
     @State private var selectedPlan = "with Floater"
+    @State private var showPicker = false
     
-    private let pages = [
+    private let plans = ["with Floater", "with Glider", "with Diver"]
+    
+    private let pagesFloater = [
         PlanPage(title: "3 Like Capacity", description: "Refilled every 24 hours", imageName: "heart", iconText: "3"),
-        PlanPage(title: "Bookmark", description: "One bookmark for your search", imageName: "bookmark", iconText: "1X")
+        PlanPage(title: "Bookmark", description: "A bookmark for your search", imageName: "bookmark", iconText: "1")
     ]
     
-    private let plans = ["with Floater", "Plan 2", "Plan 3"]
+    private let pagesGlider = [
+        PlanPage(title: "Recharge", description: "Likes recharge 1 every hour", imageName: "Battery", iconText: ""),
+        PlanPage(title: "Roam", description: "Set location anywhere", imageName: "Car", iconText: ""),
+        PlanPage(title: "Bookmark +", description: "2 bookmarks for searching", imageName: "bookmark", iconText: "2")
+    ]
+    
+    private let pagesDiver = [
+        PlanPage(title: "Liked You", description: "See employers who like you", imageName: "Lookeye", iconText: ""),
+        PlanPage(title: "5 Like Capacity", description: "Wake up with 5 likes", imageName: "heart", iconText: "5"),
+        PlanPage(title: "Recharge", description: "Likes recharge 1 every hour", imageName: "Battery", iconText: ""),
+        PlanPage(title: "Roam", description: "Set location anywhere", imageName: "Car", iconText: ""),
+        PlanPage(title: "Bookmark ++", description: "3 bookmarks for searching", imageName: "bookmark", iconText: "3")
+    ]
     
     var body: some View {
         ZStack {
@@ -33,7 +48,6 @@ struct EmployeeTierView: View {
                 .fill(Color.white)
                 .frame(width: 373, height: 650)
                 .padding(.top, 140)
-            
             
             VStack {
                 Spacer()
@@ -54,17 +68,28 @@ struct EmployeeTierView: View {
                 Spacer()
                 
                 VStack {
-                    Text("Just the Basics")
+                    Text(getPlanTitle())
                         .font(.largeTitle)
                         .padding(.top)
                     
-                    Picker("Plan", selection: $selectedPlan) {
-                        ForEach(plans, id: \.self) { plan in
-                            Text(plan)
+                    Button(action: {
+                        showPicker.toggle()
+                    }) {
+                        HStack {
+                            Text(selectedPlan)
+                                .font(.title2)
+                                .foregroundColor(Color.black)
+                            Image(systemName: "chevron.down")
+                                .foregroundColor(Color.black)
                         }
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 20).fill(getPickerBackgroundColor()))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.black, lineWidth: 1)
+                        )
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.2)))
+                    .padding()
                     
                     HStack {
                         Button(action: {
@@ -73,6 +98,8 @@ struct EmployeeTierView: View {
                             }
                         }) {
                             Image(systemName: "chevron.left")
+                                .foregroundColor(Color.black)
+                                .padding(.leading, 50.0)
                                 .font(.largeTitle)
                         }
                         .padding(.leading)
@@ -80,42 +107,45 @@ struct EmployeeTierView: View {
                         Spacer()
                         
                         VStack {
-                            Image(systemName: pages[selectedPage].imageName)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 60, height: 60)
-                            
-                            Text(pages[selectedPage].iconText)
-                                .font(.title)
-                                .padding(.bottom, 2)
-                            
-                            Text(pages[selectedPage].title)
+                            let currentPage = getCurrentPages()[selectedPage]
+                            if currentPage.imageName == "Battery" {
+                                Image(currentPage.imageName + currentPage.iconText)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 150, height: 60)
+                            } else {
+                                Image(currentPage.imageName + currentPage.iconText)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 60, height: 60)
+                            }
+                            Text(currentPage.title)
                                 .font(.title2)
                             
-                            Text(pages[selectedPage].description)
+                            Text(currentPage.description)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                             
                             HStack {
-                                Circle()
-                                    .fill(selectedPage == 0 ? Color.black : Color.gray)
-                                    .frame(width: 10, height: 10)
-                                
-                                Circle()
-                                    .fill(selectedPage == 1 ? Color.black : Color.gray)
-                                    .frame(width: 10, height: 10)
+                                ForEach(Array(getCurrentPages().indices), id: \.self) { index in
+                                    Circle()
+                                        .fill(index == selectedPage ? Color.black : Color.gray)
+                                        .frame(width: 10, height: 10)
+                                }
                             }
                             .padding(.top)
-                        }.padding(.top)
+                        }.padding(.vertical)
                         
                         Spacer()
                         
                         Button(action: {
-                            if selectedPage < pages.count - 1 {
+                            if selectedPage < getCurrentPages().count - 1 {
                                 selectedPage += 1
                             }
                         }) {
                             Image(systemName: "chevron.right")
+                                .foregroundColor(Color.black)
+                                .padding(.trailing, 50.0)
                                 .font(.largeTitle)
                         }
                         .padding(.trailing)
@@ -123,63 +153,47 @@ struct EmployeeTierView: View {
                     
                     Spacer()
                     
-                    
-                    
-                    
-                    Spacer()
-                    Spacer()
-                    
                     VStack(spacing: 0) {
-                                           VStack {
-                                               Image("Infinity").resizable().aspectRatio(contentMode: .fill).frame(width: 50)
-                                               
-                                               Text("Months")
-                                                   .font(.title2)
-                                                   .padding(.top, -20.0)
-                                           }
-                                           .frame(height: 80)
-                                           .background(Color.white)
-                                           
-                                           VStack {
-                                               Text("Free")
-                                                   .font(.title)
-                                                   .padding(.top, 2)
-                                                   .padding(.bottom, 20)
-                                           }
-                                           .frame(width: 100.0, height: 60)
-                                           .background(Color.gray.opacity(0.2))
-                                           .overlay(
-                                               Rectangle()
-                                                   .frame(height: 1)
-                                                   .foregroundColor(Color.black),
-                                               alignment: .top
-                                           )
-                                           .padding(.top, 10)
-                                       }
-                                       .frame(width: 100, height: 150)
-                                       .overlay(
-                                           RoundedRectangle(cornerRadius: 8)
-                                               .stroke(Color.black, lineWidth: 1)
-                                       )
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                        VStack {
+                            Image("Infinity").resizable().aspectRatio(contentMode: .fill).frame(width: 50)
+                            
+                            Text("Months")
+                                .font(.title2)
+                                .padding(.top, -20.0)
+                        }
+                        .frame(height: 80)
+                        .background(Color.white)
+                        
+                        VStack {
+                            Text("Free")
+                                .font(.title)
+                                .padding(.top, 2)
+                                .padding(.bottom, 20)
+                        }
+                        .frame(width: 100.0, height: 60)
+                        .background(Color.gray.opacity(0.2))
+                        .overlay(
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundColor(Color.black),
+                            alignment: .top
+                        )
+                        .padding(.top, 10)
+                    }
+                    .frame(width: 100, height: 150)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.black, lineWidth: 1)
+                    )
                     
                     Spacer()
                     
-                    
-                        Text("All users get full access")
-                            .font(.title2)
-                            .foregroundColor(Color.black)
-                            .padding()
-                            .background(RoundedRectangle(cornerRadius: 100).fill(Color("FadedTopOrange")))
-
-                    .padding(.top, 10)
+                    Text("All users get full access")
+                        .font(.title2)
+                        .foregroundColor(Color.black)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 100).fill(Color("FadedTopOrange")))
+                        .padding(.top, 10)
                     
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
@@ -192,8 +206,62 @@ struct EmployeeTierView: View {
                     .padding(.bottom, 20)
                 }
             }
+            
+            if showPicker {
+                Color.black.opacity(0.4)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        showPicker = false
+                    }
+                
+                VStack {
+                    Spacer()
+                    PickerView(selectedPlan: $selectedPlan, plans: plans, showPicker: $showPicker)
+                        .frame(width: 300, height: 200)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(radius: 20)
+                        .padding()
+                }
+            }
         }
         .navigationBarBackButtonHidden(true) // Hide the default back button
+        .onChange(of: selectedPlan) { newPlan, _ in
+            selectedPage = 0 // Reset to first page when plan changes
+        }
+    }
+    
+    private func getCurrentPages() -> [PlanPage] {
+        switch selectedPlan {
+        case "with Glider":
+            return pagesGlider
+        case "with Diver":
+            return pagesDiver
+        default:
+            return pagesFloater
+        }
+    }
+    
+    private func getPlanTitle() -> String {
+        switch selectedPlan {
+        case "with Glider":
+            return "Find Matches Faster"
+        case "with Diver":
+            return "Unlimited Access"
+        default:
+            return "Just the Basics"
+        }
+    }
+    
+    private func getPickerBackgroundColor() -> Color {
+        switch selectedPlan {
+        case "with Glider":
+            return Color.blue.opacity(0.2)
+        case "with Diver":
+            return Color.purple.opacity(0.2)
+        default:
+            return Color.gray.opacity(0.2)
+        }
     }
 }
 
@@ -202,6 +270,33 @@ struct PlanPage {
     let description: String
     let imageName: String
     let iconText: String
+}
+
+struct PickerView: View {
+    @Binding var selectedPlan: String
+    let plans: [String]
+    @Binding var showPicker: Bool
+    
+    var body: some View {
+        VStack {
+            Picker("Select Plan", selection: $selectedPlan) {
+                ForEach(plans, id: \.self) { plan in
+                    Text(plan)
+                }
+            }
+            .pickerStyle(WheelPickerStyle())
+            .padding()
+            
+            Button("Done") {
+                showPicker = false
+            }
+            .padding(.top, 10)
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 20)
+    }
 }
 
 #Preview {
