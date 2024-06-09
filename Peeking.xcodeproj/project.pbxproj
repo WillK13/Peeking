@@ -114,9 +114,9 @@
 		BE60298E2C13603B00B3C080 /* Peeking */ = {
 			isa = PBXGroup;
 			children = (
+				BE60298F2C13603B00B3C080 /* PeekingApp.swift */,
 				BE6029CD2C13951400B3C080 /* Main Pages */,
 				BE6029DF2C13972E00B3C080 /* Tiers */,
-				BE60298F2C13603B00B3C080 /* PeekingApp.swift */,
 				BE6029912C13603B00B3C080 /* ContentView.swift */,
 				BE6029C32C136B6A00B3C080 /* BackgroundView.swift */,
 				BE6029932C13603C00B3C080 /* Assets.xcassets */,

@@ -26,6 +26,7 @@ struct MainView: View {
                         Spacer()
                         Spacer()
                         
+                        
                         Image("Duck_Head").resizable().aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fit/*@END_MENU_TOKEN@*/).frame(width: 120).padding(.top, 10.0)
                         
                         
