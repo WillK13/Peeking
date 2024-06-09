@@ -24,6 +24,8 @@
 		BE6029DE2C13971400B3C080 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029DD2C13971400B3C080 /* ProfileView.swift */; };
 		BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E02C13974900B3C080 /* EmployerTiersView.swift */; };
 		BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E22C13975C00B3C080 /* EmployeeTierView.swift */; };
+		BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E42C16363D00B3C080 /* SettingsView.swift */; };
+		BE6029E72C16364400B3C080 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E62C16364400B3C080 /* TipsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,8 @@
 		BE6029DD2C13971400B3C080 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		BE6029E02C13974900B3C080 /* EmployerTiersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployerTiersView.swift; sourceTree = "<group>"; };
 		BE6029E22C13975C00B3C080 /* EmployeeTierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeTierView.swift; sourceTree = "<group>"; };
+		BE6029E42C16363D00B3C080 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		BE6029E62C16364400B3C080 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +188,8 @@
 			isa = PBXGroup;
 			children = (
 				BE6029DD2C13971400B3C080 /* ProfileView.swift */,
+				BE6029E42C16363D00B3C080 /* SettingsView.swift */,
+				BE6029E62C16364400B3C080 /* TipsView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -331,6 +337,7 @@
 				BE6029DE2C13971400B3C080 /* ProfileView.swift in Sources */,
 				BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */,
 				BE6029D42C13969000B3C080 /* UnlockedLikedView.swift in Sources */,
+				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
 				BE6029D22C13966D00B3C080 /* LikedView.swift in Sources */,
 				BE6029CF2C13963400B3C080 /* MainView.swift in Sources */,
 				BE6029D72C1396C500B3C080 /* HistoryView.swift in Sources */,
@@ -339,6 +346,7 @@
 				BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */,
 				BE6029DB2C1396F300B3C080 /* MessagesView.swift in Sources */,
 				BE6029902C13603B00B3C080 /* PeekingApp.swift in Sources */,
+				BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

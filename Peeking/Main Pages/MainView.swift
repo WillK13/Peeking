@@ -7,41 +7,48 @@
 
 import SwiftUI
 
+struct TopCornersRounded: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = [.topLeft, .topRight]
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}
+
 struct MainView: View {
+    @State private var showEmployeeTier = false
+
     var body: some View {
-        
         NavigationView {
             ZStack {
                 BackgroundView()
                 VStack {
                     //Top Area
                     HStack {
-                        
-                        HStack(spacing: 10.0) {
-                            Image(systemName: "heart.fill").foregroundColor(.red).padding(/*@START_MENU_TOKEN@*/EdgeInsets()/*@END_MENU_TOKEN@*/).padding([.top, .leading, .bottom]).font(.system(size: 35))
-                            Text("3").font(.title).padding(.trailing)
-                        }.background(RoundedRectangle(cornerRadius: 8)   .foregroundColor(.white)     ).padding([.top, .leading], 20.0)
-                        
-                        
-                        Spacer()
-                        Spacer()
-                        
-                        
-                        Image("Duck_Head").resizable().aspectRatio(contentMode: /*@START_MENU_TOKEN@*/.fit/*@END_MENU_TOKEN@*/).frame(width: 120).padding(.top, 10.0)
-                        
-                        
-                        Spacer()
-                        
-                        
-                        
-                            VStack {
-                                NavigationLink(destination: EmployeeTierView()) {
-                                    Image(systemName: "bag").foregroundColor(Color.black).font(.system(size: 45)).padding(/*@START_MENU_TOKEN@*/.horizontal, 27.0/*@END_MENU_TOKEN@*/).padding(.bottom, 10.0)
-                                }
-                                Image("adjust")
-                            
+                        HStack() {
+                            Image(systemName: "heart.fill").foregroundColor(.red).padding(.all, 5.0).font(.system(size: 25))
+                            Text("3").font(.title).padding(.trailing, 5.0)
                         }
-                    }.padding([.top, .trailing], 20.0)
+                        .background(RoundedRectangle(cornerRadius: 8).foregroundColor(.white))
+                        .padding(.leading, 27.0).padding(.top, 70)
+                        
+                        Spacer()
+                        
+                        Image("Duck_Head").resizable().aspectRatio(contentMode: .fit).frame(width: 120).padding(.top, 10.0)
+                        
+                        
+                        VStack {
+                            Button(action: {
+                                showEmployeeTier.toggle()
+                            }) {
+                                Image(systemName: "bag").foregroundColor(Color.white).font(.system(size: 45)).padding(.horizontal, 27.0).padding(.bottom, 10.0)
+                            }
+                            Image("adjust")
+                                
+                        }
+                    }.padding(.trailing, 20.0)
                     
                     //Main Area
                     ZStack {
@@ -51,67 +58,63 @@ struct MainView: View {
                             .cornerRadius(10)
                         
                         VStack(alignment: .trailing) {
-                            
                             Image(systemName: "bookmark")
                                 .resizable()
                                 .frame(width: 40, height: 50)
-                                .foregroundColor(.black).padding(.top, 10)
+                                .foregroundColor(.black).padding([.top, .trailing], 10)
                             
                             Spacer()
                             
                             Image(systemName: "heart")
                                 .resizable()
                                 .frame(width: 40, height: 40)
-                                .padding(.bottom, 10).foregroundColor(.black)
-                            
+                                .padding([.bottom, .trailing], 10).foregroundColor(.black)
                             
                             Image(systemName: "ellipsis").resizable()
                                 .frame(width: 40, height: 9)
-                                .padding(.bottom, 10).foregroundColor(.black)
+                                .padding([.bottom, .trailing], 10).foregroundColor(.black)
                             
-                            
-                            
-                            
-                            HStack() {
+                            HStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("SelectColor"))
-                                    .frame(width: 83, height: 20).overlay(
+                                    .frame(width: 80, height: 20).overlay(
                                         RoundedRectangle(cornerRadius: 10)
                                             .stroke(Color.black, lineWidth: 2)
                                     )
                                 Spacer()
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("NotSelectedColor"))
-                                    .frame(width: 83, height: 20)
+                                    .frame(width: 80, height: 20)
                                 Spacer()
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("NotSelectedColor"))
-                                    .frame(width: 83, height: 20)
+                                    .frame(width: 80, height: 20)
                                 Spacer()
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("NotSelectedColor"))
-                                    .frame(width: 83, height: 20)
+                                    .frame(width: 80, height: 20)
                                 Spacer()
                             }
-                            
-                            
-                            
                         }
                         .frame(width: 350, height: 500)
-                    }.padding(/*@START_MENU_TOKEN@*/EdgeInsets()/*@END_MENU_TOKEN@*/).padding(.bottom, 15.0)
+                    }.padding().padding(.bottom, 10.0)
                     
                     //Next Profile
-                    ZStack(alignment: .topTrailing) {
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(height: 20)
-                        
-                    }.padding(.bottom, 10)
+                    Rectangle()
+                        .fill(Color.white)
+                        .frame(height: 20)
+                        .clipShape(TopCornersRounded(radius: 10))
                     
-                }}
+                    Spacer()
+                    Spacer()
+                }
+            }
             .navigationBarHidden(true)
+            .fullScreenCover(isPresented: $showEmployeeTier) {
+                EmployeeTierView()
+            }
         }
-        }
+    }
 }
 
 #Preview {
