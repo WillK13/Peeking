@@ -38,6 +38,7 @@ struct ProfileViewEmployee: View {
                             .padding(.all, 10.0)
                             .background(Color.white)
                             .cornerRadius(10)
+                        
                     }
                     .padding(.trailing)
                 }
@@ -48,7 +49,7 @@ struct ProfileViewEmployee: View {
                     Image("profile60")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 100, height: 100).colorInvert()
                     
                     Text("Name")
                         .font(.title)
@@ -88,6 +89,7 @@ struct ProfileViewEmployee: View {
                         .padding(5.0)
                         .background(Color.white)
                         .cornerRadius(10)
+                        .padding(.top, 20)
                     }
                     
                     Button(action: {
