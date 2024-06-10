@@ -84,7 +84,7 @@ struct ProfileView: View {
                 // Placeholder for content
                 Rectangle()
                     .fill(Color.white)
-                    .frame(height: 350)
+                    .frame(width: 250.0, height: 350)
                     .cornerRadius(10)
                     .padding(.horizontal, 50.0)
                 
@@ -97,13 +97,13 @@ struct ProfileView: View {
                     }) {
                         VStack {
                             Image(systemName: "trash.fill")
-                                .font(.title)
+                                .font(.system(size: 20))
                                 .foregroundColor(.red)
                             Text("Delete Profile")
                                 .font(.footnote)
                                 .foregroundColor(Color.black)
                         }
-                        .padding()
+                        .padding(5.0)
                         .background(Color.white)
                         .cornerRadius(10)
                     }
@@ -140,10 +140,10 @@ struct ProfileView: View {
                         .cornerRadius(10)
                     }
                 }
-                .padding(.bottom, 30)
+                .padding(.bottom, 70).padding(.top, 10)
             }
         }
-        .sheet(isPresented: $showSettings) {
+        .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
         }
     }
