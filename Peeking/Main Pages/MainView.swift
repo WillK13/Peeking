@@ -54,14 +54,15 @@ struct MainView: View {
                     ZStack {
                         Rectangle()
                             .fill(Color.white)
-                            .frame(height: 525)
-                            .cornerRadius(10)
+                            .frame(width: 395, height: 545)
+                            .cornerRadius(10)                            .padding(.top, -20)
+
                         
                         VStack(alignment: .trailing) {
                             Image(systemName: "bookmark")
                                 .resizable()
                                 .frame(width: 40, height: 50)
-                                .foregroundColor(.black).padding([.top, .trailing], 10)
+                                .foregroundColor(.black)
                             
                             Spacer()
                             
@@ -77,27 +78,27 @@ struct MainView: View {
                             HStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("SelectColor"))
-                                    .frame(width: 80, height: 20).overlay(
+                                    .frame(width: 83, height: 20).overlay(
                                         RoundedRectangle(cornerRadius: 10)
                                             .stroke(Color.black, lineWidth: 2)
                                     )
                                 Spacer()
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("NotSelectedColor"))
-                                    .frame(width: 80, height: 20)
+                                    .frame(width: 83, height: 20)
                                 Spacer()
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("NotSelectedColor"))
-                                    .frame(width: 80, height: 20)
+                                    .frame(width: 83, height: 20)
                                 Spacer()
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("NotSelectedColor"))
-                                    .frame(width: 80, height: 20)
+                                    .frame(width: 83, height: 20)
                                 Spacer()
                             }
                         }
                         .frame(width: 350, height: 500)
-                    }.padding().padding(.bottom, 10.0)
+                    }.padding([.top, .leading, .trailing]).padding(.bottom, 5)
                     
                     //Next Profile
                     Rectangle()

@@ -76,7 +76,7 @@ struct CustomAlertView: View {
                     .font(.headline)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
+                    .background(Color("TopOrange"))
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }

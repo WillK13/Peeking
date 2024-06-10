@@ -1,5 +1,5 @@
 //
-//  ProfileView.swift
+//  ProfileViewEmployer.swift
 //  Peeking
 //
 //  Created by Will kaminski on 6/7/24.
@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct ProfileView: View {
+struct ProfileViewEmployer: View {
     @State private var selectedPosition = "Position name"
     @State private var positions = ["Position name", "Position 1", "Position 2"]
     @State private var showSettings = false
+    @State private var showProfileDetail = false
 
     var body: some View {
         ZStack {
@@ -87,6 +88,9 @@ struct ProfileView: View {
                     .frame(width: 250.0, height: 350)
                     .cornerRadius(10)
                     .padding(.horizontal, 50.0)
+                    .onTapGesture {
+                        showProfileDetail.toggle()
+                    }
                 
                 Spacer()
                 
@@ -142,6 +146,17 @@ struct ProfileView: View {
                 }
                 .padding(.bottom, 70).padding(.top, 10)
             }
+            
+            if showProfileDetail {
+                Color.black.opacity(0.7)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        showProfileDetail = false
+                    }
+                
+                ProfileDetailView(showProfileDetail: $showProfileDetail)
+                    .padding(.horizontal, 40)
+            }
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
@@ -149,6 +164,42 @@ struct ProfileView: View {
     }
 }
 
+struct ProfileDetailView: View {
+    @Binding var showProfileDetail: Bool
+
+    var body: some View {
+        VStack {
+            HStack {
+                Button(action: {
+                    showProfileDetail = false
+                }) {
+                    Text("X")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.leading, 10)
+                        .cornerRadius(10)
+                }
+                Spacer()
+            }
+            
+            VStack(spacing: 20) {
+                Text("Profile Detail")
+                    .font(.title)
+                    .fontWeight(.bold).padding(.bottom, 300.0).padding(.horizontal, 50)
+                
+                // Add the content of your profile detail view here
+                
+                
+            }
+            .padding()
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(radius: 20)
+        }
+        }
+}
+
 #Preview {
-    ProfileView()
+    ProfileViewEmployer()
 }

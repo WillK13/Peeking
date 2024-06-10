@@ -21,11 +21,12 @@
 		BE6029D72C1396C500B3C080 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029D62C1396C500B3C080 /* HistoryView.swift */; };
 		BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029D82C1396D800B3C080 /* CustomAlertView.swift */; };
 		BE6029DB2C1396F300B3C080 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029DA2C1396F300B3C080 /* MessagesView.swift */; };
-		BE6029DE2C13971400B3C080 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029DD2C13971400B3C080 /* ProfileView.swift */; };
+		BE6029DE2C13971400B3C080 /* ProfileViewEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029DD2C13971400B3C080 /* ProfileViewEmployer.swift */; };
 		BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E02C13974900B3C080 /* EmployerTiersView.swift */; };
 		BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E22C13975C00B3C080 /* EmployeeTierView.swift */; };
 		BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E42C16363D00B3C080 /* SettingsView.swift */; };
 		BE6029E72C16364400B3C080 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E62C16364400B3C080 /* TipsView.swift */; };
+		BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,11 +64,12 @@
 		BE6029D62C1396C500B3C080 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		BE6029D82C1396D800B3C080 /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
 		BE6029DA2C1396F300B3C080 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
-		BE6029DD2C13971400B3C080 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		BE6029DD2C13971400B3C080 /* ProfileViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewEmployer.swift; sourceTree = "<group>"; };
 		BE6029E02C13974900B3C080 /* EmployerTiersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployerTiersView.swift; sourceTree = "<group>"; };
 		BE6029E22C13975C00B3C080 /* EmployeeTierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmployeeTierView.swift; sourceTree = "<group>"; };
 		BE6029E42C16363D00B3C080 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BE6029E62C16364400B3C080 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
+		BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewEmployee.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,9 +189,10 @@
 		BE6029DC2C13970100B3C080 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				BE6029DD2C13971400B3C080 /* ProfileView.swift */,
+				BE6029DD2C13971400B3C080 /* ProfileViewEmployer.swift */,
 				BE6029E42C16363D00B3C080 /* SettingsView.swift */,
 				BE6029E62C16364400B3C080 /* TipsView.swift */,
+				BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -334,13 +337,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE6029922C13603B00B3C080 /* ContentView.swift in Sources */,
-				BE6029DE2C13971400B3C080 /* ProfileView.swift in Sources */,
+				BE6029DE2C13971400B3C080 /* ProfileViewEmployer.swift in Sources */,
 				BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */,
 				BE6029D42C13969000B3C080 /* UnlockedLikedView.swift in Sources */,
 				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
 				BE6029D22C13966D00B3C080 /* LikedView.swift in Sources */,
 				BE6029CF2C13963400B3C080 /* MainView.swift in Sources */,
 				BE6029D72C1396C500B3C080 /* HistoryView.swift in Sources */,
+				BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */,
 				BE6029C42C136B6A00B3C080 /* BackgroundView.swift in Sources */,
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,
 				BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */,
