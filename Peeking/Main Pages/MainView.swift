@@ -107,10 +107,10 @@ struct MainView: View {
                     }.padding([.top, .leading, .trailing]).padding(.bottom, 5)
                     
                     //Next Profile
-                    Rectangle()
+                    TopCornersRounded(radius: 10)
                         .fill(Color.white)
                         .frame(height: 20)
-                        .clipShape(TopCornersRounded(radius: 10))
+                        .padding([.leading, .trailing])
                     
                     Spacer()
                     Spacer()
