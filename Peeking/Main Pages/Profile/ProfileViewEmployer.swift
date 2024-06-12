@@ -11,7 +11,9 @@ struct ProfileViewEmployer: View {
     @State private var selectedPosition = "Position name"
     @State private var positions = ["Position name", "Position 1", "Position 2"]
     @State private var showSettings = false
+    @State private var showTips = false
     @State private var showProfileDetail = false
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         ZStack {
@@ -33,7 +35,7 @@ struct ProfileViewEmployer: View {
                     Spacer()
                     
                     Button(action: {
-                        // Handle tips action
+                        showTips.toggle()
                     }) {
                         Text("Tips")
                             .foregroundColor(Color.black)
@@ -41,7 +43,7 @@ struct ProfileViewEmployer: View {
                             .background(Color.white)
                             .cornerRadius(10)
                     }
-                    .padding(.trailing)
+                    .padding([.top, .trailing])
                 }
                 .padding(.top, 20)
                 
@@ -97,7 +99,7 @@ struct ProfileViewEmployer: View {
                 // Action buttons
                 HStack(spacing: 20) {
                     Button(action: {
-                        // Handle delete profile action
+                        showDeleteConfirmation.toggle()
                     }) {
                         VStack {
                             Image(systemName: "trash.fill")
@@ -161,9 +163,23 @@ struct ProfileViewEmployer: View {
                 ProfileDetailView(showProfileDetail: $showProfileDetail)
                     .padding(.horizontal, 40)
             }
+            
+            if showDeleteConfirmation {
+                Color.black.opacity(0.4)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        showDeleteConfirmation = false
+                    }
+                
+                DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation)
+                    .padding(.horizontal, 40)
+            }
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
+        }
+        .sheet(isPresented: $showTips) {
+            TipsView()
         }
     }
 }
@@ -201,7 +217,7 @@ struct ProfileDetailView: View {
             .cornerRadius(10)
             .shadow(radius: 20)
         }
-        }
+    }
 }
 
 #Preview {

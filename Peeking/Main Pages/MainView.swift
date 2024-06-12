@@ -19,6 +19,7 @@ struct TopCornersRounded: Shape {
 
 struct MainView: View {
     @State private var showEmployeeTier = false
+    @State private var showSearchSettings = false
 
     var body: some View {
         NavigationView {
@@ -45,7 +46,12 @@ struct MainView: View {
                             }) {
                                 Image(systemName: "bag").foregroundColor(Color.white).font(.system(size: 45)).padding(.horizontal, 27.0).padding(.bottom, 10.0)
                             }
-                            Image("adjust")
+                            
+                            Button(action: {
+                                showSearchSettings.toggle()
+                            }) {
+                                Image("adjust")
+                            }
                                 
                         }
                     }.padding(.trailing, 20.0)
@@ -55,7 +61,7 @@ struct MainView: View {
                         Rectangle()
                             .fill(Color.white)
                             .frame(width: 395, height: 545)
-                            .cornerRadius(10)                            .padding(.top, -20)
+                            .cornerRadius(10).padding(.top, -20)
 
                         
                         VStack(alignment: .trailing) {
@@ -113,6 +119,9 @@ struct MainView: View {
             .navigationBarHidden(true)
             .fullScreenCover(isPresented: $showEmployeeTier) {
                 EmployeeTierView()
+            }
+            .sheet(isPresented: $showSearchSettings) {
+                ToggleView()
             }
         }
     }

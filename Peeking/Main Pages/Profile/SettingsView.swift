@@ -5,12 +5,20 @@
 //  Created by Will kaminski on 6/9/24.
 //
 
+//
+//  SettingsView.swift
+//  Peeking
+//
+//  Created by Will kaminski on 6/9/24.
+//
+
 import SwiftUI
 
 struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var showReportProblem = false
     @State private var showSubscriptionSettings = false
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         NavigationView {
@@ -77,7 +85,7 @@ struct SettingsView: View {
                     Spacer()
                     HStack {
                         Button(action: {
-                            // Handle delete account action
+                            showDeleteConfirmation.toggle()
                         }) {
                             Text("Delete Account")
                                 .foregroundColor(.red)
@@ -115,6 +123,17 @@ struct SettingsView: View {
                         }
                     
                     SubscriptionSettingsView(showSubscriptionSettings: $showSubscriptionSettings)
+                        .padding(.horizontal, 40)
+                }
+                
+                if showDeleteConfirmation {
+                    Color.black.opacity(0.4)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            showDeleteConfirmation = false
+                        }
+                    
+                    DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation)
                         .padding(.horizontal, 40)
                 }
             }
@@ -261,6 +280,46 @@ struct SubscriptionSettingsView: View {
                         .foregroundColor(.red)
                         .padding()
                         .background(Color.white)
+                        .cornerRadius(10)
+                }
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 20)
+    }
+}
+
+struct DeleteConfirmationView: View {
+    @Binding var showDeleteConfirmation: Bool
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Are you sure you want to delete your account?")
+                .font(.title2)
+            
+            HStack {
+                Button(action: {
+                    // Handle cancel action
+                    showDeleteConfirmation = false
+                }) {
+                    Text("No")
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color.gray.opacity(0.5))
+                        .cornerRadius(10)
+                }
+                
+                Button(action: {
+                    // Handle delete action
+                    showDeleteConfirmation = false
+                    // Add delete logic here
+                }) {
+                    Text("Yes")
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color.red.opacity(0.5))
                         .cornerRadius(10)
                 }
             }

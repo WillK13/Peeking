@@ -40,7 +40,7 @@ struct ProfileViewEmployee: View {
                             .cornerRadius(10)
                         
                     }
-                    .padding(.trailing)
+                    .padding([.top, .trailing])
                 }
                 .padding(.top, 20)
                 
@@ -75,22 +75,7 @@ struct ProfileViewEmployee: View {
                 
                 // Action buttons
                 HStack(spacing: 20) {
-                    Button(action: {
-                        // Handle delete profile action
-                    }) {
-                        VStack {
-                            Image(systemName: "trash.fill")
-                                .font(.system(size: 20))
-                                .foregroundColor(.red)
-                            Text("Delete Profile")
-                                .font(.footnote)
-                                .foregroundColor(Color.black)
-                        }
-                        .padding(5.0)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .padding(.top, 20)
-                    }
+                    Spacer()
                     
                     Button(action: {
                         // Handle visibility action
@@ -124,7 +109,7 @@ struct ProfileViewEmployee: View {
                         .cornerRadius(10)
                     }
                 }
-                .padding(.bottom, 70).padding(.top, 10)
+                .padding(.bottom, 70).padding(.top, 10).padding(.trailing, 100)
             }
             
             if showProfileDetail {

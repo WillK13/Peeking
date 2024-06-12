@@ -27,6 +27,7 @@
 		BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E42C16363D00B3C080 /* SettingsView.swift */; };
 		BE6029E72C16364400B3C080 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E62C16364400B3C080 /* TipsView.swift */; };
 		BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */; };
+		BE6029EB2C19069700B3C080 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029EA2C19069700B3C080 /* ToggleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		BE6029E42C16363D00B3C080 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BE6029E62C16364400B3C080 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
 		BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewEmployee.swift; sourceTree = "<group>"; };
+		BE6029EA2C19069700B3C080 /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				BE6029CE2C13963400B3C080 /* MainView.swift */,
+				BE6029EA2C19069700B3C080 /* ToggleView.swift */,
 				BE6029D02C13966000B3C080 /* LikedMe */,
 				BE6029D52C1396AE00B3C080 /* LikedHistory */,
 				BE6029DA2C1396F300B3C080 /* MessagesView.swift */,
@@ -344,6 +347,7 @@
 				BE6029D22C13966D00B3C080 /* LikedView.swift in Sources */,
 				BE6029CF2C13963400B3C080 /* MainView.swift in Sources */,
 				BE6029D72C1396C500B3C080 /* HistoryView.swift in Sources */,
+				BE6029EB2C19069700B3C080 /* ToggleView.swift in Sources */,
 				BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */,
 				BE6029C42C136B6A00B3C080 /* BackgroundView.swift in Sources */,
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,
