@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct ProfileViewEmployee: View {
+    //Vars to toggle views
     @State private var showSettings = false
     @State private var showProfileDetail = false
 
     var body: some View {
+        //Background
         ZStack {
             BackgroundView()
                 .edgesIgnoringSafeArea(.all)
-            
+            //Content
             VStack {
-                // Top section with settings and tips buttons
+                //Top section with settings and tips buttons
                 HStack {
                     Button(action: {
                         showSettings.toggle()
@@ -31,7 +33,7 @@ struct ProfileViewEmployee: View {
                     Spacer()
                     
                     Button(action: {
-                        // Handle tips action
+                        //Handle tips action
                     }) {
                         Text("Tips")
                             .foregroundColor(Color.black)
@@ -44,7 +46,7 @@ struct ProfileViewEmployee: View {
                 }
                 .padding(.top, 20)
                 
-                // Avatar and position selector
+                //Avatar and position selector, should be pfp, can click to change
                 VStack(spacing: 20) {
                     Image("profile60")
                         .resizable()
@@ -61,7 +63,7 @@ struct ProfileViewEmployee: View {
                 }
                 .padding(.horizontal)
                 
-                // Placeholder for content
+                //Placeholder for content, needs to be dynamic to user data
                 Rectangle()
                     .fill(Color.white)
                     .frame(width: 250.0, height: 350)
@@ -73,12 +75,12 @@ struct ProfileViewEmployee: View {
                 
                 Spacer()
                 
-                // Action buttons
+                //Action buttons
                 HStack(spacing: 20) {
                     Spacer()
                     
                     Button(action: {
-                        // Handle visibility action
+                        //Handle visibility action
                     }) {
                         VStack {
                             Image(systemName: "eye")
@@ -94,7 +96,7 @@ struct ProfileViewEmployee: View {
                     }
                     
                     Button(action: {
-                        // Handle edit profile action
+                        //Handle edit profile action
                     }) {
                         VStack {
                             Image(systemName: "pencil")
@@ -111,7 +113,7 @@ struct ProfileViewEmployee: View {
                 }
                 .padding(.bottom, 70).padding(.top, 10).padding(.trailing, 100)
             }
-            
+            //Logic to open other views
             if showProfileDetail {
                 Color.black.opacity(0.7)
                     .edgesIgnoringSafeArea(.all)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//Custom shape for the next profile. It is a rectangle with only the top two corners rounded.
 struct TopCornersRounded: Shape {
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = [.topLeft, .topRight]
@@ -17,19 +18,28 @@ struct TopCornersRounded: Shape {
     }
 }
 
+//Main view
 struct MainView: View {
+    //Variables to show the pricing/toggle and filling icons
     @State private var showEmployeeTier = false
     @State private var showSearchSettings = false
+    @State private var isBookmarkFilled = false
+    @State private var isHeartFilled = false
 
+    //Code body
     var body: some View {
         NavigationView {
+            //ZStack with Background
             ZStack {
                 BackgroundView()
+                //VStack with the rest of the page content
                 VStack {
                     //Top Area
                     HStack {
+                        //HStack with the number of likes remaining.
                         HStack() {
                             Image(systemName: "heart.fill").foregroundColor(.red).padding(.all, 5.0).font(.system(size: 25))
+                            //This needs to change to become dynamic per user.
                             Text("3").font(.title).padding(.trailing, 5.0)
                         }
                         .background(RoundedRectangle(cornerRadius: 8).foregroundColor(.white))
@@ -39,8 +49,9 @@ struct MainView: View {
                         
                         Image("Duck_Head").resizable().aspectRatio(contentMode: .fit).frame(width: 120).padding(.top, 10.0)
                         
-                        
+                        //Stack with the tiers and toggle buttons
                         VStack {
+                            //Needs to be dynamic for employees or employers
                             Button(action: {
                                 showEmployeeTier.toggle()
                             }) {
@@ -58,29 +69,40 @@ struct MainView: View {
                     
                     //Main Area
                     ZStack {
+                        //Background white
                         Rectangle()
                             .fill(Color.white)
                             .frame(width: 395, height: 545)
                             .cornerRadius(10).padding(.top, -20)
 
-                        
+                        //Stack with the key elements.
                         VStack(alignment: .trailing) {
-                            Image(systemName: "bookmark")
-                                .resizable()
-                                .frame(width: 40, height: 50)
-                                .foregroundColor(.black)
+                            Button(action: {
+                                isBookmarkFilled.toggle()
+                            }) {
+                                Image(systemName: isBookmarkFilled ? "bookmark.fill" : "bookmark")
+                                    .resizable()
+                                    .frame(width: 40, height: 50)
+                                    .foregroundColor(.black)
+                            }
                             
                             Spacer()
                             
-                            Image(systemName: "heart")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .padding([.bottom, .trailing], 10).foregroundColor(.black)
+                            Button(action: {
+                                isHeartFilled.toggle()
+                            }) {
+                                Image(systemName: isHeartFilled ? "heart.fill" : "heart")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .padding([.bottom, .trailing], 10)
+                                    .foregroundColor(.red)
+                            }
                             
                             Image(systemName: "ellipsis").resizable()
                                 .frame(width: 40, height: 9)
                                 .padding([.bottom, .trailing], 10).foregroundColor(.black)
                             
+                            //The pages on the bottom, needs to change on click.
                             HStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("SelectColor"))

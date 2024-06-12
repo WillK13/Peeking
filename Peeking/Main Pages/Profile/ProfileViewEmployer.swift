@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileViewEmployer: View {
+    //Variables for positions and open all pop ups
     @State private var selectedPosition = "Position name"
     @State private var positions = ["Position name", "Position 1", "Position 2"]
     @State private var showSettings = false
@@ -16,12 +17,13 @@ struct ProfileViewEmployer: View {
     @State private var showDeleteConfirmation = false
 
     var body: some View {
+        //Background
         ZStack {
             BackgroundView()
                 .edgesIgnoringSafeArea(.all)
-            
+            //Content
             VStack {
-                // Top section with settings and tips buttons
+                //Top section with settings and tips buttons
                 HStack {
                     Button(action: {
                         showSettings.toggle()
@@ -47,7 +49,7 @@ struct ProfileViewEmployer: View {
                 }
                 .padding(.top, 20)
                 
-                // Avatar and position selector
+                //Avatar and position selector, should change to user pfp?
                 VStack(spacing: 20) {
                     Image("profile60")
                         .resizable()
@@ -84,7 +86,7 @@ struct ProfileViewEmployer: View {
                 }
                 .padding(.horizontal)
                 
-                // Placeholder for content
+                //Placeholder for content, should show their profile, maybe make this a seperate view?
                 Rectangle()
                     .fill(Color.white)
                     .frame(width: 250.0, height: 350)
@@ -96,7 +98,7 @@ struct ProfileViewEmployer: View {
                 
                 Spacer()
                 
-                // Action buttons
+                //Action buttons
                 HStack(spacing: 20) {
                     Button(action: {
                         showDeleteConfirmation.toggle()
@@ -117,7 +119,7 @@ struct ProfileViewEmployer: View {
 
                     
                     Button(action: {
-                        // Handle visibility action
+                        //Handle visibility action
                     }) {
                         VStack {
                             Image(systemName: "eye")
@@ -134,7 +136,7 @@ struct ProfileViewEmployer: View {
                     
                     
                     Button(action: {
-                        // Handle edit profile action
+                        //Handle edit profile action
                     }) {
                         VStack {
                             Image(systemName: "pencil")
@@ -152,7 +154,7 @@ struct ProfileViewEmployer: View {
                 }
                 .padding(.bottom, 70).padding(.top, 10)
             }
-            
+            //Logic for openning pop ups
             if showProfileDetail {
                 Color.black.opacity(0.7)
                     .edgesIgnoringSafeArea(.all)
@@ -183,13 +185,14 @@ struct ProfileViewEmployer: View {
         }
     }
 }
-
+//The pop up to full profile, can be like main view, be its own file maybe
 struct ProfileDetailView: View {
     @Binding var showProfileDetail: Bool
 
     var body: some View {
         VStack {
             HStack {
+                //Close pop up
                 Button(action: {
                     showProfileDetail = false
                 }) {
@@ -208,7 +211,7 @@ struct ProfileDetailView: View {
                     .font(.title)
                     .fontWeight(.bold).padding(.bottom, 300.0).padding(.horizontal, 50)
                 
-                // Add the content of your profile detail view here
+                //Add the content of profile
                 
                 
             }

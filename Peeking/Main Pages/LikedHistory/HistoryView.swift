@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct HistoryView: View {
+    //Variable to open the custom alert
     @State private var showAlert = false
     var body: some View {
+        //Background
         ZStack {
             BackgroundView()
+            //Content
             VStack(alignment: .center) {
                 
-                
+                //The top area
                 HStack{
+                    //If it works it works
                     Spacer()
                     Spacer()
                     Spacer()
@@ -37,11 +41,10 @@ struct HistoryView: View {
                     
                     }
                 }
-                
-                
-                
+
                 Text("Like History").font(.largeTitle).padding(.bottom, 10.0)
-            
+                //The squares and status, status needs to be dynamic and the squares should change too.
+                //Should be most recent on top.
                 HStack(spacing: 20) {
                                VStack(spacing: 10) {
                                    RoundedRectangle(cornerRadius: 10)
@@ -74,7 +77,8 @@ struct HistoryView: View {
                            .padding(.top, 15)
                 
                 
-                
+                //Another row for cut off rectangles, can extend more and maybe fit more eventually. Should
+                //      be a scroll view.
                 HStack(spacing: 20) {
                              
                                     RoundedRectangle(cornerRadius: 10)
@@ -117,6 +121,7 @@ struct HistoryView: View {
                 Spacer()
                
             }
+            //Logic to show the key
             if showAlert {
                             Color.black.opacity(0.4)
                                 .edgesIgnoringSafeArea(.all)

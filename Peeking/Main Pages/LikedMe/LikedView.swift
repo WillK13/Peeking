@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct LikedView: View {
+    //Variable for the popup, make dynamic so I don't need unlocked?
     @State private var showPopup = false
     
     var body: some View {
+        //Background
         ZStack {
             BackgroundView()
-            
+            //Content
             VStack(alignment: .center) {
                 Image(systemName: "eye.slash")
                     .resizable()
@@ -22,7 +24,7 @@ struct LikedView: View {
                     .padding(.vertical, 30)
                 
                 VStack(spacing: 20) {
-                    // Heart icon and text
+                    //Heart icon and text
                     HStack {
                         Image(systemName: "heart.fill")
                             .foregroundColor(.red)
@@ -33,7 +35,7 @@ struct LikedView: View {
                             .font(.title)
                     }
                     
-                    // Grid of rectangles
+                    //Grid of rectangles, need to make profiles, blurred.
                     VStack(spacing: 20) {
                         HStack(spacing: 20) {
                             RoundedRectangle(cornerRadius: 10)
@@ -53,9 +55,9 @@ struct LikedView: View {
                         }
                     }
                     .padding(.bottom, 15)
-                    
+                    //Cut out rectangles, need to have a profile too.
                     HStack(spacing: 20) {
-                        // First cut-off rectangle
+                        //First cut-off rectangle
                         ZStack(alignment: .bottom) {
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
                                 .fill(Color.white)
@@ -73,7 +75,7 @@ struct LikedView: View {
                                 .offset(y: 1)
                         }
                         
-                        // Second cut-off rectangle
+                        //Second cut-off rectangle
                         ZStack(alignment: .bottom) {
                             RoundedRectangle(cornerRadius: 10, style: .continuous)
                                 .fill(Color.white)
@@ -98,7 +100,7 @@ struct LikedView: View {
                 
                 Spacer()
             }
-            
+            //Popup, need to make dynamic with payment?
             if showPopup {
                 Color.black.opacity(0.15)
                     .edgesIgnoringSafeArea(.top).padding(.bottom, 45.0)
@@ -127,9 +129,9 @@ struct LikedView: View {
                     
                    
                 }
-                //.onTapGesture {
-               //     showPopup = false
-               // }
+//                .onTapGesture {
+//                    showPopup = false
+//                }
             }
         }
         //.onTapGesture {

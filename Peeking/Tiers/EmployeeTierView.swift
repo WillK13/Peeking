@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct EmployeeTierView: View {
+    //Vars for all of the sviews and plans and pages and a timer.
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var selectedPage = 0
     @State private var selectedPlan = "with Floater"
     @State private var showPicker = false
     @State private var timer: Timer? = nil
-
+    //Possible plans
     private let plans = ["with Floater", "with Glider", "with Diver"]
-
+    //All of the content for each page.
     private let pagesFloater = [
         PlanPage(title: "3 Like Capacity", description: "Refilled every 24 hours", imageName: "heart", iconText: "3"),
         PlanPage(title: "Bookmark", description: "A bookmark for your search", imageName: "bookmark", iconText: "1")
@@ -36,8 +37,10 @@ struct EmployeeTierView: View {
     ]
 
     var body: some View {
+        //Background
         ZStack {
             BackgroundView()
+            //Content behind
             VStack {
                 Image("Duck_Head").resizable().aspectRatio(contentMode: .fit).frame(width: 120).padding(.top, 10)
                 Spacer()
@@ -49,12 +52,13 @@ struct EmployeeTierView: View {
                 .fill(Color.white)
                 .frame(width: 373, height: 650)
                 .padding(.top, 120)
-
+            //Main content
             VStack {
                 Spacer()
                 Spacer()
                 Spacer()
                 Spacer()
+                //Disclaimer
                 Text("Billing disclaimer")
                     .font(.title2)
                     .foregroundColor(Color.white)
@@ -65,17 +69,19 @@ struct EmployeeTierView: View {
                     .foregroundColor(Color("UnimportantText"))
                     .multilineTextAlignment(.center)
                     .frame(width: 300.0)
-
+                //Changing info
                 VStack {
+                    //If it works it works
                     Spacer()
                     Spacer()
                     Spacer()
                     Spacer()
                     Spacer()
                     Spacer()
+                    //Custom title
                     Text(getPlanTitle())
                         .font(.largeTitle)
-
+                    //Change plan
                     Button(action: {
                         showPicker.toggle()
                     }) {
@@ -94,7 +100,7 @@ struct EmployeeTierView: View {
                         )
                     }
                     .padding()
-
+                    //Click through features
                     HStack {
                         Button(action: {
                             if selectedPage > 0 {
@@ -109,7 +115,7 @@ struct EmployeeTierView: View {
                         .padding(.leading)
 
                         Spacer()
-
+                        //The features of each plan
                         VStack {
                             let currentPage = getCurrentPages()[selectedPage]
                             if currentPage.imageName == "Battery" {
@@ -154,7 +160,7 @@ struct EmployeeTierView: View {
                         }
                         .padding(.trailing)
                     }
-
+                    //Custom info on pricing
                     if selectedPlan == "with Floater" {
                         VStack(spacing: 0) {
                             VStack {
@@ -189,7 +195,7 @@ struct EmployeeTierView: View {
                                 .stroke(Color.black, lineWidth: 1)
                         )
                     } else {
-                        PaymentOptionsView(selectedPlan: selectedPlan) // Pass the selected plan
+                        PaymentOptionsView(selectedPlan: selectedPlan)
                             .padding()
                     }
 
@@ -204,7 +210,7 @@ struct EmployeeTierView: View {
                             .cornerRadius(100)
                     }
                     .padding(.top, 10)
-
+                    //Exit
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }) {
@@ -216,7 +222,7 @@ struct EmployeeTierView: View {
                     .padding(.bottom, 20)
                 }
             }
-
+            //Logic for showing pages
             if showPicker {
                 Color.black.opacity(0.4)
                     .edgesIgnoringSafeArea(.all)
@@ -235,7 +241,7 @@ struct EmployeeTierView: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden(true) // Hide the default back button
+        .navigationBarBackButtonHidden(true) //Hide the default back button
         .onAppear {
             startTimer()
         }
@@ -243,10 +249,10 @@ struct EmployeeTierView: View {
             stopTimer()
         }
         .onChange(of: selectedPlan) { newPlan, _ in
-            selectedPage = 0 // Reset to first page when plan changes
+            selectedPage = 0 //Reset to first page when plan changes
         }
     }
-
+    //Get timer working
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
             withAnimation {
@@ -254,12 +260,12 @@ struct EmployeeTierView: View {
             }
         }
     }
-
+    //Stop the timer
     private func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
-
+    //Get current page based on plan
     private func getCurrentPages() -> [PlanPage] {
         switch selectedPlan {
         case "with Glider":
@@ -270,7 +276,7 @@ struct EmployeeTierView: View {
             return pagesFloater
         }
     }
-
+    //All of the titles
     private func getPlanTitle() -> String {
         switch selectedPlan {
         case "with Glider":
@@ -281,7 +287,7 @@ struct EmployeeTierView: View {
             return "Just the Basics"
         }
     }
-
+    //Custom background colors
     private func getPickerBackgroundColor() -> Color {
         switch selectedPlan {
         case "with Glider":
@@ -292,7 +298,7 @@ struct EmployeeTierView: View {
             return Color.gray.opacity(0.2)
         }
     }
-
+    //Custom text per plan
     private func getButtonText() -> String {
         switch selectedPlan {
         case "with Glider":
@@ -303,7 +309,7 @@ struct EmployeeTierView: View {
             return "All users get full access"
         }
     }
-
+    //Custom buttons per plan
     private func getButtonBackgroundColor() -> Color {
         switch selectedPlan {
         case "with Glider":
@@ -315,14 +321,14 @@ struct EmployeeTierView: View {
         }
     }
 }
-
+//PlanPage object with info for each page
 struct PlanPage {
     let title: String
     let description: String
     let imageName: String
     let iconText: String
 }
-
+//Pick the right view based on each plan
 struct PickerView: View {
     @Binding var selectedPlan: String
     let plans: [String]
@@ -349,13 +355,14 @@ struct PickerView: View {
         .shadow(radius: 20)
     }
 }
-
+//View for payment options for glider and diver depending on each one picked.
 struct PaymentOptionsView: View {
-    let selectedPlan: String // Receive the selected plan
-    @State private var selectedOption = "1 Month" // Default selected option
+    let selectedPlan: String
+    @State private var selectedOption = "1 Month" //Default selected option
 
     var body: some View {
-        HStack(spacing: 10) { // Reduced spacing
+        HStack(spacing: 10) {
+            //Year
             VStack {
                 Text("BEST VALUE")
                     .font(.caption)
@@ -379,7 +386,7 @@ struct PaymentOptionsView: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
-                .frame(width: 80, height: 150) // Increased height
+                .frame(width: 80, height: 150)
                 .background(Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
@@ -391,6 +398,7 @@ struct PaymentOptionsView: View {
             }
 
             VStack {
+                //6 Months
                 Text("MOST POPULAR")
                     .font(.caption)
                     .foregroundColor(.gray)
@@ -413,7 +421,7 @@ struct PaymentOptionsView: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
-                .frame(width: 80, height: 150) // Increased height
+                .frame(width: 80, height: 150)
                 .background(Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
@@ -425,6 +433,7 @@ struct PaymentOptionsView: View {
             }
 
             VStack {
+                //Month
                 Text("")
                     .font(.caption)
                     .padding(.top, -20.0)
@@ -439,7 +448,7 @@ struct PaymentOptionsView: View {
                     Text(getMonthlyPrice(for: "1 Month"))
                         .font(.caption)
                 }
-                .frame(width: 80, height: 150) // Increased height
+                .frame(width: 80, height: 150)
                 .background(Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
@@ -451,7 +460,7 @@ struct PaymentOptionsView: View {
             }
         }
     }
-
+    //Change prices for each plan, need to make dynamic potentially
     private func getPrice(for duration: String) -> String {
         switch selectedPlan {
         case "with Diver":
@@ -478,7 +487,7 @@ struct PaymentOptionsView: View {
             }
         }
     }
-
+    //Change prices for each plan, need to make dynamic potentially
     private func getMonthlyPrice(for duration: String) -> String {
         switch selectedPlan {
         case "with Diver":

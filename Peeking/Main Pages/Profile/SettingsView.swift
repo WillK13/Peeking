@@ -15,18 +15,22 @@
 import SwiftUI
 
 struct SettingsView: View {
+    //Variables for showing different views
     @Environment(\.presentationMode) var presentationMode
     @State private var showReportProblem = false
     @State private var showSubscriptionSettings = false
     @State private var showDeleteConfirmation = false
 
     var body: some View {
+        //This is all a pop up
         NavigationView {
+            //Background
             ZStack {
                 BackgroundView()
                     .edgesIgnoringSafeArea(.all)
-                
+                //Content
                 VStack {
+                    //Back button
                     HStack {
                         Button(action: {
                             presentationMode.wrappedValue.dismiss()
@@ -41,7 +45,7 @@ struct SettingsView: View {
                     .padding(.top, 20)
                     
                     Spacer()
-
+                    //All of the sections
                     VStack(spacing: 20) {
                         Image(systemName: "gearshape.fill")
                             .foregroundColor(.white)
@@ -49,7 +53,7 @@ struct SettingsView: View {
                             .font(.system(size: 70))
                         
                         Button(action: {
-                            // Handle push notifications action
+                            //Handle push notifications action
                         }) {
                             SettingsButton(title: "Push Notifications")
                         }
@@ -69,7 +73,7 @@ struct SettingsView: View {
                         }
                         
                         Button(action: {
-                            // Handle account details action
+                            //Handle account details action
                         }) {
                             SettingsButton(title: "Account Details")
                         }
@@ -83,6 +87,7 @@ struct SettingsView: View {
                     .padding(.horizontal, 20).padding(.top, -100)
 
                     Spacer()
+                    //Delete account and an are you sure pop up
                     HStack {
                         Button(action: {
                             showDeleteConfirmation.toggle()
@@ -103,7 +108,7 @@ struct SettingsView: View {
                     
                     Spacer()
                 }
-                
+                //Logic for opening pop ups
                 if showReportProblem {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
@@ -141,7 +146,7 @@ struct SettingsView: View {
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }
-
+//View for pop ups
 struct SettingsButton: View {
     let title: String
 
@@ -154,8 +159,9 @@ struct SettingsButton: View {
             .cornerRadius(10)
     }
 }
-
+//View for report
 struct ReportProblemView: View {
+    //Variables for drop down
     @Binding var showReportProblem: Bool
     @State private var selectedSubject = "Select a subject"
     @State private var details = ""
@@ -209,7 +215,7 @@ struct ReportProblemView: View {
                 }
             
             Button(action: {
-                // Handle submit action
+                //Handle submit action
                 showReportProblem = false
             }) {
                 Text("Submit")
@@ -225,8 +231,9 @@ struct ReportProblemView: View {
         .shadow(radius: 20)
     }
 }
-
+//View for subscription
 struct SubscriptionSettingsView: View {
+    //Vars for plan, needs to be dynamic based on what you have
     @Binding var showSubscriptionSettings: Bool
     @State private var selectedPlan = "Glider"
 
@@ -236,7 +243,7 @@ struct SubscriptionSettingsView: View {
             Text("Subscription Settings")
                 .font(.title)
                 
-            
+            //This info needs to change as well.
             HStack {
                 Text(selectedPlan)
                     .foregroundColor(.black)
@@ -260,7 +267,7 @@ struct SubscriptionSettingsView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.black, lineWidth: 1)
             )
-            
+            //Needs to be greyed out if action is not possible, also then cant click.
             HStack {
                 Button(action: {
                     // Handle restore action
@@ -290,7 +297,7 @@ struct SubscriptionSettingsView: View {
         .shadow(radius: 20)
     }
 }
-
+//The are you sure you want to delete
 struct DeleteConfirmationView: View {
     @Binding var showDeleteConfirmation: Bool
 
@@ -298,10 +305,9 @@ struct DeleteConfirmationView: View {
         VStack(spacing: 20) {
             Text("Are you sure you want to delete your account?")
                 .font(.title2)
-            
+            //The buttons yes or no
             HStack {
                 Button(action: {
-                    // Handle cancel action
                     showDeleteConfirmation = false
                 }) {
                     Text("No")
@@ -310,7 +316,7 @@ struct DeleteConfirmationView: View {
                         .background(Color.gray.opacity(0.5))
                         .cornerRadius(10)
                 }
-                
+                //Have to connect to account then and delete
                 Button(action: {
                     // Handle delete action
                     showDeleteConfirmation = false
@@ -330,7 +336,7 @@ struct DeleteConfirmationView: View {
         .shadow(radius: 20)
     }
 }
-
+//Deal with pop ups
 extension View {
     func placeholder<Content: View>(
         when shouldShow: Bool,

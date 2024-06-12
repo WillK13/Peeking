@@ -9,16 +9,18 @@ import SwiftUI
 
 struct TipsView: View {
     var body: some View {
+        //Background
         ZStack {
             BackgroundView()
                 .edgesIgnoringSafeArea(.all)
-            
+            //Content
             VStack(alignment: .center) {
+                //Headline
                 Text("Tips")
                     .font(.title)
                     .fontWeight(.bold)
                     .padding(.bottom, 20)
-                
+                //Tips, each one in an HStack
                 HStack {
                     Spacer()
                     ZStack {
@@ -34,7 +36,7 @@ struct TipsView: View {
                     }
                     Spacer()
                 }
-                
+                //Need to toggle these middle two based on who is on app or just change a word using a var
                 HStack {
                     Spacer()
                     ZStack {

@@ -6,16 +6,18 @@
 //
 
 import SwiftUI
-
+//Custom alert for the key to likes status
 struct CustomAlertView: View {
     @Binding var showAlert: Bool
     var body: some View {
+        //Content
         VStack {
             Text("Status Key")
                 .font(.largeTitle)
                 .padding(.bottom, 10)
-            
+            //The key
             VStack(alignment: .leading, spacing: 10) {
+                //Success
                 HStack {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color.green)
@@ -31,7 +33,7 @@ struct CustomAlertView: View {
                             .font(.subheadline)
                     }
                 }
-                
+                //Pending
                 HStack {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color.yellow)
@@ -47,7 +49,7 @@ struct CustomAlertView: View {
                             .font(.subheadline)
                     }
                 }
-                
+                //No
                 HStack {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(Color.red)
@@ -68,7 +70,7 @@ struct CustomAlertView: View {
             .background(Color.white)
             .cornerRadius(10)
             .shadow(radius: 10)
-            
+            //Exit
             Button(action: {
                 showAlert = false
             }) {

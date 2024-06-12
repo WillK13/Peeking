@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ToggleView: View {
+    // Variables for distance, show views, and the current selected options
     @Environment(\.presentationMode) var presentationMode
     @State private var distance: Double = 30
     @State private var showLocationView = false
@@ -17,17 +18,23 @@ struct ToggleView: View {
     @State private var selectedStartupOption = "Startup"
     @State private var selectedSmallBusinessOption = "Small Business"
     @State private var selectedIndependentContractorOption = "Independent Contractor"
+    @State private var selectedRemoteOption = "Remote"
+    @State private var selectedHybridOption = "Hybrid"
+    @State private var selectedInPersonOption = "In-Person"
     @State private var selectedPartTimeOption = "Part-time"
     @State private var selectedFullTimeOption = "Full-Time"
     @State private var selectedTemporaryOption = "Temporary"
 
+    // Options for all of the drop downs.
     var jobOptions = ["Consulting", "IT Consulting", "Management Consulting"]
     var employerOptions = ["Startup", "Small Business", "Independent Contractor"]
-    var workSettingOptions = ["Remote", "Hybrid", "In-Person"]
+    var workSettingOptions = ["Remote", "In-Person", "Hybrid"]
     var employmentStatusOptions = ["Part-time", "Full-Time", "Temporary"]
 
     var body: some View {
+        //VStack with all content
         VStack(spacing: 20) {
+            //Back arrow
             HStack {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
@@ -42,9 +49,10 @@ struct ToggleView: View {
             Text("Search Settings")
                 .font(.title)
                 .fontWeight(.bold)
-
+            //The main view area
             ScrollView {
                 VStack(spacing: 20) {
+                    //Location
                     HStack {
                         Text("Location")
                         Spacer()
@@ -65,7 +73,7 @@ struct ToggleView: View {
                     .padding(.horizontal)
                     
                     Divider().background(Color.gray)
-                    
+                    //Distance toggle
                     VStack(spacing: 10) {
                         Text("Distance")
                         Slider(value: $distance, in: 0...500)
@@ -74,7 +82,7 @@ struct ToggleView: View {
                     .padding(.horizontal)
                     
                     Divider().background(Color.gray)
-
+                    //The fields
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Field/Niche")
                         HStack {
@@ -93,7 +101,7 @@ struct ToggleView: View {
                     .padding()
                     
                     Divider().background(Color.gray)
-
+                    //The employers
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Type of Employer")
                         HStack {
@@ -112,7 +120,7 @@ struct ToggleView: View {
                     .padding()
                     
                     Divider().background(Color.gray)
-
+                    //The work setting
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Work Setting")
                         HStack {
@@ -123,15 +131,15 @@ struct ToggleView: View {
                             Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
                         }
                         HStack(spacing: 10) {
-                            SearchSettingButton(title: "Remote")
-                            SearchSettingButton(title: "Hybrid")
-                            SearchSettingButton(title: "In-Person")
+                            DropdownMenuButton(title: $selectedRemoteOption, options: workSettingOptions)
+                            DropdownMenuButton(title: $selectedHybridOption, options: workSettingOptions)
+                            DropdownMenuButton(title: $selectedInPersonOption, options: workSettingOptions)
                         }
                     }
                     .padding()
                     
                     Divider().background(Color.gray)
-
+                    //The employment status
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Employment Status")
                         HStack {
@@ -150,7 +158,7 @@ struct ToggleView: View {
                     .padding()
                     
                     Divider().background(Color.gray)
-
+                    //Exit
                     Button(action: {
                         // Handle save and exit action
                         presentationMode.wrappedValue.dismiss()
@@ -169,7 +177,7 @@ struct ToggleView: View {
         .padding()
     }
 }
-
+//Drop down menu for each button with the custom items above
 struct DropdownMenuButton: View {
     @Binding var title: String
     let options: [String]
@@ -194,12 +202,14 @@ struct DropdownMenuButton: View {
         }
     }
 }
-
+//New vier when expand location
 struct LocationView: View {
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
+        //All of the content
         VStack(spacing: 20) {
+            //Exit page
             HStack {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
@@ -215,10 +225,10 @@ struct LocationView: View {
                 .font(.title)
                 .fontWeight(.bold)
             
-            // Your Location settings UI here
+            // Location settings
             Text("Location")
             Text("Map")
-
+            //Exit
             Button(action: {
                 presentationMode.wrappedValue.dismiss()
             }) {
@@ -233,20 +243,6 @@ struct LocationView: View {
             Spacer()
         }
         .padding()
-    }
-}
-
-struct SearchSettingButton: View {
-    let title: String
-
-    var body: some View {
-        Text(title)
-            .foregroundColor(.black)
-            .padding()
-            .background(Color.orange.opacity(0.7))
-            .cornerRadius(10)
-            .lineLimit(1)
-            .truncationMode(.tail)
     }
 }
 

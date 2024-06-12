@@ -11,6 +11,7 @@ import SwiftUI
 struct PeekingApp: App {
     var body: some Scene {
         WindowGroup {
+            //Open up the total View
             ContentView()
         }
     }

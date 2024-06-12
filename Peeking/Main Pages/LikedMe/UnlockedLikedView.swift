@@ -20,7 +20,7 @@ struct UnlockedLikedView: View {
                 
                 
                 VStack(spacing: 20) {
-                                // Heart icon and text
+                                //Heart icon and text
                                 HStack {
                                     Image(systemName: "heart.fill")
                                         .foregroundColor(.red)
@@ -32,7 +32,7 @@ struct UnlockedLikedView: View {
                                 }
                                
                                 
-                                // Grid of rectangles
+                                //Grid of rectangles
                                 VStack(spacing: 20) {
                                     HStack(spacing: 20) {
                                         RoundedRectangle(cornerRadius: 10)
@@ -54,14 +54,8 @@ struct UnlockedLikedView: View {
                                 }
                                 .padding(.bottom, 15)
                     
-                    
-                    
-                    
-                    
-                    
-                    
                     HStack(spacing: 20) {
-                                   // First cut-off rectangle
+                                   //First cut-off rectangle
                                    ZStack(alignment: .bottom) {
                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
                                            .fill(Color.white)
@@ -79,7 +73,7 @@ struct UnlockedLikedView: View {
                                            .offset(y: 1)
                                    }
                                    
-                                   // Second cut-off rectangle
+                                   //Second cut-off rectangle
                                    ZStack(alignment: .bottom) {
                                        RoundedRectangle(cornerRadius: 10, style: .continuous)
                                            .fill(Color.white)
@@ -102,18 +96,12 @@ struct UnlockedLikedView: View {
                                 Spacer()
                             }
                 
-                
-                
-                
-                
                 Spacer()
             }
     }
         
-        
 }
 }
-
 #Preview {
     UnlockedLikedView()
 }
