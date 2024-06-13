@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-//Custom shape for the next profile. It is a rectangle with only the top two corners rounded.
+// Custom shape for the next profile. It is a rectangle with only the top two corners rounded.
 struct TopCornersRounded: Shape {
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = [.topLeft, .topRight]
@@ -25,8 +25,8 @@ struct MainView: View {
     @State private var showSearchSettings = false
     @State private var isBookmarkFilled = false
     @State private var isHeartFilled = false
+    @State private var showOverlay = false
 
-    //Code body
     var body: some View {
         NavigationView {
             //ZStack with Background
@@ -98,9 +98,15 @@ struct MainView: View {
                                     .foregroundColor(.red)
                             }
                             
-                            Image(systemName: "ellipsis").resizable()
-                                .frame(width: 40, height: 9)
-                                .padding([.bottom, .trailing], 10).foregroundColor(.black)
+                            Button(action: {
+                                showOverlay.toggle()
+                            }) {
+                                Image(systemName: "ellipsis")
+                                    .resizable()
+                                    .frame(width: 40, height: 9)
+                                    .padding([.bottom, .trailing], 10)
+                                    .foregroundColor(.black)
+                            }
                             
                             //The pages on the bottom, needs to change on click.
                             HStack {
@@ -136,6 +142,42 @@ struct MainView: View {
                     
                     Spacer()
                     Spacer()
+                }
+                
+                //Overlay and Report button
+                if showOverlay {
+                    Color.black.opacity(0.6)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            showOverlay.toggle()
+                        }
+
+                    VStack {
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                //Handle report action
+                            }) {
+                                HStack {
+                                    Image(systemName: "exclamationmark.circle")
+                                        .foregroundColor(.red)
+                                    Text("Report")
+                                        .foregroundColor(.red)
+                                }
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .shadow(radius: 10)
+                            }
+                            .padding()
+                        }.padding(.trailing, 10)
+                        Spacer()
+                    }
                 }
             }
             .navigationBarHidden(true)

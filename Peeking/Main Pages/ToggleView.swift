@@ -12,24 +12,33 @@ struct ToggleView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var distance: Double = 30
     @State private var showLocationView = false
-    @State private var selectedConsultingOption = "Consulting"
-    @State private var selectedMedicalTrackOption = "Medical Track"
-    @State private var selectedHealthcareOption = "Healthcare"
-    @State private var selectedStartupOption = "Startup"
-    @State private var selectedSmallBusinessOption = "Small Business"
-    @State private var selectedIndependentContractorOption = "Independent Contractor"
-    @State private var selectedRemoteOption = "Remote"
-    @State private var selectedHybridOption = "Hybrid"
-    @State private var selectedInPersonOption = "In-Person"
-    @State private var selectedPartTimeOption = "Part-time"
-    @State private var selectedFullTimeOption = "Full-Time"
-    @State private var selectedTemporaryOption = "Temporary"
+    
+    @State private var selectedField1 = "Consulting"
+    @State private var selectedField2 = "Medical Track"
+    @State private var selectedField3 = "Healthcare"
+    
+    @State private var selectedEmployer1 = "Startup"
+    @State private var selectedEmployer2 = "Small Business"
+    @State private var selectedEmployer3 = "Independent Contractor"
+    
+    @State private var selectedSetting1 = "Remote"
+    @State private var selectedSetting2 = "Hybrid"
+    @State private var selectedSetting3 = "In-Person"
+    
+    @State private var selectedStatus1 = "Part-time"
+    @State private var selectedStatus2 = "Full-Time"
+    @State private var selectedStatus3 = "Temporary"
+    
+    @State private var selectedStart1 = "Fall"
+    @State private var selectedStart2 = "Winter"
+    @State private var selectedStart3 = "Any"
 
     // Options for all of the drop downs.
-    var jobOptions = ["Consulting", "IT Consulting", "Management Consulting"]
-    var employerOptions = ["Startup", "Small Business", "Independent Contractor"]
+    var fieldOptions = ["Consulting", "IT Consulting", "Management Consulting"]
+    var employerOptions = ["Startup", "Small Business", "Independent Client", "Corporate"]
     var workSettingOptions = ["Remote", "In-Person", "Hybrid"]
-    var employmentStatusOptions = ["Part-time", "Full-Time", "Temporary"]
+    var employmentStatusOptions = ["Part-time", "Full-Time", "Temporary", "Internship"]
+    var StartOptions = ["Fall", "Winter", "Spring", "Summer", "Any"]
 
     var body: some View {
         //VStack with all content
@@ -93,9 +102,9 @@ struct ToggleView: View {
                             Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
                         }
                         HStack {
-                            DropdownMenuButton(title: $selectedConsultingOption, options: jobOptions)
-                            DropdownMenuButton(title: $selectedMedicalTrackOption, options: jobOptions)
-                            DropdownMenuButton(title: $selectedHealthcareOption, options: jobOptions)
+                            DropdownMenuButton(title: $selectedField1, options: fieldOptions)
+                            DropdownMenuButton(title: $selectedField2, options: fieldOptions)
+                            DropdownMenuButton(title: $selectedField3, options: fieldOptions)
                         }
                     }
                     .padding()
@@ -112,9 +121,9 @@ struct ToggleView: View {
                             Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
                         }
                         HStack {
-                            DropdownMenuButton(title: $selectedStartupOption, options: employerOptions)
-                            DropdownMenuButton(title: $selectedSmallBusinessOption, options: employerOptions)
-                            DropdownMenuButton(title: $selectedIndependentContractorOption, options: employerOptions)
+                            DropdownMenuButton(title: $selectedEmployer1, options: employerOptions)
+                            DropdownMenuButton(title: $selectedEmployer2, options: employerOptions)
+                            DropdownMenuButton(title: $selectedEmployer3, options: employerOptions)
                         }
                     }
                     .padding()
@@ -131,9 +140,9 @@ struct ToggleView: View {
                             Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
                         }
                         HStack(spacing: 10) {
-                            DropdownMenuButton(title: $selectedRemoteOption, options: workSettingOptions)
-                            DropdownMenuButton(title: $selectedHybridOption, options: workSettingOptions)
-                            DropdownMenuButton(title: $selectedInPersonOption, options: workSettingOptions)
+                            DropdownMenuButton(title: $selectedSetting1, options: workSettingOptions)
+                            DropdownMenuButton(title: $selectedSetting2, options: workSettingOptions)
+                            DropdownMenuButton(title: $selectedSetting3, options: workSettingOptions)
                         }
                     }
                     .padding()
@@ -150,9 +159,32 @@ struct ToggleView: View {
                             Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
                         }
                         HStack {
-                            DropdownMenuButton(title: $selectedPartTimeOption, options: employmentStatusOptions)
-                            DropdownMenuButton(title: $selectedFullTimeOption, options: employmentStatusOptions)
-                            DropdownMenuButton(title: $selectedTemporaryOption, options: employmentStatusOptions)
+                            DropdownMenuButton(title: $selectedStatus1, options: employmentStatusOptions)
+                            DropdownMenuButton(title: $selectedStatus2, options: employmentStatusOptions)
+                            DropdownMenuButton(title: $selectedStatus3, options: employmentStatusOptions)
+                        }
+                    }
+                    .padding()
+                    
+                    Divider().background(Color.gray)
+                    //The start time
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Start Time")
+                        HStack {
+                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
+                            Spacer()
+                            Text("2nd Choice").foregroundColor(.gray)
+                            Spacer()
+                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
+                        }
+                        HStack {
+                            Spacer()
+                            DropdownMenuButton(title: $selectedStart1, options: StartOptions)
+                            Spacer()
+                            DropdownMenuButton(title: $selectedStart2, options: StartOptions)
+                            Spacer()
+                            DropdownMenuButton(title: $selectedStart3, options: StartOptions)
+                            Spacer()
                         }
                     }
                     .padding()
