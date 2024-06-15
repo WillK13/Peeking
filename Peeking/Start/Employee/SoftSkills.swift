@@ -8,11 +8,41 @@
 import SwiftUI
 
 struct SoftSkills: View {
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            BackgroundView()
+                .edgesIgnoringSafeArea(.all)
+            VStack(alignment: .leading) {
+                // Custom back arrow
+                HStack {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "arrow.left")
+                            .foregroundColor(.black)
+                            .padding()
+                    }
+                    Spacer()
+                }
+                .padding(.leading)
+                
+                Spacer()
+                
+                Text("Hello, World!")
+                    .font(.largeTitle)
+                
+                Spacer()
+            }
+            .padding()
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
-#Preview {
-    SoftSkills()
+struct SoftSkills_Previews: PreviewProvider {
+    static var previews: some View {
+        SoftSkills()
+    }
 }

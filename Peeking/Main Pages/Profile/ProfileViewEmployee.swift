@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileViewEmployee: View {
     //Vars to toggle views
     @State private var showSettings = false
+    @State private var showTips = false
     @State private var showProfileDetail = false
 
     var body: some View {
@@ -33,7 +34,7 @@ struct ProfileViewEmployee: View {
                     Spacer()
                     
                     Button(action: {
-                        //Handle tips action
+                        showTips.toggle()
                     }) {
                         Text("Tips")
                             .foregroundColor(Color.black)
@@ -127,6 +128,9 @@ struct ProfileViewEmployee: View {
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
+        }
+        .sheet(isPresented: $showTips) {
+            TipsView()
         }
     }
 }

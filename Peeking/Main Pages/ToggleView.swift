@@ -43,21 +43,24 @@ struct ToggleView: View {
     var body: some View {
         //VStack with all content
         VStack(spacing: 20) {
-            //Back arrow
-            HStack {
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.black).font(.system(size: 25))
+            VStack {
+                //Back arrow
+                HStack {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.black).font(.system(size: 25))
+                    }
+                    Spacer()
                 }
-                Spacer()
-            }
-            .padding([.top, .leading, .trailing])
-
-            Text("Search Settings")
-                .font(.title)
-                .fontWeight(.bold)
+                .padding([.top, .leading, .trailing])
+                
+                Text("Search Settings")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .padding(.bottom)
+            }.background(Color.gray.opacity(0.2)).cornerRadius(10)
             //The main view area
             ScrollView {
                 VStack(spacing: 20) {
@@ -84,8 +87,11 @@ struct ToggleView: View {
                     Divider().background(Color.gray)
                     //Distance toggle
                     VStack(spacing: 10) {
-                        Text("Distance")
-                        Slider(value: $distance, in: 0...500)
+                        HStack {
+                            Text("Distance")
+                            Spacer()
+                        }
+                        Slider(value: $distance, in: 0...100)
                         Text("Up to \(Int(distance)) miles")
                     }
                     .padding(.horizontal)

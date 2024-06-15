@@ -28,7 +28,7 @@ struct ContentView: View {
                     .tabItem {
                         Image("chat50").renderingMode(.template)
                     }
-                ProfileViewEmployer()
+                ProfileViewEmployee()
                     .tabItem {
                         Image("profile50").renderingMode(.template)
                     }

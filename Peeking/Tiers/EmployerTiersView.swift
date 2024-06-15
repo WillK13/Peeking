@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmployerTiersView: View {
-    //Vars for all of the sviews and plans and pages and a timer.
+    //Vars for all of the views and plans and pages and a timer.
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var selectedPage = 0
     @State private var selectedPlan = "with Floater"
