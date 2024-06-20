@@ -14,6 +14,11 @@
 		BE5E4FF22C1E371800D36578 /* TechnicalsEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FF12C1E371800D36578 /* TechnicalsEmployee.swift */; };
 		BE5E4FF42C1E441E00D36578 /* HonestyStatement.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FF32C1E441E00D36578 /* HonestyStatement.swift */; };
 		BE5E4FF62C1E485200D36578 /* SoftSkills.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FF52C1E485200D36578 /* SoftSkills.swift */; };
+		BE5E4FF82C1E4F4E00D36578 /* welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FF72C1E4F4E00D36578 /* welcome.swift */; };
+		BE5E4FFA2C24A1F200D36578 /* WorkEnviornment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FF92C24A1F200D36578 /* WorkEnviornment.swift */; };
+		BE5E4FFC2C24A41600D36578 /* Hobbies.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FFB2C24A41600D36578 /* Hobbies.swift */; };
+		BE5E4FFE2C24A73800D36578 /* ProfileConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FFD2C24A73800D36578 /* ProfileConfirmation.swift */; };
+		BE5E50002C24D17000D36578 /* newposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FFF2C24D17000D36578 /* newposition.swift */; };
 		BE6029902C13603B00B3C080 /* PeekingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE60298F2C13603B00B3C080 /* PeekingApp.swift */; };
 		BE6029922C13603B00B3C080 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029912C13603B00B3C080 /* ContentView.swift */; };
 		BE6029942C13603C00B3C080 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE6029932C13603C00B3C080 /* Assets.xcassets */; };
@@ -62,6 +67,11 @@
 		BE5E4FF12C1E371800D36578 /* TechnicalsEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TechnicalsEmployee.swift; sourceTree = "<group>"; };
 		BE5E4FF32C1E441E00D36578 /* HonestyStatement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HonestyStatement.swift; sourceTree = "<group>"; };
 		BE5E4FF52C1E485200D36578 /* SoftSkills.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftSkills.swift; sourceTree = "<group>"; };
+		BE5E4FF72C1E4F4E00D36578 /* welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = welcome.swift; sourceTree = "<group>"; };
+		BE5E4FF92C24A1F200D36578 /* WorkEnviornment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkEnviornment.swift; sourceTree = "<group>"; };
+		BE5E4FFB2C24A41600D36578 /* Hobbies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hobbies.swift; sourceTree = "<group>"; };
+		BE5E4FFD2C24A73800D36578 /* ProfileConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileConfirmation.swift; sourceTree = "<group>"; };
+		BE5E4FFF2C24D17000D36578 /* newposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newposition.swift; sourceTree = "<group>"; };
 		BE60298C2C13603B00B3C080 /* Peeking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peeking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE60298F2C13603B00B3C080 /* PeekingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekingApp.swift; sourceTree = "<group>"; };
 		BE6029912C13603B00B3C080 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -128,6 +138,7 @@
 			children = (
 				BE5E4FEA2C1CAF2F00D36578 /* Invite */,
 				BE5E4FEB2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift */,
+				BE5E4FFF2C24D17000D36578 /* newposition.swift */,
 			);
 			path = Employer;
 			sourceTree = "<group>";
@@ -140,6 +151,9 @@
 				BE5E4FF12C1E371800D36578 /* TechnicalsEmployee.swift */,
 				BE5E4FF32C1E441E00D36578 /* HonestyStatement.swift */,
 				BE5E4FF52C1E485200D36578 /* SoftSkills.swift */,
+				BE5E4FF92C24A1F200D36578 /* WorkEnviornment.swift */,
+				BE5E4FFB2C24A41600D36578 /* Hobbies.swift */,
+				BE5E4FFD2C24A73800D36578 /* ProfileConfirmation.swift */,
 			);
 			path = Employee;
 			sourceTree = "<group>";
@@ -147,6 +161,7 @@
 		BE5E4FE92C1CAF1600D36578 /* Real Start */ = {
 			isa = PBXGroup;
 			children = (
+				BE5E4FF72C1E4F4E00D36578 /* welcome.swift */,
 			);
 			path = "Real Start";
 			sourceTree = "<group>";
@@ -403,7 +418,9 @@
 				BE5E4FF42C1E441E00D36578 /* HonestyStatement.swift in Sources */,
 				BE6029922C13603B00B3C080 /* ContentView.swift in Sources */,
 				BE6029DE2C13971400B3C080 /* ProfileViewEmployer.swift in Sources */,
+				BE5E50002C24D17000D36578 /* newposition.swift in Sources */,
 				BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */,
+				BE5E4FFC2C24A41600D36578 /* Hobbies.swift in Sources */,
 				BE6029D42C13969000B3C080 /* UnlockedLikedView.swift in Sources */,
 				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
 				BE5E4FF22C1E371800D36578 /* TechnicalsEmployee.swift in Sources */,
@@ -412,6 +429,7 @@
 				BE6029CF2C13963400B3C080 /* MainView.swift in Sources */,
 				BE6029D72C1396C500B3C080 /* HistoryView.swift in Sources */,
 				BE5E4FEE2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift in Sources */,
+				BE5E4FFA2C24A1F200D36578 /* WorkEnviornment.swift in Sources */,
 				BE6029EB2C19069700B3C080 /* ToggleView.swift in Sources */,
 				BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */,
 				BE6029C42C136B6A00B3C080 /* BackgroundView.swift in Sources */,
@@ -420,6 +438,8 @@
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,
 				BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */,
 				BE6029DB2C1396F300B3C080 /* MessagesView.swift in Sources */,
+				BE5E4FF82C1E4F4E00D36578 /* welcome.swift in Sources */,
+				BE5E4FFE2C24A73800D36578 /* ProfileConfirmation.swift in Sources */,
 				BE6029902C13603B00B3C080 /* PeekingApp.swift in Sources */,
 				BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */,
 				BE5E4FF62C1E485200D36578 /* SoftSkills.swift in Sources */,

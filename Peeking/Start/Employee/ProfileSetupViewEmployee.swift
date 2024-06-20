@@ -39,12 +39,24 @@ struct ProfileSetupViewEmployee: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 ZStack {
                     BackgroundView()
                         .edgesIgnoringSafeArea(.all)
                     VStack(alignment: .leading) {
+                        
+                        HStack {
+                            NavigationLink(destination: Welcome()) {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 25))
+                                    .padding()
+                            }
+                            Spacer()
+                        }
+                        .padding(.top)
+                        
                         HStack {
                             Spacer()
                             Text("Basics")
@@ -179,6 +191,7 @@ struct ProfileSetupViewEmployee: View {
                 ImagePicker(image: self.$inputImage)
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     func isFormComplete() -> Bool {

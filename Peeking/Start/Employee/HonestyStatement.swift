@@ -1,10 +1,3 @@
-//
-//  HonestyStatement.swift
-//  Peeking
-//
-//  Created by Will kaminski on 6/15/24.
-//
-
 import SwiftUI
 
 struct HonestyStatement: View {
@@ -19,7 +12,9 @@ struct HonestyStatement: View {
                 VStack(alignment: .leading) {
                     // Custom back arrow
                     HStack {
-                        NavigationLink(destination: TechnicalsEmployee()) {
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
                             Image(systemName: "arrow.left")
                                 .foregroundColor(.black)
                                 .padding()
@@ -80,7 +75,7 @@ struct HonestyStatement: View {
                     HStack {
                         Spacer()
                         // Next Button
-                        NavigationLink(destination: SoftSkills()) {
+                        NavigationLink(destination: SoftSkills().navigationBarBackButtonHidden(true)) {
                             Image(systemName: "arrow.right")
                                 .foregroundColor(.black)
                                 .padding()
@@ -97,6 +92,7 @@ struct HonestyStatement: View {
                 .padding()
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

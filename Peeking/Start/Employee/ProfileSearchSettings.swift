@@ -228,9 +228,10 @@ struct ProfileSearchSettings: View {
                     }.padding(.trailing, 20)
                 }
                 .padding(.bottom, 20) // Add some bottom padding to ensure the last item is fully visible
-            }
+            }.navigationBarBackButtonHidden(true)
         }
         .padding()
+        .navigationBarBackButtonHidden(true)
     }
     
     func isFormComplete() -> Bool {

@@ -1,10 +1,3 @@
-//
-//  TechnicalsEmployee.swift
-//  Peeking
-//
-//  Created by Will kaminski on 6/15/24.
-//
-
 import SwiftUI
 
 struct TechnicalsEmployee: View {
@@ -100,7 +93,7 @@ struct TechnicalsEmployee: View {
                         HStack {
                             Spacer()
                             // Next Button
-                            NavigationLink(destination: HonestyStatement()) {
+                            NavigationLink(destination: HonestyStatement().navigationBarBackButtonHidden(true)) {
                                 Image(systemName: "arrow.right")
                                     .foregroundColor(.black)
                                     .padding()
@@ -115,10 +108,10 @@ struct TechnicalsEmployee: View {
                         }
                     }
                     .padding()
-                    
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     func isFormComplete() -> Bool {
