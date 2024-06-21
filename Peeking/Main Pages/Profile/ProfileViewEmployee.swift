@@ -12,6 +12,8 @@ struct ProfileViewEmployee: View {
     @State private var showSettings = false
     @State private var showTips = false
     @State private var showProfileDetail = false
+    @State private var showEditProfile = false
+
 
     var body: some View {
         //Background
@@ -34,7 +36,7 @@ struct ProfileViewEmployee: View {
                     Spacer()
                     
                     Button(action: {
-                        showTips.toggle()
+                        //Handle tips action
                     }) {
                         Text("Tips")
                             .foregroundColor(Color.black)
@@ -97,7 +99,7 @@ struct ProfileViewEmployee: View {
                     }
                     
                     Button(action: {
-                        //Handle edit profile action
+                        showEditProfile.toggle()
                     }) {
                         VStack {
                             Image(systemName: "pencil")
@@ -128,6 +130,9 @@ struct ProfileViewEmployee: View {
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
+        }
+        .fullScreenCover(isPresented: $showEditProfile) {
+            EditProfile()
         }
         .sheet(isPresented: $showTips) {
             TipsView()

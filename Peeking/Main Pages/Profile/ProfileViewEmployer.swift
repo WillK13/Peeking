@@ -15,6 +15,8 @@ struct ProfileViewEmployer: View {
     @State private var showTips = false
     @State private var showProfileDetail = false
     @State private var showDeleteConfirmation = false
+    @State private var showEditProfile = false
+
 
     var body: some View {
         //Background
@@ -136,7 +138,7 @@ struct ProfileViewEmployer: View {
                     
                     
                     Button(action: {
-                        //Handle edit profile action
+                        showEditProfile.toggle()
                     }) {
                         VStack {
                             Image(systemName: "pencil")
@@ -179,6 +181,9 @@ struct ProfileViewEmployer: View {
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsView()
+        }
+        .fullScreenCover(isPresented: $showEditProfile) {
+            EditProfileEmployer()
         }
         .sheet(isPresented: $showTips) {
             TipsView()

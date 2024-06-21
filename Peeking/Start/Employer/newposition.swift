@@ -46,7 +46,7 @@ struct newposition: View {
                             .cornerRadius(15) // Increased corner radius
                         }
                         Spacer()
-                        
+                        //Maybe get rid of
                         NavigationLink(destination: ProfileSetupViewEmployer()) {
                             HStack {
                                 VStack(alignment: .leading) {
@@ -58,10 +58,12 @@ struct newposition: View {
                             }
                             .padding(30)
                             .background(gradientBackground)
-                            .cornerRadius(15) // Increased corner radius
+                            .cornerRadius(15).opacity(0.4)
+                            // Increased corner radius
                         }
                         
                         Spacer()
+                        //Maybe get rid of
                         NavigationLink(destination: ProfileSetupViewEmployer()) {
                             HStack {
                                 VStack(alignment: .leading) {
@@ -73,7 +75,7 @@ struct newposition: View {
                             }
                             .padding(30)
                             .background(gradientBackground)
-                            .cornerRadius(15) // Increased corner radius
+                            .cornerRadius(15).opacity(0.4) // Increased corner radius
                         }
                         Spacer()
                     }

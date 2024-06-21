@@ -19,6 +19,14 @@
 		BE5E4FFC2C24A41600D36578 /* Hobbies.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FFB2C24A41600D36578 /* Hobbies.swift */; };
 		BE5E4FFE2C24A73800D36578 /* ProfileConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FFD2C24A73800D36578 /* ProfileConfirmation.swift */; };
 		BE5E50002C24D17000D36578 /* newposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FFF2C24D17000D36578 /* newposition.swift */; };
+		BE5E50042C26071100D36578 /* searchsettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E50032C26071100D36578 /* searchsettings.swift */; };
+		BE5E50062C2608FD00D36578 /* DesiredTechnicals.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E50052C2608FD00D36578 /* DesiredTechnicals.swift */; };
+		BE5E500A2C26093200D36578 /* honestyemployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E50092C26093200D36578 /* honestyemployer.swift */; };
+		BE5E500C2C26093D00D36578 /* enviornmentemployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E500B2C26093D00D36578 /* enviornmentemployer.swift */; };
+		BE5E500E2C26094500D36578 /* softskillsemployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E500D2C26094500D36578 /* softskillsemployer.swift */; };
+		BE5E50102C26094F00D36578 /* hobbiesemployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E500F2C26094F00D36578 /* hobbiesemployer.swift */; };
+		BE5E50122C2644FA00D36578 /* EditProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E50112C2644FA00D36578 /* EditProfile.swift */; };
+		BE5E50142C26488600D36578 /* EditProfileEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E50132C26488600D36578 /* EditProfileEmployer.swift */; };
 		BE6029902C13603B00B3C080 /* PeekingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE60298F2C13603B00B3C080 /* PeekingApp.swift */; };
 		BE6029922C13603B00B3C080 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029912C13603B00B3C080 /* ContentView.swift */; };
 		BE6029942C13603C00B3C080 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE6029932C13603C00B3C080 /* Assets.xcassets */; };
@@ -72,6 +80,14 @@
 		BE5E4FFB2C24A41600D36578 /* Hobbies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hobbies.swift; sourceTree = "<group>"; };
 		BE5E4FFD2C24A73800D36578 /* ProfileConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileConfirmation.swift; sourceTree = "<group>"; };
 		BE5E4FFF2C24D17000D36578 /* newposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newposition.swift; sourceTree = "<group>"; };
+		BE5E50032C26071100D36578 /* searchsettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchsettings.swift; sourceTree = "<group>"; };
+		BE5E50052C2608FD00D36578 /* DesiredTechnicals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesiredTechnicals.swift; sourceTree = "<group>"; };
+		BE5E50092C26093200D36578 /* honestyemployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = honestyemployer.swift; sourceTree = "<group>"; };
+		BE5E500B2C26093D00D36578 /* enviornmentemployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = enviornmentemployer.swift; sourceTree = "<group>"; };
+		BE5E500D2C26094500D36578 /* softskillsemployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = softskillsemployer.swift; sourceTree = "<group>"; };
+		BE5E500F2C26094F00D36578 /* hobbiesemployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hobbiesemployer.swift; sourceTree = "<group>"; };
+		BE5E50112C2644FA00D36578 /* EditProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfile.swift; sourceTree = "<group>"; };
+		BE5E50132C26488600D36578 /* EditProfileEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileEmployer.swift; sourceTree = "<group>"; };
 		BE60298C2C13603B00B3C080 /* Peeking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peeking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE60298F2C13603B00B3C080 /* PeekingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekingApp.swift; sourceTree = "<group>"; };
 		BE6029912C13603B00B3C080 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -139,6 +155,12 @@
 				BE5E4FEA2C1CAF2F00D36578 /* Invite */,
 				BE5E4FEB2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift */,
 				BE5E4FFF2C24D17000D36578 /* newposition.swift */,
+				BE5E50032C26071100D36578 /* searchsettings.swift */,
+				BE5E50052C2608FD00D36578 /* DesiredTechnicals.swift */,
+				BE5E50092C26093200D36578 /* honestyemployer.swift */,
+				BE5E500B2C26093D00D36578 /* enviornmentemployer.swift */,
+				BE5E500D2C26094500D36578 /* softskillsemployer.swift */,
+				BE5E500F2C26094F00D36578 /* hobbiesemployer.swift */,
 			);
 			path = Employer;
 			sourceTree = "<group>";
@@ -272,6 +294,8 @@
 				BE6029E42C16363D00B3C080 /* SettingsView.swift */,
 				BE6029E62C16364400B3C080 /* TipsView.swift */,
 				BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */,
+				BE5E50112C2644FA00D36578 /* EditProfile.swift */,
+				BE5E50132C26488600D36578 /* EditProfileEmployer.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -415,16 +439,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE5E50142C26488600D36578 /* EditProfileEmployer.swift in Sources */,
 				BE5E4FF42C1E441E00D36578 /* HonestyStatement.swift in Sources */,
 				BE6029922C13603B00B3C080 /* ContentView.swift in Sources */,
+				BE5E500A2C26093200D36578 /* honestyemployer.swift in Sources */,
 				BE6029DE2C13971400B3C080 /* ProfileViewEmployer.swift in Sources */,
 				BE5E50002C24D17000D36578 /* newposition.swift in Sources */,
 				BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */,
 				BE5E4FFC2C24A41600D36578 /* Hobbies.swift in Sources */,
 				BE6029D42C13969000B3C080 /* UnlockedLikedView.swift in Sources */,
 				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
+				BE5E50042C26071100D36578 /* searchsettings.swift in Sources */,
 				BE5E4FF22C1E371800D36578 /* TechnicalsEmployee.swift in Sources */,
 				BE6029D22C13966D00B3C080 /* LikedView.swift in Sources */,
+				BE5E500E2C26094500D36578 /* softskillsemployer.swift in Sources */,
 				BE5E4FEC2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift in Sources */,
 				BE6029CF2C13963400B3C080 /* MainView.swift in Sources */,
 				BE6029D72C1396C500B3C080 /* HistoryView.swift in Sources */,
@@ -434,14 +462,18 @@
 				BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */,
 				BE6029C42C136B6A00B3C080 /* BackgroundView.swift in Sources */,
 				BE5E4FE12C1B769600D36578 /* ToggleViewEmployer.swift in Sources */,
+				BE5E50062C2608FD00D36578 /* DesiredTechnicals.swift in Sources */,
+				BE5E500C2C26093D00D36578 /* enviornmentemployer.swift in Sources */,
 				BE5E4FF02C1CC8B100D36578 /* ProfileSearchSettings.swift in Sources */,
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,
 				BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */,
+				BE5E50102C26094F00D36578 /* hobbiesemployer.swift in Sources */,
 				BE6029DB2C1396F300B3C080 /* MessagesView.swift in Sources */,
 				BE5E4FF82C1E4F4E00D36578 /* welcome.swift in Sources */,
 				BE5E4FFE2C24A73800D36578 /* ProfileConfirmation.swift in Sources */,
 				BE6029902C13603B00B3C080 /* PeekingApp.swift in Sources */,
 				BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */,
+				BE5E50122C2644FA00D36578 /* EditProfile.swift in Sources */,
 				BE5E4FF62C1E485200D36578 /* SoftSkills.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
