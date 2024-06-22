@@ -1,5 +1,4 @@
-//
-//  welcome.swift
+//  Welcome.swift
 //  Peeking
 //
 //  Created by Will kaminski on 6/15/24.
@@ -31,7 +30,7 @@ struct Welcome: View {
                         .padding(.vertical, 20)
                     
                     VStack(spacing: 20) {
-                        NavigationLink(destination: ProfileSetupViewEmployee(isProfileSetupComplete: $isProfileSetupComplete)) {
+                        NavigationLink(destination: ProfileSetupViewEmployee(isProfileSetupComplete: $isProfileSetupComplete, fromEditProfile: false)) {
                             HStack {
                                 Image("Duck_Head")
                                     .resizable()

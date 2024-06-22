@@ -82,7 +82,7 @@ struct honestyemployer: View {
                     HStack {
                         Spacer()
                         // Next Button
-                        NavigationLink(destination: enviornmentemployer().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: enviornmentemployer(fromEditProfile: false).navigationBarBackButtonHidden(true)) {
                             Image(systemName: "arrow.right")
                                 .foregroundColor(.black)
                                 .padding()

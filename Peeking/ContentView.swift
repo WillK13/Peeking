@@ -18,19 +18,19 @@ struct ContentView: View {
                     }
                 LikedView()
                     .tabItem {
-                        Image("eyeoff50").renderingMode(.template)
+                        Image("eyem").renderingMode(.template)
                     }
                 HistoryView()
                     .tabItem {
-                        Image("heart50").renderingMode(.template)
+                        Image("heartm").renderingMode(.template)
                     }
                 MessagesView()
                     .tabItem {
-                        Image("chat50").renderingMode(.template)
+                        Image("messagesm").renderingMode(.template)
                     }
                 ProfileViewEmployee()
                     .tabItem {
-                        Image("profile50").renderingMode(.template)
+                        Image("profilem").renderingMode(.template)
                     }
             }
         }

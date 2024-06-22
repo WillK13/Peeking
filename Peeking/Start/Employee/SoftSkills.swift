@@ -15,6 +15,9 @@ struct SoftSkills: View {
     @State private var workFlexibility: String = ""
     @State private var supportResources: String = ""
     @State private var goodManagement: String = ""
+    @State private var goodEnv: String = ""
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
     
     let characterLimit = 150
 
@@ -35,12 +38,29 @@ struct SoftSkills: View {
                                     .padding()
                             }
                             Spacer()
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }
+                            }
                         }
                         .padding(.leading)
                         
                         HStack {
                             Spacer()
-                            Text("Tell Us Your Desired Work Environment")
+                            Text("Let’s Understand Your Soft-Skills")
                                 .font(.largeTitle)
                                 .padding(.top)
                             Spacer()
@@ -48,7 +68,7 @@ struct SoftSkills: View {
                         
                         HStack {
                             Spacer()
-                            Text("These will NOT be publicly visible")
+                            Text("These will be publicly visible")
                                 .font(.subheadline)
                                 .italic()
                                 .foregroundColor(.gray)
@@ -57,20 +77,21 @@ struct SoftSkills: View {
                         }
                         
                         VStack(alignment: .leading, spacing: 20) {
-                            CustomTextField(title: "1. Briefly describe your ideal work environment.", text: $workEnvironment, characterLimit: characterLimit)
-                            CustomTextField(title: "2. What kind of team dynamics do you prefer in a workplace?", text: $teamDynamics, characterLimit: characterLimit)
-                            CustomTextField(title: "3. What level of flexibility in work hours is important to you?", text: $workFlexibility, characterLimit: characterLimit)
-                            CustomTextField(title: "4. What types of support or resources do you find essential in a workplace?", text: $supportResources, characterLimit: characterLimit)
-                            CustomTextField(title: "5. What characteristics do you value most in good management?", text: $goodManagement, characterLimit: characterLimit)
+                            CustomTextField(title: "1. What do you perceive as your top three personal qualities?", text: $workEnvironment, characterLimit: characterLimit)
+                            CustomTextField(title: "2. Which soft-skills do you consider to be your strongest assets in the workplace?", text: $teamDynamics, characterLimit: characterLimit)
+                            CustomTextField(title: "3. What are the most important soft-skills you rely on for effective teamwork?", text: $workFlexibility, characterLimit: characterLimit)
+                            CustomTextField(title: "4. How do you deal with challenges or conflicts at work?", text: $supportResources, characterLimit: characterLimit)
+                            CustomTextField(title: "5. How do you build good relationships with colleagues and clients?", text: $goodManagement, characterLimit: characterLimit)
+                            CustomTextField(title: "6. What do you believe forms a positive work environment?", text: $goodEnv, characterLimit: characterLimit)
                         }
                         .padding(.horizontal)
                         
                         Spacer()
-                        
+                        if !fromEditProfile {
                         HStack {
                             Spacer()
                             // Next Button
-                            NavigationLink(destination: WorkEnviornment()) {
+                            NavigationLink(destination: WorkEnviornment(fromEditProfile: false)) {
                                 Image(systemName: "arrow.right")
                                     .foregroundColor(.black)
                                     .padding()
@@ -84,19 +105,23 @@ struct SoftSkills: View {
                             .padding(.bottom, 50)
                         }
                     }
+                    }
                     .padding()
                 }
-                .navigationBarBackButtonHidden(true)
+                
             }
-        }
+        }                    .navigationBarBackButtonHidden(true)
+
     }
+
     
     func isFormComplete() -> Bool {
         return !workEnvironment.isEmpty &&
                !teamDynamics.isEmpty &&
                !workFlexibility.isEmpty &&
                !supportResources.isEmpty &&
-               !goodManagement.isEmpty
+               !goodManagement.isEmpty &&
+               !goodEnv.isEmpty
     }
 }
 
@@ -146,6 +171,6 @@ struct CustomTextField: View {
 
 struct SoftSkills_Previews: PreviewProvider {
     static var previews: some View {
-        SoftSkills()
+        SoftSkills(fromEditProfile: false)
     }
 }

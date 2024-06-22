@@ -15,6 +15,8 @@ struct WorkEnviornment: View {
     @State private var answer3: String = ""
     @State private var answer4: String = ""
     @State private var answer5: String = ""
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
     
     let characterLimit = 150
 
@@ -35,6 +37,23 @@ struct WorkEnviornment: View {
                                     .padding()
                             }
                             Spacer()
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }
+                            }
                         }
                         .padding(.leading)
                         
@@ -65,11 +84,11 @@ struct WorkEnviornment: View {
                         .padding(.bottom, 20)
                         
                         Spacer()
-                        
+                        if !fromEditProfile {
                         HStack {
                             Spacer()
                             // Next Button
-                            NavigationLink(destination: Hobbies()) {
+                            NavigationLink(destination: Hobbies(fromEditProfile: false)) {
                                 Image(systemName: "arrow.right")
                                     .foregroundColor(.black)
                                     .padding()
@@ -83,12 +102,14 @@ struct WorkEnviornment: View {
                             .padding(.bottom, 50)
                         }
                     }
+                    }
                     .padding()
-                    .navigationBarBackButtonHidden(true)
                 }
             }
-        }
+        }                    .navigationBarBackButtonHidden(true)
+
     }
+
     
     func isFormComplete() -> Bool {
         return !answer1.isEmpty && !answer2.isEmpty && !answer3.isEmpty && !answer4.isEmpty && !answer5.isEmpty
@@ -97,6 +118,6 @@ struct WorkEnviornment: View {
 
 struct WorkEnviornment_Previews: PreviewProvider {
     static var previews: some View {
-        WorkEnviornment()
+        WorkEnviornment(fromEditProfile: false)
     }
 }

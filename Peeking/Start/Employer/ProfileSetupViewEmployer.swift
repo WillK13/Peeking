@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProfileSetupViewEmployer: View {
     @Environment(\.presentationMode) var presentationMode
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
     @State private var companyName: String = ""
     @State private var companyLogo: Image? = nil
     @State private var showingImagePicker = false
@@ -56,9 +58,36 @@ struct ProfileSetupViewEmployer: View {
                                     .padding()
                             }
                             Spacer()
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }                                        .padding(.trailing, 15)
+
+                                
+                            }
                         }
                         .padding(.top)
+                        HStack {
+                            Spacer()
+                            Text("The Basics")
+                                .font(.largeTitle)
+                                .multilineTextAlignment(.center)
+                            Spacer()
+                        }
                         
+
                         // Form fields
                         VStack(alignment: .leading, spacing: 20) {
                             Group {
@@ -107,7 +136,7 @@ struct ProfileSetupViewEmployer: View {
                                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
                                 
                                 Divider().background(Color.gray)
-
+                                
                                 Text("5. Start Time")
                                     .font(.headline)
                                 SearchBar(text: $timeSearchText, options: startTimeOptions, selectedOptions: $selectedStartTime)
@@ -119,7 +148,7 @@ struct ProfileSetupViewEmployer: View {
                                 Text("6. Relevant Fields")
                                     .font(.headline)
                                 SearchBar(text: $fieldsSearchText, options: relevantFieldsOptions, selectedOptions: $relevantFields)
-                                                                
+                                
                                 Text("7. Workplace Languages")
                                     .font(.headline)
                                 SearchBar(text: $languageSearchText, options: workplaceLanguagesOptions, selectedOptions: $workplaceLanguages)
@@ -128,24 +157,24 @@ struct ProfileSetupViewEmployer: View {
                                 Text("8. Employer Type")
                                     .font(.headline)
                                 SearchBar(text: $erTypeSearchText, options: employerTypeOptions, selectedOptions: $employerType)
-  
+                                
                                 Text("9. Work Setting")
                                     .font(.headline)
                                 SearchBar(text: $settingSearchText, options: workSettingOptions, selectedOptions: $workSetting)
-  
+                                
                                 Text("10. Employment Type")
                                     .font(.headline)
                                 SearchBar(text: $entTypeSearchText, options: employmentTypeOptions, selectedOptions: $employmentType)
                                 
                                 
                                 Divider().background(Color.gray)
-
+                                
                                 Text("11. Company Mission (Optional)")
                                 TextEditorWithLimit(text: $companyMission, characterLimit: 100, placeholder: "Type here...")
                                     .frame(height: 100)
                                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
                             }
-                            
+                            if !fromEditProfile {
                             // Next button
                             HStack {
                                 Spacer()
@@ -162,6 +191,7 @@ struct ProfileSetupViewEmployer: View {
                                 .padding(.top, 30)
                                 .padding(.bottom, 50)
                             }
+                        }
                         }
                         .padding()
                     }
@@ -288,6 +318,6 @@ struct TextFieldWithLimit: View {
 
 struct ProfileSetupViewEmployer_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileSetupViewEmployer()
+        ProfileSetupViewEmployer(fromEditProfile: false)
     }
 }

@@ -6,71 +6,70 @@
 //
 
 import SwiftUI
-//Custom alert for the key to likes status
+
+// Custom alert for the key to likes status
 struct CustomAlertView: View {
     @Binding var showAlert: Bool
+
     var body: some View {
-        //Content
+        // Content
         VStack {
             Text("Status Key")
-                .font(.largeTitle)
+                .font(.headline)
+                .foregroundColor(.black)
                 .padding(.bottom, 10)
-            //The key
-            VStack(alignment: .leading, spacing: 10) {
-                //Success
+
+            // The key
+            VStack(alignment: .leading, spacing: 15) {
+                // Success
                 HStack {
-                    RoundedRectangle(cornerRadius: 10)
+                    Circle()
                         .fill(Color.green)
                         .frame(width: 30, height: 30)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.black, lineWidth: 1)
-                        )
                     VStack(alignment: .leading) {
                         Text("Match")
                             .font(.headline)
+                            .foregroundColor(.green)
                         Text("User has liked you back")
                             .font(.subheadline)
+                            .foregroundColor(.black)
                     }
                 }
-                //Pending
+                // Pending
                 HStack {
-                    RoundedRectangle(cornerRadius: 10)
+                    Circle()
                         .fill(Color.yellow)
                         .frame(width: 30, height: 30)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.black, lineWidth: 1)
-                        )
                     VStack(alignment: .leading) {
                         Text("Not Seen")
                             .font(.headline)
+                            .foregroundColor(.yellow)
                         Text("User has yet to see your profile")
                             .font(.subheadline)
+                            .foregroundColor(.black)
                     }
                 }
-                //No
+                // No
                 HStack {
-                    RoundedRectangle(cornerRadius: 10)
+                    Circle()
                         .fill(Color.red)
                         .frame(width: 30, height: 30)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.black, lineWidth: 1)
-                        )
                     VStack(alignment: .leading) {
                         Text("Unlikely")
                             .font(.headline)
+                            .foregroundColor(.red)
                         Text("User has swiped past, very low chance they will see your profile again")
                             .font(.subheadline)
+                            .foregroundColor(.black)
                     }
                 }
             }
             .padding()
-            .background(Color.white)
+            .background(Color(.systemGray6))
             .cornerRadius(10)
             .shadow(radius: 10)
-            //Exit
+
+            // Exit
             Button(action: {
                 showAlert = false
             }) {
@@ -78,7 +77,7 @@ struct CustomAlertView: View {
                     .font(.headline)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color("TopOrange"))
+                    .background(Color("BottomOrange"))
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
@@ -92,3 +91,8 @@ struct CustomAlertView: View {
     }
 }
 
+struct CustomAlertView_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomAlertView(showAlert: .constant(true))
+    }
+}

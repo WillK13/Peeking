@@ -10,9 +10,8 @@ import SwiftUI
 struct EditProfileEmployer: View {
     //Variables for showing different views
     @Environment(\.presentationMode) var presentationMode
-    @State private var showReportProblem = false
-    @State private var showSubscriptionSettings = false
-    @State private var showDeleteConfirmation = false
+    @Binding var isProfileSetupComplete: Bool
+
 
     var body: some View {
         //This is all a pop up
@@ -48,34 +47,25 @@ struct EditProfileEmployer: View {
                             .font(.largeTitle)
                             .padding(.top, -30.0)
                         Text("Choose a category to edit").italic()
-                        Button(action: {
-                            //Handle push notifications action
-                        }) {
-                            SettingsButton(title: "Basics")
+                        
+                        NavigationLink(destination: ProfileSetupViewEmployer( fromEditProfile: true)) {
+                                SettingsButton(title: "Basics")
                         }
                         
-                        Button(action: {
-                            showReportProblem.toggle()
-                        }) {
-                            SettingsButton(title: "Desired Technicals")
+                        NavigationLink(destination: DesiredTechnicals( fromEditProfile: true)) {
+                                SettingsButton(title: "Desired Technicals")
                         }
                         
-                        Button(action: {
-                            //Handle account details action
-                        }) {
-                            SettingsButton(title: "Work Enviornment")
+                        NavigationLink(destination: enviornmentemployer( fromEditProfile: true)) {
+                                SettingsButton(title: "Work Environment")
                         }
                         
-                        Button(action: {
-                            //Handle account details action
-                        }) {
-                            SettingsButton(title: "Hobbies and Photo")
+                        NavigationLink(destination: hobbiesemployer( fromEditProfile: true)) {
+                                SettingsButton(title: "Hobbies and Photo")
                         }
                         
-                        Button(action: {
-                            //Handle account details action
-                        }) {
-                            SettingsButton(title: "Desired Soft-Skills")
+                        NavigationLink(destination: softskillsemployer( fromEditProfile: true)) {
+                                SettingsButton(title: "Desired Soft-Skills")
                         }
                         
                     }
@@ -90,36 +80,14 @@ struct EditProfileEmployer: View {
                     
                     Spacer()
                 }
-                //Logic for opening pop ups
-                if showReportProblem {
-                    Color.black.opacity(0.4)
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture {
-                            showReportProblem = false
-                        }
-                    
-                    ReportProblemView(showReportProblem: $showReportProblem)
-                        .padding(.horizontal, 40)
-                }
-                
-                if showSubscriptionSettings {
-                    Color.black.opacity(0.4)
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture {
-                            showSubscriptionSettings = false
-                        }
-                    
-                    SubscriptionSettingsView(showSubscriptionSettings: $showSubscriptionSettings)
-                        .padding(.horizontal, 40)
-                }
-                
                 
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        
     }
 }
 
 #Preview {
-    EditProfileEmployer()
+    EditProfileEmployer(isProfileSetupComplete: .constant(false))
 }

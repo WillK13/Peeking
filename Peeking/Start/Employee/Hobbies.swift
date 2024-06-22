@@ -14,6 +14,8 @@ struct Hobbies: View {
     @State private var inputImage: UIImage? = nil
     @State private var profileImage: Image? = nil
     @State private var showingImagePicker = false
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
 
     let characterLimit = 50
 
@@ -34,6 +36,23 @@ struct Hobbies: View {
                                     .padding()
                             }
                             Spacer()
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }
+                            }
                         }
                         .padding(.leading)
                         
@@ -62,11 +81,11 @@ struct Hobbies: View {
                                     .cornerRadius(10)
                                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
                                     .fixedSize(horizontal: false, vertical: true)
-                                    Text("(ie: DJ-ing, origami, gardening)")
-                                        .foregroundColor(.gray)
-                                        .italic()
-                                        .padding([.horizontal])
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                Text("(ie: DJ-ing, origami, gardening)")
+                                    .foregroundColor(.gray)
+                                    .italic()
+                                    .padding([.horizontal])
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             ZStack(alignment: .leading) {
                                 if hobbies.isEmpty {
@@ -141,7 +160,7 @@ struct Hobbies: View {
                         }
                         
                         Spacer()
-                        
+                        if !fromEditProfile {
                         HStack {
                             Spacer()
                             // Next Button
@@ -159,15 +178,20 @@ struct Hobbies: View {
                             .padding(.bottom, 50)
                         }
                     }
+                    }
                     .padding()
-                    .navigationBarBackButtonHidden(true)
+                    
                 }
                 .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                     ImagePicker(image: self.$inputImage)
-                }
-            }
-        }
+                }                    
+
+            }                    
+
+        }                    .navigationBarBackButtonHidden(true)
+
     }
+
     
     func isFormComplete() -> Bool {
         return !hobbies.isEmpty && profileImage != nil
@@ -181,6 +205,6 @@ struct Hobbies: View {
 
 struct Hobbies_Previews: PreviewProvider {
     static var previews: some View {
-        Hobbies()
+        Hobbies(fromEditProfile: false)
     }
 }

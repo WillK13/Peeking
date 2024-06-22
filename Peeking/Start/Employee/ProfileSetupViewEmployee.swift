@@ -1,4 +1,3 @@
-//
 //  ProfileSetupViewEmployee.swift
 //  Peeking
 //
@@ -8,8 +7,10 @@
 import SwiftUI
 
 struct ProfileSetupViewEmployee: View {
+    @Environment(\.presentationMode) var presentationMode // Add this line
     @Binding var isProfileSetupComplete: Bool
-    
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
     @State private var firstName: String = ""
     @State private var selectedMonth: String = "January"
     @State private var selectedDay: String = "1"
@@ -23,6 +24,7 @@ struct ProfileSetupViewEmployee: View {
     @State private var languages: [String] = []
     @State private var fieldsOfExperience: [Experience] = []
     @State private var levelOfEducation: [String] = []
+    
 
     var languageOptions = ["English", "Spanish", "French", "German"]
     var experienceOptions = ["Software and Development", "Cybersecurity", "IT Consulting"]
@@ -47,19 +49,42 @@ struct ProfileSetupViewEmployee: View {
                     VStack(alignment: .leading) {
                         
                         HStack {
-                            NavigationLink(destination: Welcome()) {
+                            Button(action: {
+                                if fromEditProfile {
+                                    presentationMode.wrappedValue.dismiss()
+                                } else {
+                                    presentationMode.wrappedValue.dismiss() // Dismiss to go back to Welcome
+                                }
+                            }) {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(.black)
                                     .font(.system(size: 25))
                                     .padding()
                             }
                             Spacer()
+                            
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }
+                            }
                         }
                         .padding(.top)
                         
                         HStack {
                             Spacer()
-                            Text("Basics")
+                            Text("The Basics")
                                 .font(.largeTitle)
                                 .padding(.top)
                                 .padding(.bottom, 20)
@@ -72,7 +97,7 @@ struct ProfileSetupViewEmployee: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.bottom, 20).padding(.trailing, 150)
                         Divider().background(Color.gray)
-
+                        
                         // Birthday
                         Text("2. Birthday")
                             .font(.headline)
@@ -111,7 +136,7 @@ struct ProfileSetupViewEmployee: View {
                         }
                         .padding(.bottom, 20)
                         Divider().background(Color.gray)
-
+                        
                         // Profile Picture
                         Text("3. Profile Picture")
                             .font(.headline)
@@ -147,7 +172,7 @@ struct ProfileSetupViewEmployee: View {
                             .foregroundColor(.gray)
                             .padding(.bottom, 20)
                         Divider().background(Color.gray)
-
+                        
                         // Languages
                         Text("4. Languages")
                             .font(.headline)
@@ -168,6 +193,7 @@ struct ProfileSetupViewEmployee: View {
                         SearchBar(text: $educationSearchText, options: educationOptions, selectedOptions: $levelOfEducation)
                         
                         Spacer()
+                        if !fromEditProfile {
                         HStack {
                             Spacer()
                             // Next Button
@@ -183,6 +209,7 @@ struct ProfileSetupViewEmployee: View {
                             .padding(.top, 30)
                             .padding(.bottom, 50)
                         }
+                    }
                     }
                     .padding()
                 }
@@ -383,10 +410,10 @@ struct ImagePicker: UIViewControllerRepresentable {
 
 struct ProfileSetupViewEmployee_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileSetupViewEmployee(isProfileSetupComplete: .constant(false))
+        ProfileSetupViewEmployee(isProfileSetupComplete: .constant(false), fromEditProfile: false)
     }
 }
 
 #Preview {
-    ProfileSetupViewEmployee(isProfileSetupComplete: .constant(false))
+    ProfileSetupViewEmployee(isProfileSetupComplete: .constant(false), fromEditProfile: false)
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct DesiredTechnicals: View {
     @Environment(\.presentationMode) var presentationMode
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
     @State private var technicalSkills: String = ""
     @State private var certifications: String = ""
     
@@ -32,6 +34,23 @@ struct DesiredTechnicals: View {
                                     .padding()
                             }
                             Spacer()
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }
+                            }
                         }
                         .padding(.leading)
                         
@@ -96,7 +115,7 @@ struct DesiredTechnicals: View {
                         }
                         
                         Spacer()
-                        
+                        if !fromEditProfile {
                         HStack {
                             Spacer()
                             // Next Button
@@ -114,6 +133,7 @@ struct DesiredTechnicals: View {
                             .padding(.bottom, 50)
                         }
                     }
+                    }
                     .padding()
                 }
             }
@@ -127,5 +147,5 @@ struct DesiredTechnicals: View {
 }
 
 #Preview {
-    DesiredTechnicals()
+    DesiredTechnicals(fromEditProfile: false)
 }

@@ -16,7 +16,7 @@ struct PeekingApp: App {
             if isProfileSetupComplete {
                 ContentView()
             } else {
-                ProfileSetupViewEmployee(isProfileSetupComplete: $isProfileSetupComplete)
+                //ProfileSetupViewEmployee(isProfileSetupComplete: $isProfileSetupComplete)
             }
         }
     }

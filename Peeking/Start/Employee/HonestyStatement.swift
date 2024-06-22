@@ -75,7 +75,7 @@ struct HonestyStatement: View {
                     HStack {
                         Spacer()
                         // Next Button
-                        NavigationLink(destination: SoftSkills().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: SoftSkills(fromEditProfile: false).navigationBarBackButtonHidden(true)) {
                             Image(systemName: "arrow.right")
                                 .foregroundColor(.black)
                                 .padding()

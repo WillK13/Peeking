@@ -9,6 +9,8 @@ import SwiftUI
 
 struct hobbiesemployer: View {
     @Environment(\.presentationMode) var presentationMode
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
     
     @State private var hobbies: String = ""
     @State private var inputImage: UIImage? = nil
@@ -34,6 +36,23 @@ struct hobbiesemployer: View {
                                     .padding()
                             }
                             Spacer()
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }
+                            }
                         }
                         .padding(.leading)
                         
@@ -136,22 +155,24 @@ struct hobbiesemployer: View {
                         }
                         
                         Spacer()
-                        
-                        HStack {
-                            Spacer()
-                            // Next Button
-                            NavigationLink(destination: ProfileConfirmation()) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
-                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                        if !fromEditProfile {
+                            
+                            HStack {
+                                Spacer()
+                                // Next Button
+                                NavigationLink(destination: ProfileConfirmation()) {
+                                    Image(systemName: "arrow.right")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color.white)
+                                        .cornerRadius(25)
+                                        .shadow(radius: 10)
+                                        .opacity(isFormComplete() ? 1.0 : 0.5)
+                                }
+                                .disabled(!isFormComplete())
+                                .padding(.top, 30)
+                                .padding(.bottom, 50)
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
                     }
                     .padding()
@@ -161,7 +182,7 @@ struct hobbiesemployer: View {
                     ImagePicker(image: self.$inputImage)
                 }
             }
-        }
+        }.navigationBarBackButtonHidden(true)
     }
     func isFormComplete() -> Bool {
         return !hobbies.isEmpty && profileImage != nil
@@ -174,5 +195,5 @@ struct hobbiesemployer: View {
 }
 
 #Preview {
-    hobbiesemployer()
+    hobbiesemployer(fromEditProfile: false)
 }

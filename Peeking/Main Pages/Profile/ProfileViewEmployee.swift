@@ -132,7 +132,7 @@ struct ProfileViewEmployee: View {
             SettingsView()
         }
         .fullScreenCover(isPresented: $showEditProfile) {
-            EditProfile()
+            EditProfile(isProfileSetupComplete: .constant(false))
         }
         .sheet(isPresented: $showTips) {
             TipsView()

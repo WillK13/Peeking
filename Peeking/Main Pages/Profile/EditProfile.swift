@@ -1,4 +1,3 @@
-//
 //  EditProfile.swift
 //  Peeking
 //
@@ -10,9 +9,8 @@ import SwiftUI
 struct EditProfile: View {
     //Variables for showing different views
     @Environment(\.presentationMode) var presentationMode
-    @State private var showReportProblem = false
-    @State private var showSubscriptionSettings = false
-    @State private var showDeleteConfirmation = false
+    @Binding var isProfileSetupComplete: Bool
+
 
     var body: some View {
         //This is all a pop up
@@ -48,34 +46,25 @@ struct EditProfile: View {
                             .font(.largeTitle)
                             .padding(.top, -30.0)
                         Text("Choose a category to edit").italic()
-                        Button(action: {
-                            //Handle push notifications action
-                        }) {
-                            SettingsButton(title: "Basics")
+                        
+                        NavigationLink(destination: ProfileSetupViewEmployee(isProfileSetupComplete: $isProfileSetupComplete, fromEditProfile: true)) {
+                                SettingsButton(title: "Basics")
                         }
                         
-                        Button(action: {
-                            showReportProblem.toggle()
-                        }) {
-                            SettingsButton(title: "Technicals")
+                        NavigationLink(destination: TechnicalsEmployee( fromEditProfile: true)) {
+                                SettingsButton(title: "Technicals")
                         }
                         
-                        Button(action: {
-                            //Handle account details action
-                        }) {
-                            SettingsButton(title: "Soft-Skills")
+                        NavigationLink(destination: SoftSkills( fromEditProfile: true)) {
+                                SettingsButton(title: "Soft-Skills")
                         }
                         
-                        Button(action: {
-                            //Handle account details action
-                        }) {
-                            SettingsButton(title: "Hobbies and Photo")
+                        NavigationLink(destination: Hobbies( fromEditProfile: true)) {
+                                SettingsButton(title: "Hobbies and Photo")
                         }
                         
-                        Button(action: {
-                            //Handle account details action
-                        }) {
-                            SettingsButton(title: "Desired Enviornment")
+                        NavigationLink(destination: WorkEnviornment( fromEditProfile: true)) {
+                                SettingsButton(title: "Desired Enviornment")
                         }
                         
                     }
@@ -90,29 +79,6 @@ struct EditProfile: View {
                     
                     Spacer()
                 }
-                //Logic for opening pop ups
-                if showReportProblem {
-                    Color.black.opacity(0.4)
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture {
-                            showReportProblem = false
-                        }
-                    
-                    ReportProblemView(showReportProblem: $showReportProblem)
-                        .padding(.horizontal, 40)
-                }
-                
-                if showSubscriptionSettings {
-                    Color.black.opacity(0.4)
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture {
-                            showSubscriptionSettings = false
-                        }
-                    
-                    SubscriptionSettingsView(showSubscriptionSettings: $showSubscriptionSettings)
-                        .padding(.horizontal, 40)
-                }
-                
                 
             }
         }
@@ -121,5 +87,5 @@ struct EditProfile: View {
 }
 
 #Preview {
-    EditProfile()
+    EditProfile(isProfileSetupComplete: .constant(false))
 }

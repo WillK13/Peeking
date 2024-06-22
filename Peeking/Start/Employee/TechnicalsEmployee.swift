@@ -4,6 +4,8 @@ struct TechnicalsEmployee: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var technicalSkills: String = ""
     @State private var certifications: String = ""
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
     
     let technicalSkillsLimit = 400
     let certificationsLimit = 300
@@ -25,14 +27,30 @@ struct TechnicalsEmployee: View {
                                     .padding()
                             }
                             Spacer()
-                        }
-                        .padding(.leading)
+                            
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }
+                            }
+                        }                                .padding(.leading)
                         
                         HStack {
                             Spacer()
                             Text("Technicals")
                                 .font(.largeTitle)
-                                .padding(.top)
                             Spacer()
                         }
                         HStack {
@@ -89,7 +107,7 @@ struct TechnicalsEmployee: View {
                         }
                         
                         Spacer()
-                        
+                        if !fromEditProfile {
                         HStack {
                             Spacer()
                             // Next Button
@@ -106,6 +124,7 @@ struct TechnicalsEmployee: View {
                             .padding(.top, 30)
                             .padding(.bottom, 50)
                         }
+                    }
                     }
                     .padding()
                 }
@@ -155,6 +174,6 @@ struct TextEditorWithLimit: View {
 
 struct TechnicalsEmployee_Previews: PreviewProvider {
     static var previews: some View {
-        TechnicalsEmployee()
+        TechnicalsEmployee(fromEditProfile: false)
     }
 }

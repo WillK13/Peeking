@@ -32,7 +32,7 @@ struct newposition: View {
                     Spacer()
                     VStack(spacing: 20) {
                         Spacer()
-                        NavigationLink(destination: ProfileSetupViewEmployer()) {
+                        NavigationLink(destination: ProfileSetupViewEmployer(fromEditProfile: false)) {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text("Create New position")
@@ -47,7 +47,7 @@ struct newposition: View {
                         }
                         Spacer()
                         //Maybe get rid of
-                        NavigationLink(destination: ProfileSetupViewEmployer()) {
+                        NavigationLink(destination: ProfileSetupViewEmployer(fromEditProfile: false)) {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text("Create New position")
@@ -64,7 +64,7 @@ struct newposition: View {
                         
                         Spacer()
                         //Maybe get rid of
-                        NavigationLink(destination: ProfileSetupViewEmployer()) {
+                        NavigationLink(destination: ProfileSetupViewEmployer(fromEditProfile: false)) {
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text("Create New position")

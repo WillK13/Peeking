@@ -215,7 +215,7 @@ struct ProfileSearchSettings: View {
                     //Exit
                     HStack {
                         Spacer()
-                        NavigationLink(destination: TechnicalsEmployee()) {
+                        NavigationLink(destination: TechnicalsEmployee( fromEditProfile: false)) {
                             Image(systemName: "arrow.right")
                                 .foregroundColor(.white)
                                 .padding()

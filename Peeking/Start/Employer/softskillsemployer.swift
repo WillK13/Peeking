@@ -9,6 +9,8 @@ import SwiftUI
 
 struct softskillsemployer: View {
     @Environment(\.presentationMode) var presentationMode
+    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+
     
     @State private var workEnvironment: String = ""
     @State private var teamDynamics: String = ""
@@ -37,6 +39,23 @@ struct softskillsemployer: View {
                                     .padding()
                             }
                             Spacer()
+                            if fromEditProfile {
+                                Image(systemName: "square.and.pencil")
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 30.0)
+                                    .font(.system(size: 70))
+                                Spacer()
+                                
+                                Button(action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    Text("Done")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color(.white))
+                                        .cornerRadius(5)
+                                }
+                            }
                         }
                         .padding(.leading)
                         
@@ -70,11 +89,12 @@ struct softskillsemployer: View {
                         .padding(.horizontal)
                         
                         Spacer()
-                        
+                        if !fromEditProfile {
+
                         HStack {
                             Spacer()
                             // Next Button
-                            NavigationLink(destination: hobbiesemployer()) {
+                            NavigationLink(destination: hobbiesemployer(fromEditProfile: false)) {
                                 Image(systemName: "arrow.right")
                                     .foregroundColor(.black)
                                     .padding()
@@ -88,11 +108,12 @@ struct softskillsemployer: View {
                             .padding(.bottom, 50)
                         }
                     }
+                    }
                     .padding()
                 }
                 .navigationBarBackButtonHidden(true)
             }
-        }
+        }.navigationBarBackButtonHidden(true)
     }
     
     func isFormComplete() -> Bool {
@@ -104,5 +125,5 @@ struct softskillsemployer: View {
     }
 }
 #Preview {
-    softskillsemployer()
+    softskillsemployer(fromEditProfile: false)
 }
