@@ -14,6 +14,19 @@ struct HistoryView: View {
         //Background
         ZStack {
             BackgroundView()
+            
+            
+            
+            LinearGradient(
+                gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.05)]),
+                startPoint: .center,
+                endPoint: .bottom
+            )
+            .edgesIgnoringSafeArea([.leading, .trailing]) // Ignore safe area only for horizontal edges
+            .padding(.bottom)
+            
+            
+            
             //Content
             VStack(alignment: .center) {
                 
@@ -83,7 +96,7 @@ struct HistoryView: View {
                              
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color.white)
-                                        .frame(width: 150, height: 120)
+                                        .frame(width: 150, height: 190)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 10)
                                                 .strokeBorder(Color.clear, lineWidth: 0)
@@ -92,7 +105,7 @@ struct HistoryView: View {
                                                         .fill(Color.clear)
                                                         .frame(height: 2)
                                                         .border(Color.black, width: 1)
-                                                        .offset(y: 60)
+                                                        .offset(y: 95)
                                                 )
                                         )
                                     
@@ -102,7 +115,7 @@ struct HistoryView: View {
                                
                                     RoundedRectangle(cornerRadius: 10)
                                         .fill(Color.white)
-                                        .frame(width: 150, height: 120)
+                                        .frame(width: 150, height: 190)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 10)
                                                 .strokeBorder(Color.clear, lineWidth: 0)
@@ -111,7 +124,7 @@ struct HistoryView: View {
                                                         .fill(Color.clear)
                                                         .frame(height: 2)
                                                         .border(Color.black, width: 1)
-                                                        .offset(y: 60)
+                                                        .offset(y: 95)
                                                 )
                                         )
                             }

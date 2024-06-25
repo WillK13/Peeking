@@ -36,7 +36,7 @@ struct ProfileViewEmployee: View {
                     Spacer()
                     
                     Button(action: {
-                        //Handle tips action
+                        showTips.toggle()
                     }) {
                         Text("Tips")
                             .foregroundColor(Color.black)
