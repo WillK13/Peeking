@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct Welcome: View {
-    @State private var isProfileSetupComplete: Bool = false
+    @Binding var isProfileSetupComplete: Bool
     
     var gradientBackground: LinearGradient {
         LinearGradient(gradient: Gradient(colors: [Color.orange, Color.yellow]), startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -96,6 +96,6 @@ struct Welcome: View {
 
 struct Welcome_Previews: PreviewProvider {
     static var previews: some View {
-        Welcome()
+        Welcome(isProfileSetupComplete: .constant(false))
     }
 }

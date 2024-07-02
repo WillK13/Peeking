@@ -16,6 +16,8 @@ struct ProfileViewEmployer: View {
     @State private var showProfileDetail = false
     @State private var showDeleteConfirmation = false
     @State private var showEditProfile = false
+    @State private var showSignInView = false
+
 
 
     var body: some View {
@@ -180,7 +182,7 @@ struct ProfileViewEmployer: View {
             }
         }
         .fullScreenCover(isPresented: $showSettings) {
-            SettingsView()
+            SettingsView(showSignInView: $showSignInView)
         }
         .fullScreenCover(isPresented: $showEditProfile) {
             EditProfileEmployer(isProfileSetupComplete: .constant(false))

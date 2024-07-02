@@ -5,32 +5,35 @@
 //  Created by Will kaminski on 6/9/24.
 //
 
-//
-//  SettingsView.swift
-//  Peeking
-//
-//  Created by Will kaminski on 6/9/24.
-//
-
 import SwiftUI
 
+@MainActor
+final class SettingViewModel: ObservableObject {
+    func signOut() throws {
+        try PhoneAuthManager.shared.signOut()
+        print("Byebye")
+    }
+}
+
 struct SettingsView: View {
-    //Variables for showing different views
+    // Variables for showing different views
     @Environment(\.presentationMode) var presentationMode
     @State private var showReportProblem = false
     @State private var showSubscriptionSettings = false
     @State private var showDeleteConfirmation = false
+    @State private var showLogOutConfirmation = false
+    @Binding var showSignInView: Bool
 
     var body: some View {
-        //This is all a pop up
+        // This is all a pop up
         NavigationView {
-            //Background
+            // Background
             ZStack {
                 BackgroundView()
                     .edgesIgnoringSafeArea(.all)
-                //Content
+                // Content
                 VStack {
-                    //Back button
+                    // Back button
                     HStack {
                         Button(action: {
                             presentationMode.wrappedValue.dismiss()
@@ -45,7 +48,7 @@ struct SettingsView: View {
                     .padding(.top, 20)
                     
                     Spacer()
-                    //All of the sections
+                    // All of the sections
                     VStack(spacing: 20) {
                         Image(systemName: "gearshape.fill")
                             .foregroundColor(.white)
@@ -53,7 +56,7 @@ struct SettingsView: View {
                             .font(.system(size: 70))
                         
                         Button(action: {
-                            //Handle push notifications action
+                            // Handle push notifications action
                         }) {
                             SettingsButton(title: "Push Notifications")
                         }
@@ -73,7 +76,7 @@ struct SettingsView: View {
                         }
                         
                         Button(action: {
-                            //Handle account details action
+                            // Handle account details action
                         }) {
                             SettingsButton(title: "Account Details")
                         }
@@ -87,7 +90,21 @@ struct SettingsView: View {
                     .padding(.horizontal, 20).padding(.top, -100)
 
                     Spacer()
-                    //Delete account and an are you sure pop up
+                    
+                    HStack {
+                        Button(action: {
+                            showLogOutConfirmation.toggle()
+                        }) {
+                            Text("Log Out")
+                                .foregroundColor(.red)
+                                .padding(10.0)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                        }
+                        .padding(.leading, 20)
+                        Spacer()
+                    }
+                    // Delete account and an are you sure pop up
                     HStack {
                         Button(action: {
                             showDeleteConfirmation.toggle()
@@ -108,7 +125,7 @@ struct SettingsView: View {
                     
                     Spacer()
                 }
-                //Logic for opening pop ups
+                // Logic for opening pop ups
                 if showReportProblem {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
@@ -141,12 +158,22 @@ struct SettingsView: View {
                     DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation)
                         .padding(.horizontal, 40)
                 }
+                
+                if showLogOutConfirmation {
+                    Color.black.opacity(0.4)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            showLogOutConfirmation = false
+                        }
+                    LogOutConfirmationView(showLogOutConfirmation: $showLogOutConfirmation, showSignInView: $showSignInView)
+                        .padding(.horizontal, 40)
+                }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }
-//View for pop ups
+// View for pop ups
 struct SettingsButton: View {
     let title: String
 
@@ -159,9 +186,9 @@ struct SettingsButton: View {
             .cornerRadius(10)
     }
 }
-//View for report
+// View for report
 struct ReportProblemView: View {
-    //Variables for drop down
+    // Variables for drop down
     @Binding var showReportProblem: Bool
     @State private var selectedSubject = "Select a subject"
     @State private var details = ""
@@ -215,7 +242,7 @@ struct ReportProblemView: View {
                 }
             
             Button(action: {
-                //Handle submit action
+                // Handle submit action
                 showReportProblem = false
             }) {
                 Text("Submit")
@@ -231,9 +258,9 @@ struct ReportProblemView: View {
         .shadow(radius: 20)
     }
 }
-//View for subscription
+// View for subscription
 struct SubscriptionSettingsView: View {
-    //Vars for plan, needs to be dynamic based on what you have
+    // Vars for plan, needs to be dynamic based on what you have
     @Binding var showSubscriptionSettings: Bool
     @State private var selectedPlan = "Glider"
 
@@ -243,7 +270,7 @@ struct SubscriptionSettingsView: View {
             Text("Subscription Settings")
                 .font(.title)
                 
-            //This info needs to change as well.
+            // This info needs to change as well.
             HStack {
                 Text(selectedPlan)
                     .foregroundColor(.black)
@@ -267,7 +294,7 @@ struct SubscriptionSettingsView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.black, lineWidth: 1)
             )
-            //Needs to be greyed out if action is not possible, also then cant click.
+            // Needs to be greyed out if action is not possible, also then cant click.
             HStack {
                 Button(action: {
                     // Handle restore action
@@ -297,7 +324,7 @@ struct SubscriptionSettingsView: View {
         .shadow(radius: 20)
     }
 }
-//The are you sure you want to delete
+// The are you sure you want to delete
 struct DeleteConfirmationView: View {
     @Binding var showDeleteConfirmation: Bool
 
@@ -305,7 +332,7 @@ struct DeleteConfirmationView: View {
         VStack(spacing: 20) {
             Text("Are you sure you want to delete your account?")
                 .font(.title2)
-            //The buttons yes or no
+            // The buttons yes or no
             HStack {
                 Button(action: {
                     showDeleteConfirmation = false
@@ -316,7 +343,7 @@ struct DeleteConfirmationView: View {
                         .background(Color.gray.opacity(0.5))
                         .cornerRadius(10)
                 }
-                //Have to connect to account then and delete
+                // Have to connect to account then and delete
                 Button(action: {
                     // Handle delete action
                     showDeleteConfirmation = false
@@ -336,7 +363,56 @@ struct DeleteConfirmationView: View {
         .shadow(radius: 20)
     }
 }
-//Deal with pop ups
+
+// The are you sure you want to delete
+struct LogOutConfirmationView: View {
+    @Binding var showLogOutConfirmation: Bool
+    @StateObject private var viewModel = SettingViewModel()
+    @Binding var showSignInView: Bool
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Are you sure you want to log out?")
+                .font(.title2)
+            // The buttons yes or no
+            HStack {
+                Button(action: {
+                    showLogOutConfirmation = false
+                }) {
+                    Text("No")
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color.gray.opacity(0.5))
+                        .cornerRadius(10)
+                }
+                // Have to connect to account then and delete
+                Button(action: {
+                    // Handle delete action
+                    showLogOutConfirmation = false
+                    // Add delete logic here
+                    Task {
+                        do { try viewModel.signOut()
+                            showSignInView = true
+                        } catch {
+                            print(error)
+                        }
+                    }
+                }) {
+                    Text("Yes")
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color.red.opacity(0.5))
+                        .cornerRadius(10)
+                }
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 20)
+    }
+}
+// Deal with pop ups
 extension View {
     func placeholder<Content: View>(
         when shouldShow: Bool,
@@ -351,5 +427,5 @@ extension View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(showSignInView: .constant(false))
 }

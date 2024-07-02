@@ -20,7 +20,7 @@ struct newposition: View {
                 
                 VStack {
                     HStack {
-                        NavigationLink(destination: Welcome()) {
+                        NavigationLink(destination: Welcome(isProfileSetupComplete: $isProfileSetupComplete)) {
                             Image(systemName: "chevron.left")
                                 .foregroundColor(.black)
                                 .font(.system(size: 25))
