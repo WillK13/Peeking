@@ -45,4 +45,11 @@ class PhoneAuthManager: ObservableObject {
         try auth.signOut()
     }
     
+    public func deleteUser() async throws {
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badURL)
+        }
+        try await user.delete()
+    }
+    
 }

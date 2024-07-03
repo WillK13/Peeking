@@ -15,6 +15,14 @@ final class SettingViewModel: ObservableObject {
     }
 }
 
+@MainActor
+final class SettingViewModel2: ObservableObject {
+    func deleteUser() async throws{
+        try await PhoneAuthManager.shared.deleteUser()
+        print("Account Deleted")
+    }
+}
+
 struct SettingsView: View {
     // Variables for showing different views
     @Environment(\.presentationMode) var presentationMode
@@ -327,6 +335,8 @@ struct SubscriptionSettingsView: View {
 // The are you sure you want to delete
 struct DeleteConfirmationView: View {
     @Binding var showDeleteConfirmation: Bool
+    @StateObject private var viewModel = SettingViewModel2()
+
 
     var body: some View {
         VStack(spacing: 20) {
@@ -348,6 +358,12 @@ struct DeleteConfirmationView: View {
                     // Handle delete action
                     showDeleteConfirmation = false
                     // Add delete logic here
+                    Task {
+                        do { try await viewModel.deleteUser()
+                        } catch {
+                            print(error)
+                        }
+                    }
                 }) {
                     Text("Yes")
                         .foregroundColor(.black)
@@ -394,7 +410,6 @@ struct LogOutConfirmationView: View {
                         // Add delete logic here
                         Task {
                             do { try viewModel.signOut()
-                                showSignInView = true
                             } catch {
                                 print(error)
                             }
