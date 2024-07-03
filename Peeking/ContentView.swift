@@ -10,25 +10,22 @@ import FirebaseAuth
 
 struct ContentView: View {
     @Binding var isProfileSetupComplete: Bool
-    @State private var showSignInView = true
-    @State private var normalOpen = false
 
     var body: some View {
         Group {
             if Auth.auth().currentUser == nil {
-                PhoneAuthView(showSignInView: $showSignInView, isProfileSetupComplete: $isProfileSetupComplete)
+                firstView()
             } else if !isProfileSetupComplete {
-                Welcome(isProfileSetupComplete: $isProfileSetupComplete)
+                @State var isProfileSetupComplete = false
+                Welcome()
             } else {
-                MainTabView(normalOpen: $normalOpen, showSignInView: $showSignInView)
+                MainTabView()
             }
         }
     }
 }
 
 struct MainTabView: View {
-    @Binding var normalOpen: Bool
-    @Binding var showSignInView: Bool
     
     var body: some View {
         TabView {
@@ -48,7 +45,7 @@ struct MainTabView: View {
                 .tabItem {
                     Image("messagesm").renderingMode(.template)
                 }
-            ProfileViewEmployee(normalOpen: $normalOpen)
+            ProfileViewEmployee()
                 .tabItem {
                     Image("profilem").renderingMode(.template)
                 }

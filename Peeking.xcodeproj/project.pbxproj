@@ -56,6 +56,7 @@
 		BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502512C33394B00B6175B /* PhoneAuthView.swift */; };
 		BEE502542C3339F100B6175B /* PhoneAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502532C3339F100B6175B /* PhoneAuthManager.swift */; };
 		BEE502562C34740300B6175B /* smsCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502552C34740300B6175B /* smsCodeView.swift */; };
+		BEE502582C35C84100B6175B /* AppleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502572C35C84100B6175B /* AppleSignInManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,7 @@
 		BEE502512C33394B00B6175B /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
 		BEE502532C3339F100B6175B /* PhoneAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthManager.swift; sourceTree = "<group>"; };
 		BEE502552C34740300B6175B /* smsCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smsCodeView.swift; sourceTree = "<group>"; };
+		BEE502572C35C84100B6175B /* AppleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +208,7 @@
 				BEE502512C33394B00B6175B /* PhoneAuthView.swift */,
 				BEE502532C3339F100B6175B /* PhoneAuthManager.swift */,
 				BEE502552C34740300B6175B /* smsCodeView.swift */,
+				BEE502572C35C84100B6175B /* AppleSignInManager.swift */,
 			);
 			path = "Real Start";
 			sourceTree = "<group>";
@@ -485,6 +488,7 @@
 				BE5E4FF42C1E441E00D36578 /* HonestyStatement.swift in Sources */,
 				BE6029922C13603B00B3C080 /* ContentView.swift in Sources */,
 				BE5E500A2C26093200D36578 /* honestyemployer.swift in Sources */,
+				BEE502582C35C84100B6175B /* AppleSignInManager.swift in Sources */,
 				BE6029DE2C13971400B3C080 /* ProfileViewEmployer.swift in Sources */,
 				BE5E502D2C33264A00D36578 /* firstView.swift in Sources */,
 				BE5E50002C24D17000D36578 /* newposition.swift in Sources */,

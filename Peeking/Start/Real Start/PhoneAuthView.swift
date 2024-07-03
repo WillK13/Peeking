@@ -48,22 +48,31 @@ struct PhoneAuthView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.numberPad)  // Number pad for verification code input
                     .padding()
-                Button(action: {
-                    phoneAuthManager.verifyCode(smsCode: verificationCode) { success in
-                        guard success else { return }
-                        isVerified = true
-                        showVerificationPopup = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                            showSignInView = false
-                            isProfileSetupComplete = false  // Ensure user needs to complete profile setup
+                
+                
+                
+                NavigationStack {
+                    NavigationLink(destination: Welcome()) {
+                        
+                        
+                        Button(action: {
+                            phoneAuthManager.verifyCode(smsCode: verificationCode) { success in
+                                guard success else { return }
+                                isVerified = true
+                                showVerificationPopup = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    showSignInView = false
+                                    isProfileSetupComplete = false  // Ensure user needs to complete profile setup
+                                }
+                            }
+                        }) {
+                            Text("Verify Code")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(10)
                         }
                     }
-                }) {
-                    Text("Verify Code")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
                 }
             }
 

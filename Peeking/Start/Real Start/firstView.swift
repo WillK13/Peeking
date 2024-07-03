@@ -6,38 +6,49 @@
 //
 
 import SwiftUI
-import _AuthenticationServices_SwiftUI
 import AuthenticationServices
-import CryptoKit
 import FirebaseAuth
-
 
 struct firstView: View {
     @State private var showSignInView: Bool = false
     @State private var isProfileSetupComplete: Bool = false
+    @StateObject private var appleSignInManager = AppleSignInManager()
+    
     var body: some View {
         NavigationStack {
             NavigationLink(destination: PhoneAuthView(showSignInView: $showSignInView, isProfileSetupComplete: $isProfileSetupComplete)) {
                 HStack {
-                    
                     VStack(alignment: .leading) {
                         Text("Employer")
                             .font(.title3)
                             .foregroundColor(Color.white)
                     }
-                    .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
-                }.background(Color.blue)
+                    .padding()
+                }
+                .background(Color.blue)
             }
             
-            SignInWithAppleButton(onRequest: { request in
-                //handleSignInWithAppleRequest(request)
-            }, onCompletion: { result in
-               //handleSignInWithAppleCompletion(result)
-            })
-                .frame(height:55)
+            
+                
+                
+                SignInWithAppleButton(onRequest: { request in
+                    appleSignInManager.handleSignInWithAppleRequest(request)
+                }, onCompletion: { result in
+                    appleSignInManager.handleSignInWithAppleCompletion(result) { success in
+                        if success {
+                            // Handle successful sign-in
+                            isProfileSetupComplete = false  // Ensure user needs to complete profile setup
+                            showSignInView = false
+                        } else {
+                            // Handle sign-in error
+                        }
+                    }
+                })
+                .frame(height: 55)
                 .cornerRadius(8)
-            
-            
+                .padding()
+                
+                
         }
     }
 }

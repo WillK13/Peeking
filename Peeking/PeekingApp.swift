@@ -13,20 +13,10 @@ import UserNotifications
 @main
 struct PeekingApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
-    @State private var isProfileSetupComplete = false
-    @State private var showSignInView = true
-    @State private var normalOpen = false
-
     var body: some Scene {
         WindowGroup {
-            if Auth.auth().currentUser == nil {
-                ContentView(isProfileSetupComplete: $isProfileSetupComplete)
-            }
-            else {
-                @State var isProfileSetupComplete = true
-                ContentView(isProfileSetupComplete: $isProfileSetupComplete)
-            }
+            @State var isProfileSetupComplete = true
+            ContentView(isProfileSetupComplete: $isProfileSetupComplete)
         }
     }
 }

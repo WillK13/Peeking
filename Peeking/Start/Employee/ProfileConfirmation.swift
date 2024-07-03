@@ -12,8 +12,6 @@ struct ProfileConfirmation: View {
     @State private var currentStep = 0
     @State private var navigateToMainView = false
     @State private var isProfileSetupComplete = true
-    @State private var normalOpen = true
-    @State private var showSignInView = true
 
     var body: some View {
         NavigationStack {
@@ -146,7 +144,7 @@ struct ProfileConfirmation: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $navigateToMainView) {
-                MainTabView(normalOpen: $normalOpen, showSignInView: $normalOpen)
+                ContentView(isProfileSetupComplete: $isProfileSetupComplete)
             }
         }
     }

@@ -385,26 +385,28 @@ struct LogOutConfirmationView: View {
                         .background(Color.gray.opacity(0.5))
                         .cornerRadius(10)
                 }
-                // Have to connect to account then and delete
-                Button(action: {
-                    // Handle delete action
-                    showLogOutConfirmation = false
-                    // Add delete logic here
-                    Task {
-                        do { try viewModel.signOut()
-                            showSignInView = true
-                        } catch {
-                            print(error)
+                
+                
+                    // Have to connect to account then and delete
+                    Button(action: {
+                        // Handle delete action
+                        showLogOutConfirmation = false
+                        // Add delete logic here
+                        Task {
+                            do { try viewModel.signOut()
+                                showSignInView = true
+                            } catch {
+                                print(error)
+                            }
                         }
+                    }) {
+                        Text("Yes")
+                            .foregroundColor(.black)
+                            .padding()
+                            .background(Color.red.opacity(0.5))
+                            .cornerRadius(10)
                     }
-                }) {
-                    Text("Yes")
-                        .foregroundColor(.black)
-                        .padding()
-                        .background(Color.red.opacity(0.5))
-                        .cornerRadius(10)
                 }
-            }
         }
         .padding()
         .background(Color.white)
