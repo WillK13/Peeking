@@ -16,15 +16,16 @@ struct PeekingApp: App {
     
     @State private var isProfileSetupComplete = false
     @State private var showSignInView = true
+    @State private var normalOpen = false
 
     var body: some Scene {
         WindowGroup {
             if Auth.auth().currentUser == nil {
-                PhoneAuthView(showSignInView: $showSignInView, isProfileSetupComplete: $isProfileSetupComplete)
-            } else if !isProfileSetupComplete {
-                Welcome(isProfileSetupComplete: $isProfileSetupComplete)
-            } else {
-                SettingsView(showSignInView: $showSignInView)
+                ContentView(isProfileSetupComplete: $isProfileSetupComplete)
+            }
+            else {
+                @State var isProfileSetupComplete = true
+                ContentView(isProfileSetupComplete: $isProfileSetupComplete)
             }
         }
     }

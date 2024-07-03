@@ -39,6 +39,10 @@ struct PhoneAuthView: View {
                         .background(Color.blue)
                         .cornerRadius(10)
                 }
+                
+                
+                Spacer()
+                
             } else {
                 TextField("Enter your code", text: $verificationCode)
                     .textFieldStyle(RoundedBorderTextFieldStyle())

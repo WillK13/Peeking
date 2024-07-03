@@ -11,7 +11,7 @@ import SwiftUI
 final class SettingViewModel: ObservableObject {
     func signOut() throws {
         try PhoneAuthManager.shared.signOut()
-        print("Byebye")
+        print("Logged out")
     }
 }
 

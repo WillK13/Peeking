@@ -14,7 +14,7 @@ struct ProfileViewEmployee: View {
     @State private var showProfileDetail = false
     @State private var showEditProfile = false
     @State private var showSignInView = false
-
+    @Binding var normalOpen: Bool
 
 
     var body: some View {
@@ -143,5 +143,5 @@ struct ProfileViewEmployee: View {
 }
 
 #Preview {
-    ProfileViewEmployee()
+    ProfileViewEmployee(normalOpen: .constant(true))
 }

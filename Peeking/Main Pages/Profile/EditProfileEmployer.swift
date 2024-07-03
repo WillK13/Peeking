@@ -11,6 +11,7 @@ struct EditProfileEmployer: View {
     //Variables for showing different views
     @Environment(\.presentationMode) var presentationMode
     @Binding var isProfileSetupComplete: Bool
+    @Binding var normalOpen: Bool
 
 
     var body: some View {
@@ -89,5 +90,5 @@ struct EditProfileEmployer: View {
 }
 
 #Preview {
-    EditProfileEmployer(isProfileSetupComplete: .constant(false))
+    EditProfileEmployer(isProfileSetupComplete: .constant(false), normalOpen: .constant(true))
 }
