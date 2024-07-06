@@ -8,7 +8,6 @@ import SwiftUI
 
 struct ProfileSetupViewEmployee: View {
     @Environment(\.presentationMode) var presentationMode // Add this line
-    @Binding var isProfileSetupComplete: Bool
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
 
     @State private var firstName: String = ""
@@ -410,10 +409,10 @@ struct ImagePicker: UIViewControllerRepresentable {
 
 struct ProfileSetupViewEmployee_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileSetupViewEmployee(isProfileSetupComplete: .constant(false), fromEditProfile: false)
+        ProfileSetupViewEmployee(fromEditProfile: false)
     }
 }
 
 #Preview {
-    ProfileSetupViewEmployee(isProfileSetupComplete: .constant(false), fromEditProfile: false)
+    ProfileSetupViewEmployee(fromEditProfile: false)
 }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct newposition: View {
-    @Binding var isProfileSetupComplete: Bool
     
     var gradientBackground: LinearGradient {
         LinearGradient(gradient: Gradient(colors: [Color.orange, Color.yellow]), startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -89,5 +88,5 @@ struct newposition: View {
 }
 
 #Preview {
-    newposition(isProfileSetupComplete: .constant(false))
+    newposition()
 }

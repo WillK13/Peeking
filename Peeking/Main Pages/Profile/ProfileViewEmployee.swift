@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-
 struct ProfileViewEmployee: View {
+    @StateObject private var viewModel = ProfileViewModel()
+
     //Vars to toggle views
     @State private var showSettings = false
     @State private var showTips = false
     @State private var showProfileDetail = false
     @State private var showEditProfile = false
-    @State private var showSignInView = false
 
 
     var body: some View {
@@ -59,6 +59,13 @@ struct ProfileViewEmployee: View {
                     
                     Text("Name")
                         .font(.title)
+//                    if let userID = viewModel.userID {
+//                                            Text(userID)
+//                                                .font(.title)
+//                                        } else {
+//                                            Text("Loading...")
+//                                                .font(.title)
+//                                        }
                     
                     Text("What employers see")
                         .font(.subheadline)
@@ -130,10 +137,10 @@ struct ProfileViewEmployee: View {
             }
         }
         .fullScreenCover(isPresented: $showSettings) {
-            SettingsView(showSignInView: $showSignInView)
+            SettingsView(viewModel: ProfileViewModel())
         }
         .fullScreenCover(isPresented: $showEditProfile) {
-            EditProfile(isProfileSetupComplete: .constant(false))
+            EditProfile()
         }
         .sheet(isPresented: $showTips) {
             TipsView()

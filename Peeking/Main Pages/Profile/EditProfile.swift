@@ -9,7 +9,6 @@ import SwiftUI
 struct EditProfile: View {
     //Variables for showing different views
     @Environment(\.presentationMode) var presentationMode
-    @Binding var isProfileSetupComplete: Bool
 
 
     var body: some View {
@@ -47,7 +46,7 @@ struct EditProfile: View {
                             .padding(.top, -30.0)
                         Text("Choose a category to edit").italic()
                         
-                        NavigationLink(destination: ProfileSetupViewEmployee(isProfileSetupComplete: $isProfileSetupComplete, fromEditProfile: true)) {
+                        NavigationLink(destination: ProfileSetupViewEmployee(fromEditProfile: true)) {
                                 SettingsButton(title: "Basics")
                         }
                         
@@ -87,5 +86,5 @@ struct EditProfile: View {
 }
 
 #Preview {
-    EditProfile(isProfileSetupComplete: .constant(false))
+    EditProfile()
 }

@@ -6,27 +6,8 @@
 //
 
 import SwiftUI
-import FirebaseAuth
 
 struct ContentView: View {
-    @Binding var isProfileSetupComplete: Bool
-
-    var body: some View {
-        Group {
-            if Auth.auth().currentUser == nil {
-                firstView()
-            } else if !isProfileSetupComplete {
-                @State var isProfileSetupComplete = false
-                Welcome()
-            } else {
-                MainTabView()
-            }
-        }
-    }
-}
-
-struct MainTabView: View {
-    
     var body: some View {
         TabView {
             MainView()
@@ -55,6 +36,6 @@ struct MainTabView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(isProfileSetupComplete: .constant(true))
+        ContentView()
     }
 }

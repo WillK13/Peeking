@@ -16,7 +16,6 @@ struct ProfileViewEmployer: View {
     @State private var showProfileDetail = false
     @State private var showDeleteConfirmation = false
     @State private var showEditProfile = false
-    @State private var showSignInView = false
 
 
 
@@ -176,16 +175,16 @@ struct ProfileViewEmployer: View {
                     .onTapGesture {
                         showDeleteConfirmation = false
                     }
-                
-                DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation)
-                    .padding(.horizontal, 40)
+                //Logic to delete position
+//                DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation,)
+//                    .padding(.horizontal, 40)
             }
         }
         .fullScreenCover(isPresented: $showSettings) {
-            SettingsView(showSignInView: $showSignInView)
+            SettingsView(viewModel: ProfileViewModel())
         }
         .fullScreenCover(isPresented: $showEditProfile) {
-            EditProfileEmployer(isProfileSetupComplete: .constant(false))
+            EditProfileEmployer()
         }
         .sheet(isPresented: $showTips) {
             TipsView()

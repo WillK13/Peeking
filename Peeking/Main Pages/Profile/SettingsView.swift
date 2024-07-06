@@ -5,6 +5,13 @@
 //  Created by Will kaminski on 6/9/24.
 //
 
+//
+//  SettingsView.swift
+//  Peeking
+//
+//  Created by Will kaminski on 6/9/24.
+//
+
 import SwiftUI
 
 @MainActor
@@ -17,7 +24,7 @@ final class SettingViewModel: ObservableObject {
 
 @MainActor
 final class SettingViewModel2: ObservableObject {
-    func deleteUser() async throws{
+    func deleteUser() async throws {
         try await PhoneAuthManager.shared.deleteUser()
         print("Account Deleted")
     }
@@ -30,7 +37,8 @@ struct SettingsView: View {
     @State private var showSubscriptionSettings = false
     @State private var showDeleteConfirmation = false
     @State private var showLogOutConfirmation = false
-    @Binding var showSignInView: Bool
+    @ObservedObject var viewModel: ProfileViewModel
+    @State private var showFirstView = false
 
     var body: some View {
         // This is all a pop up
@@ -54,7 +62,7 @@ struct SettingsView: View {
                         Spacer()
                     }
                     .padding(.top, 20)
-                    
+
                     Spacer()
                     // All of the sections
                     VStack(spacing: 20) {
@@ -62,33 +70,33 @@ struct SettingsView: View {
                             .foregroundColor(.white)
                             .padding(.vertical, 30.0)
                             .font(.system(size: 70))
-                        
+
                         Button(action: {
                             // Handle push notifications action
                         }) {
                             SettingsButton(title: "Push Notifications")
                         }
-                        
+
                         Button(action: {
                             showReportProblem.toggle()
                         }) {
                             SettingsButton(title: "Report a Problem")
                         }
-                        
+
                         Link(destination: URL(string: "https://www.example.com/how-does-it-work")!) {
                             SettingsButton(title: "How Does it Work?")
                         }
-                        
+
                         Link(destination: URL(string: "https://www.example.com/terms-of-use")!) {
                             SettingsButton(title: "Terms of Use")
                         }
-                        
+
                         Button(action: {
                             // Handle account details action
                         }) {
                             SettingsButton(title: "Account Details")
                         }
-                        
+
                         Button(action: {
                             showSubscriptionSettings.toggle()
                         }) {
@@ -98,7 +106,7 @@ struct SettingsView: View {
                     .padding(.horizontal, 20).padding(.top, -100)
 
                     Spacer()
-                    
+
                     HStack {
                         Button(action: {
                             showLogOutConfirmation.toggle()
@@ -130,7 +138,7 @@ struct SettingsView: View {
                         Spacer()
                         Image("Duck_Body").resizable().aspectRatio(contentMode: .fill).padding(.trailing, 140.0).frame(width: 10.0, height: 70.0)
                     }
-                    
+
                     Spacer()
                 }
                 // Logic for opening pop ups
@@ -140,47 +148,51 @@ struct SettingsView: View {
                         .onTapGesture {
                             showReportProblem = false
                         }
-                    
+
                     ReportProblemView(showReportProblem: $showReportProblem)
                         .padding(.horizontal, 40)
                 }
-                
+
                 if showSubscriptionSettings {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
                             showSubscriptionSettings = false
                         }
-                    
+
                     SubscriptionSettingsView(showSubscriptionSettings: $showSubscriptionSettings)
                         .padding(.horizontal, 40)
                 }
-                
+
                 if showDeleteConfirmation {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
                             showDeleteConfirmation = false
                         }
-                    
-                    DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation)
+
+                    DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation, viewModel: viewModel, showFirstView: $showFirstView)
                         .padding(.horizontal, 40)
                 }
-                
+
                 if showLogOutConfirmation {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
                         .onTapGesture {
                             showLogOutConfirmation = false
                         }
-                    LogOutConfirmationView(showLogOutConfirmation: $showLogOutConfirmation, showSignInView: $showSignInView)
+                    LogOutConfirmationView(showLogOutConfirmation: $showLogOutConfirmation, viewModel: viewModel, showFirstView: $showFirstView)
                         .padding(.horizontal, 40)
                 }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $showFirstView) {
+            firstView(viewModel: viewModel)
+        }
     }
 }
+
 // View for pop ups
 struct SettingsButton: View {
     let title: String
@@ -194,13 +206,14 @@ struct SettingsButton: View {
             .cornerRadius(10)
     }
 }
+
 // View for report
 struct ReportProblemView: View {
     // Variables for drop down
     @Binding var showReportProblem: Bool
     @State private var selectedSubject = "Select a subject"
     @State private var details = ""
-    
+
     let subjects = ["Bug", "Feedback", "Other"]
 
     var body: some View {
@@ -208,7 +221,7 @@ struct ReportProblemView: View {
             Text("Report a Problem")
                 .font(.title)
                 .fontWeight(.bold)
-            
+
             Menu {
                 ForEach(subjects, id: \.self) { subject in
                     Button(action: {
@@ -232,7 +245,7 @@ struct ReportProblemView: View {
                         .stroke(Color.black, lineWidth: 1)
                 )
             }
-            
+
             TextEditor(text: $details)
                 .padding()
                 .frame(height: 150)
@@ -248,7 +261,7 @@ struct ReportProblemView: View {
                         .padding(.horizontal, 8)
                         .padding(.vertical, 12)
                 }
-            
+
             Button(action: {
                 // Handle submit action
                 showReportProblem = false
@@ -266,6 +279,7 @@ struct ReportProblemView: View {
         .shadow(radius: 20)
     }
 }
+
 // View for subscription
 struct SubscriptionSettingsView: View {
     // Vars for plan, needs to be dynamic based on what you have
@@ -273,11 +287,10 @@ struct SubscriptionSettingsView: View {
     @State private var selectedPlan = "Glider"
 
     var body: some View {
-        
         VStack(spacing: 20) {
             Text("Subscription Settings")
                 .font(.title)
-                
+
             // This info needs to change as well.
             HStack {
                 Text(selectedPlan)
@@ -285,7 +298,7 @@ struct SubscriptionSettingsView: View {
                     .padding()
                     .background(Color.blue.opacity(0.2))
                     .cornerRadius(10)
-                
+
                 VStack(alignment: .leading) {
                     Text("6 Month - $39.95")
                         .font(.headline)
@@ -313,7 +326,7 @@ struct SubscriptionSettingsView: View {
                         .background(Color.white)
                         .cornerRadius(10)
                 }
-                
+
                 Button(action: {
                     // Handle cancel subscription action
                 }) {
@@ -332,11 +345,13 @@ struct SubscriptionSettingsView: View {
         .shadow(radius: 20)
     }
 }
+
 // The are you sure you want to delete
 struct DeleteConfirmationView: View {
     @Binding var showDeleteConfirmation: Bool
-    @StateObject private var viewModel = SettingViewModel2()
-
+    @StateObject private var viewModel2 = SettingViewModel2()
+    @ObservedObject var viewModel: ProfileViewModel
+    @Binding var showFirstView: Bool
 
     var body: some View {
         VStack(spacing: 20) {
@@ -357,9 +372,11 @@ struct DeleteConfirmationView: View {
                 Button(action: {
                     // Handle delete action
                     showDeleteConfirmation = false
-                    // Add delete logic here
                     Task {
-                        do { try await viewModel.deleteUser()
+                        do {
+                            try await viewModel2.deleteUser()
+                            viewModel.loadCurrentUser()
+                            showFirstView = true
                         } catch {
                             print(error)
                         }
@@ -383,8 +400,9 @@ struct DeleteConfirmationView: View {
 // The are you sure you want to delete
 struct LogOutConfirmationView: View {
     @Binding var showLogOutConfirmation: Bool
-    @StateObject private var viewModel = SettingViewModel()
-    @Binding var showSignInView: Bool
+    @StateObject private var viewModel2 = SettingViewModel()
+    @ObservedObject var viewModel: ProfileViewModel
+    @Binding var showFirstView: Bool
 
     var body: some View {
         VStack(spacing: 20) {
@@ -401,27 +419,27 @@ struct LogOutConfirmationView: View {
                         .background(Color.gray.opacity(0.5))
                         .cornerRadius(10)
                 }
-                
-                
-                    // Have to connect to account then and delete
-                    Button(action: {
-                        // Handle delete action
-                        showLogOutConfirmation = false
-                        // Add delete logic here
-                        Task {
-                            do { try viewModel.signOut()
-                            } catch {
-                                print(error)
-                            }
+                // Have to connect to account then and delete
+                Button(action: {
+                    // Handle delete action
+                    showLogOutConfirmation = false
+                    Task {
+                        do {
+                            try viewModel2.signOut()
+                            viewModel.loadCurrentUser()
+                            showFirstView = true
+                        } catch {
+                            print(error)
                         }
-                    }) {
-                        Text("Yes")
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(Color.red.opacity(0.5))
-                            .cornerRadius(10)
                     }
+                }) {
+                    Text("Yes")
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color.red.opacity(0.5))
+                        .cornerRadius(10)
                 }
+            }
         }
         .padding()
         .background(Color.white)
@@ -429,6 +447,7 @@ struct LogOutConfirmationView: View {
         .shadow(radius: 20)
     }
 }
+
 // Deal with pop ups
 extension View {
     func placeholder<Content: View>(
@@ -444,5 +463,5 @@ extension View {
 }
 
 #Preview {
-    SettingsView(showSignInView: .constant(false))
+    SettingsView(viewModel: ProfileViewModel())
 }

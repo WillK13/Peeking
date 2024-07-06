@@ -11,7 +11,6 @@ struct Welcome: View {
     var gradientBackground: LinearGradient {
         LinearGradient(gradient: Gradient(colors: [Color.orange, Color.yellow]), startPoint: .topLeading, endPoint: .bottomTrailing)
     }
-    @State var isProfileSetupComplete = true
     var body: some View {
         NavigationStack {
             ZStack {
@@ -29,7 +28,7 @@ struct Welcome: View {
                         .padding(.vertical, 20)
                     
                     VStack(spacing: 20) {
-                        NavigationLink(destination: ProfileSetupViewEmployee(isProfileSetupComplete: $isProfileSetupComplete, fromEditProfile: false)) {
+                        NavigationLink(destination: ProfileSetupViewEmployee(fromEditProfile: false)) {
                             HStack {
                                 Image("Duck_Head")
                                     .resizable()
@@ -50,7 +49,7 @@ struct Welcome: View {
                             .cornerRadius(15) // Increased corner radius
                         }
                         
-                        NavigationLink(destination: newposition(isProfileSetupComplete: $isProfileSetupComplete)) {
+                        NavigationLink(destination: newposition()) {
                             HStack {
                                 Image("Duck_Head")
                                     .resizable()

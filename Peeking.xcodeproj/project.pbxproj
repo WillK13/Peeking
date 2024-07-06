@@ -57,6 +57,12 @@
 		BEE502542C3339F100B6175B /* PhoneAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502532C3339F100B6175B /* PhoneAuthManager.swift */; };
 		BEE502562C34740300B6175B /* smsCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502552C34740300B6175B /* smsCodeView.swift */; };
 		BEE502582C35C84100B6175B /* AppleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502572C35C84100B6175B /* AppleSignInManager.swift */; };
+		BEE5025A2C3872F300B6175B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = BEE502592C3872F300B6175B /* FirebaseFirestore */; };
+		BEE5025C2C3872F300B6175B /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BEE5025B2C3872F300B6175B /* FirebaseFirestoreSwift */; };
+		BEE502672C39BE4800B6175B /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502662C39BE4800B6175B /* ProfileViewModel.swift */; };
+		BEE502692C39BE7A00B6175B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502682C39BE7A00B6175B /* UserManager.swift */; };
+		BEE5026D2C39CA2E00B6175B /* DBUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE5026C2C39CA2E00B6175B /* DBUser.swift */; };
+		BEE5026F2C39D59300B6175B /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE5026E2C39D59300B6175B /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +135,10 @@
 		BEE502532C3339F100B6175B /* PhoneAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthManager.swift; sourceTree = "<group>"; };
 		BEE502552C34740300B6175B /* smsCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smsCodeView.swift; sourceTree = "<group>"; };
 		BEE502572C35C84100B6175B /* AppleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInManager.swift; sourceTree = "<group>"; };
+		BEE502662C39BE4800B6175B /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		BEE502682C39BE7A00B6175B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		BEE5026C2C39CA2E00B6175B /* DBUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUser.swift; sourceTree = "<group>"; };
+		BEE5026E2C39D59300B6175B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +146,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEE5025C2C3872F300B6175B /* FirebaseFirestoreSwift in Frameworks */,
 				BE5E50222C2E213400D36578 /* FirebaseAnalyticsSwift in Frameworks */,
+				BEE5025A2C3872F300B6175B /* FirebaseFirestore in Frameworks */,
 				BE5E50252C3319AB00D36578 /* FirebaseAuth in Frameworks */,
 				BE5E50202C2E213400D36578 /* FirebaseAnalytics in Frameworks */,
 			);
@@ -209,6 +221,7 @@
 				BEE502532C3339F100B6175B /* PhoneAuthManager.swift */,
 				BEE502552C34740300B6175B /* smsCodeView.swift */,
 				BEE502572C35C84100B6175B /* AppleSignInManager.swift */,
+				BEE502662C39BE4800B6175B /* ProfileViewModel.swift */,
 			);
 			path = "Real Start";
 			sourceTree = "<group>";
@@ -260,8 +273,10 @@
 				BE6029DF2C13972E00B3C080 /* Tiers */,
 				BE6029912C13603B00B3C080 /* ContentView.swift */,
 				BE6029C32C136B6A00B3C080 /* BackgroundView.swift */,
+				BEE502632C39A2BF00B6175B /* FireStore */,
 				BE6029932C13603C00B3C080 /* Assets.xcassets */,
 				BE6029952C13603C00B3C080 /* Preview Content */,
+				BEE5026E2C39D59300B6175B /* LoadingView.swift */,
 			);
 			path = Peeking;
 			sourceTree = "<group>";
@@ -345,6 +360,15 @@
 			path = Tiers;
 			sourceTree = "<group>";
 		};
+		BEE502632C39A2BF00B6175B /* FireStore */ = {
+			isa = PBXGroup;
+			children = (
+				BEE502682C39BE7A00B6175B /* UserManager.swift */,
+				BEE5026C2C39CA2E00B6175B /* DBUser.swift */,
+			);
+			path = FireStore;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -365,6 +389,8 @@
 				BE5E501F2C2E213400D36578 /* FirebaseAnalytics */,
 				BE5E50212C2E213400D36578 /* FirebaseAnalyticsSwift */,
 				BE5E50242C3319AB00D36578 /* FirebaseAuth */,
+				BEE502592C3872F300B6175B /* FirebaseFirestore */,
+				BEE5025B2C3872F300B6175B /* FirebaseFirestoreSwift */,
 			);
 			productName = Peeking;
 			productReference = BE60298C2C13603B00B3C080 /* Peeking.app */;
@@ -490,7 +516,9 @@
 				BE5E500A2C26093200D36578 /* honestyemployer.swift in Sources */,
 				BEE502582C35C84100B6175B /* AppleSignInManager.swift in Sources */,
 				BE6029DE2C13971400B3C080 /* ProfileViewEmployer.swift in Sources */,
+				BEE502672C39BE4800B6175B /* ProfileViewModel.swift in Sources */,
 				BE5E502D2C33264A00D36578 /* firstView.swift in Sources */,
+				BEE5026F2C39D59300B6175B /* LoadingView.swift in Sources */,
 				BE5E50002C24D17000D36578 /* newposition.swift in Sources */,
 				BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */,
 				BEE502542C3339F100B6175B /* PhoneAuthManager.swift in Sources */,
@@ -499,6 +527,7 @@
 				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
 				BE5E50042C26071100D36578 /* searchsettings.swift in Sources */,
 				BE5E4FF22C1E371800D36578 /* TechnicalsEmployee.swift in Sources */,
+				BEE5026D2C39CA2E00B6175B /* DBUser.swift in Sources */,
 				BE6029D22C13966D00B3C080 /* LikedView.swift in Sources */,
 				BE5E500E2C26094500D36578 /* softskillsemployer.swift in Sources */,
 				BE5E4FEC2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift in Sources */,
@@ -512,6 +541,7 @@
 				BE6029C42C136B6A00B3C080 /* BackgroundView.swift in Sources */,
 				BE5E4FE12C1B769600D36578 /* ToggleViewEmployer.swift in Sources */,
 				BE5E50062C2608FD00D36578 /* DesiredTechnicals.swift in Sources */,
+				BEE502692C39BE7A00B6175B /* UserManager.swift in Sources */,
 				BE5E500C2C26093D00D36578 /* enviornmentemployer.swift in Sources */,
 				BE5E4FF02C1CC8B100D36578 /* ProfileSearchSettings.swift in Sources */,
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,
@@ -885,6 +915,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BE5E501E2C2E213400D36578 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		BEE502592C3872F300B6175B /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE5E501E2C2E213400D36578 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		BEE5025B2C3872F300B6175B /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BE5E501E2C2E213400D36578 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
