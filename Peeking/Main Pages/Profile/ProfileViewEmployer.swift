@@ -181,7 +181,7 @@ struct ProfileViewEmployer: View {
             }
         }
         .fullScreenCover(isPresented: $showSettings) {
-            SettingsView(viewModel: ProfileViewModel())
+            SettingsView()
         }
         .fullScreenCover(isPresented: $showEditProfile) {
             EditProfileEmployer()

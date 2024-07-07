@@ -13,7 +13,7 @@ struct ProfileConfirmation: View {
     @State private var currentStep = 0
     @State private var navigateToMainView = false
     @State private var showLoadingIndicator = false
-    @StateObject private var userManager = UserManager()
+    //@StateObject private var userManager = UserManager()
 
     var body: some View {
         NavigationStack {
@@ -128,7 +128,18 @@ struct ProfileConfirmation: View {
                         HStack {
                             Spacer()
                             Button(action: {
-                                updateProfileSetupComplete()
+                                Task {
+                                    showLoadingIndicator = true
+                                    do {
+                                        if let userId = Auth.auth().currentUser?.uid {
+                                            try await UserManager.shared.updateProfileSetupComplete(userId: userId, isComplete: true)
+                                            navigateToMainView = true
+                                        }
+                                    } catch {
+                                        print("Failed to update profile.")
+                                    }
+                                    showLoadingIndicator = false
+                                }
                             }) {
                                 Text("Make my profile")
                                     .font(.headline)
@@ -156,25 +167,6 @@ struct ProfileConfirmation: View {
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $navigateToMainView) {
                 ContentView()
-            }
-        }
-    }
-    
-    private func updateProfileSetupComplete() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        showLoadingIndicator = true
-        Task {
-            do {
-                try await userManager.updateUserProfileSetup(userId: userId, isComplete: true)
-                DispatchQueue.main.async {
-                    showLoadingIndicator = false
-                    navigateToMainView = true
-                }
-            } catch {
-                print("Failed to update profile setup: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    showLoadingIndicator = false
-                }
             }
         }
     }

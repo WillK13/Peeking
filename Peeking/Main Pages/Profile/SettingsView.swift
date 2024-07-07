@@ -17,7 +17,7 @@ import SwiftUI
 @MainActor
 final class SettingViewModel: ObservableObject {
     func signOut() throws {
-        try PhoneAuthManager.shared.signOut()
+        try AuthenticationManager.shared.signOut()
         print("Logged out")
     }
 }
@@ -25,7 +25,7 @@ final class SettingViewModel: ObservableObject {
 @MainActor
 final class SettingViewModel2: ObservableObject {
     func deleteUser() async throws {
-        try await PhoneAuthManager.shared.deleteUser()
+        try await AuthenticationManager.shared.delete()
         print("Account Deleted")
     }
 }
@@ -37,7 +37,6 @@ struct SettingsView: View {
     @State private var showSubscriptionSettings = false
     @State private var showDeleteConfirmation = false
     @State private var showLogOutConfirmation = false
-    @ObservedObject var viewModel: ProfileViewModel
     @State private var showFirstView = false
 
     var body: some View {
@@ -171,7 +170,7 @@ struct SettingsView: View {
                             showDeleteConfirmation = false
                         }
 
-                    DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation, viewModel: viewModel, showFirstView: $showFirstView)
+                    DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation, showFirstView: $showFirstView)
                         .padding(.horizontal, 40)
                 }
 
@@ -181,14 +180,14 @@ struct SettingsView: View {
                         .onTapGesture {
                             showLogOutConfirmation = false
                         }
-                    LogOutConfirmationView(showLogOutConfirmation: $showLogOutConfirmation, viewModel: viewModel, showFirstView: $showFirstView)
+                    LogOutConfirmationView(showLogOutConfirmation: $showLogOutConfirmation, showFirstView: $showFirstView)
                         .padding(.horizontal, 40)
                 }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $showFirstView) {
-            firstView(viewModel: viewModel)
+            firstView()
         }
     }
 }
@@ -350,7 +349,6 @@ struct SubscriptionSettingsView: View {
 struct DeleteConfirmationView: View {
     @Binding var showDeleteConfirmation: Bool
     @StateObject private var viewModel2 = SettingViewModel2()
-    @ObservedObject var viewModel: ProfileViewModel
     @Binding var showFirstView: Bool
 
     var body: some View {
@@ -375,7 +373,7 @@ struct DeleteConfirmationView: View {
                     Task {
                         do {
                             try await viewModel2.deleteUser()
-                            viewModel.loadCurrentUser()
+                            //viewModel.loadCurrentUser()
                             showFirstView = true
                         } catch {
                             print(error)
@@ -401,7 +399,6 @@ struct DeleteConfirmationView: View {
 struct LogOutConfirmationView: View {
     @Binding var showLogOutConfirmation: Bool
     @StateObject private var viewModel2 = SettingViewModel()
-    @ObservedObject var viewModel: ProfileViewModel
     @Binding var showFirstView: Bool
 
     var body: some View {
@@ -426,7 +423,7 @@ struct LogOutConfirmationView: View {
                     Task {
                         do {
                             try viewModel2.signOut()
-                            viewModel.loadCurrentUser()
+                            //viewModel.loadCurrentUser()
                             showFirstView = true
                         } catch {
                             print(error)
@@ -463,5 +460,5 @@ extension View {
 }
 
 #Preview {
-    SettingsView(viewModel: ProfileViewModel())
+    SettingsView()
 }

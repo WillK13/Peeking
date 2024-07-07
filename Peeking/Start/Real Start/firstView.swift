@@ -5,21 +5,14 @@
 //  Created by Will kaminski on 7/1/24.
 //
 
-//
-//  firstView.swift
-//  Peeking
-//
-//  Created by Will kaminski on 7/1/24.
-//
-
 import SwiftUI
 import AuthenticationServices
 import FirebaseAuth
 
 struct firstView: View {
-    @StateObject private var appleSignInManager = AppleSignInManager()
+    @StateObject private var appleSignInManager = SignInAppleHelper()
+    @StateObject private var authViewModel = AuthenticationViewModel()
     @State private var showPhoneAuthView = false
-    @ObservedObject var viewModel: ProfileViewModel
     @State private var showWelcomeView = false
     @State private var showContentView = false
     
@@ -50,30 +43,34 @@ struct firstView: View {
                     .background(Color.white)
                     .cornerRadius(8)
                 }
-                SignInWithAppleButton(onRequest: { request in
-                    appleSignInManager.handleSignInWithAppleRequest(request)
-                }, onCompletion: { result in
-                    appleSignInManager.handleSignInWithAppleCompletion(result) { success in
-                        if success {
-                            // Handle successful sign-in
-                            viewModel.loadCurrentUser()
-                            if viewModel.isProfileCreated {
-                                showContentView = true
-                            } else {
-                                showWelcomeView = true
+                
+                SignInWithAppleButtonViewRepresentable(type: .signIn, style: .black)
+                    .onTapGesture {
+                        Task {
+                            do {
+                                try await authViewModel.signInApple()
+                                // After sign-in, check if the user profile is created
+                                if let user = try? AuthenticationManager.shared.getAuthenticatedUser(),
+                                   let dbUser = try? await UserManager.shared.getUser(userId: user.userId) {
+                                    if dbUser.isProfileSetupComplete == true {
+                                        showContentView = true
+                                    } else {
+                                        showWelcomeView = true
+                                    }
+                                }
+                            } catch {
+                                // Handle sign-in error
+                                print("Error signing in with Apple: \(error)")
                             }
-                        } else {
-                            // Handle sign-in error
                         }
                     }
-                })
-                .frame(width: 250.0, height: 75)
-                .cornerRadius(8)
-                .padding()
-                .colorInvert()
+                    .frame(width: 250.0, height: 75)
+                    .cornerRadius(8)
+                    .padding()
             }
-        }.fullScreenCover(isPresented: $showPhoneAuthView) {
-            PhoneAuthView(viewModel: viewModel)
+        }
+        .fullScreenCover(isPresented: $showPhoneAuthView) {
+            PhoneAuthView(authViewModel: authViewModel)
         }
         .fullScreenCover(isPresented: $showWelcomeView) {
             Welcome()
@@ -85,5 +82,5 @@ struct firstView: View {
 }
 
 #Preview {
-    firstView(viewModel: ProfileViewModel())
+    firstView()
 }

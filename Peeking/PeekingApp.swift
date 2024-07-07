@@ -13,18 +13,16 @@ import UserNotifications
 @main
 struct PeekingApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject private var viewModel = ProfileViewModel()
 
     var body: some Scene {
         WindowGroup {
-            if viewModel.isLoading {
-                LoadingView()
-            } else if Auth.auth().currentUser == nil {
-                firstView(viewModel: viewModel)
-            } else if viewModel.isProfileCreated {
-                ContentView()
-            } else {
-                Welcome()
+            if Auth.auth().currentUser == nil
+            {
+                firstView()
+            }
+            else
+            {
+                    ContentView()
             }
         }
     }

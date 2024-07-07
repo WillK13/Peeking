@@ -7,7 +7,6 @@
 
 import SwiftUI
 struct ProfileViewEmployee: View {
-    @StateObject private var viewModel = ProfileViewModel()
 
     //Vars to toggle views
     @State private var showSettings = false
@@ -137,7 +136,7 @@ struct ProfileViewEmployee: View {
             }
         }
         .fullScreenCover(isPresented: $showSettings) {
-            SettingsView(viewModel: ProfileViewModel())
+            SettingsView()
         }
         .fullScreenCover(isPresented: $showEditProfile) {
             EditProfile()

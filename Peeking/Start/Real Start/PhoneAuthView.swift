@@ -6,21 +6,19 @@
 //
 
 import SwiftUI
-import FirebaseAuth
 
 struct PhoneAuthView: View {
     @State private var phoneNumber: String = ""
     @State private var verificationCode: String = ""
+    @StateObject private var phoneHelper = SignInWithPhoneHelper.shared
     @State private var isCodeSent: Bool = false
-    @ObservedObject private var phoneAuthManager = PhoneAuthManager()
-    @State private var isVerified: Bool = false
     @State private var showVerificationPopup: Bool = false
     @State private var errorMessage: String?
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: ProfileViewModel
     @State private var showWelcomeView = false
-    @State private var showContentView = false
-
+    @State private var showMainView = false
+    @ObservedObject var authViewModel: AuthenticationViewModel
+    
     var body: some View {
         ZStack {
             BackgroundView()
@@ -42,16 +40,17 @@ struct PhoneAuthView: View {
                     TextField("Enter your phone number", text: $phoneNumber)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(width: 350.0)
-                        .keyboardType(.phonePad)  // Phone pad for phone number input
+                        .keyboardType(.phonePad)
                         .padding(.top, 200.0)
-                    let number = "+1\(phoneNumber)"
+                    
                     Button(action: {
-                        phoneAuthManager.startAuth(phoneNumber: number) { success in
-                            guard success else {
+                        Task {
+                            do {
+                                try await phoneHelper.startSignInWithPhoneFlow(phoneNumber: "+1\(phoneNumber)")
+                                isCodeSent = true
+                            } catch {
                                 errorMessage = "Failed to send verification code."
-                                return
                             }
-                            isCodeSent = true
                         }
                     }) {
                         Text("Send Verification Code")
@@ -62,27 +61,26 @@ struct PhoneAuthView: View {
                     }
                     Spacer()
                 } else {
-                    TextField("Enter your code", text: $verificationCode)
+                    TextField("Enter your code", text: $phoneHelper.smsCode)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.numberPad)  // Number pad for verification code input
+                        .keyboardType(.numberPad)
                         .padding()
                     Spacer()
                     Button(action: {
-                        phoneAuthManager.verifyCode(smsCode: verificationCode) { success in
-                            guard success else {
-                                errorMessage = "Failed to verify code."
-                                return
-                            }
-                            isVerified = true
-                            showVerificationPopup = true
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now()) {
-                                viewModel.loadCurrentUser()
-                                if viewModel.isProfileCreated {
-                                    showContentView = true
-                                } else {
-                                    showWelcomeView = true
+                        Task {
+                            do {
+                                try await authViewModel.verifyPhoneCode(verificationID: phoneHelper.verificationID ?? "", smsCode: phoneHelper.smsCode)
+                                // After verification, check if the user profile is created
+                                if let user = try? AuthenticationManager.shared.getAuthenticatedUser(),
+                                   let dbUser = try? await UserManager.shared.getUser(userId: user.userId) {
+                                    if dbUser.isProfileSetupComplete == true {
+                                        showMainView = true
+                                    } else {
+                                        showWelcomeView = true
+                                    }
                                 }
+                            } catch {
+                                errorMessage = "Failed to verify code."
                             }
                         }
                     }) {
@@ -102,11 +100,6 @@ struct PhoneAuthView: View {
                         .background(Color.white)
                         .cornerRadius(10)
                         .shadow(radius: 10)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                self.errorMessage = nil
-                            }
-                        }
                 }
 
                 if showVerificationPopup {
@@ -123,7 +116,7 @@ struct PhoneAuthView: View {
         .fullScreenCover(isPresented: $showWelcomeView) {
             Welcome()
         }
-        .fullScreenCover(isPresented: $showContentView) {
+        .fullScreenCover(isPresented: $showMainView) {
             ContentView()
         }
     }
@@ -131,6 +124,6 @@ struct PhoneAuthView: View {
 
 struct PhoneAuthView_Previews: PreviewProvider {
     static var previews: some View {
-        PhoneAuthView(viewModel: ProfileViewModel())
+        PhoneAuthView(authViewModel: AuthenticationViewModel())
     }
 }

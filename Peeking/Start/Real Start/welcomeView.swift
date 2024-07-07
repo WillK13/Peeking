@@ -1,3 +1,4 @@
+//
 //  Welcome.swift
 //  Peeking
 //
@@ -5,12 +6,14 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct Welcome: View {
     
     var gradientBackground: LinearGradient {
         LinearGradient(gradient: Gradient(colors: [Color.orange, Color.yellow]), startPoint: .topLeading, endPoint: .bottomTrailing)
     }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -23,7 +26,8 @@ struct Welcome: View {
                     
                     Spacer()
                     
-                    Text("Choose your route:").italic()
+                    Text("Choose your route:")
+                        .italic()
                         .font(.title)
                         .padding(.vertical, 20)
                     
@@ -33,7 +37,7 @@ struct Welcome: View {
                                 Image("Duck_Head")
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 50, height: 50) // Increased size
+                                    .frame(width: 50, height: 50)
                                     .padding(.trailing, 10)
                                 VStack(alignment: .leading) {
                                     Text("New Profile")
@@ -46,15 +50,26 @@ struct Welcome: View {
                             }
                             .padding(30)
                             .background(gradientBackground)
-                            .cornerRadius(15) // Increased corner radius
+                            .cornerRadius(15)
                         }
+                        .simultaneousGesture(TapGesture().onEnded {
+                            Task {
+                                do {
+                                    if let userId = Auth.auth().currentUser?.uid {
+                                        try await UserManager.shared.updateUserProfileType(userId: userId, userType: 0)
+                                    }
+                                } catch {
+                                    print("Failed to update user type to Job-Seeker.")
+                                }
+                            }
+                        })
                         
                         NavigationLink(destination: newposition()) {
                             HStack {
                                 Image("Duck_Head")
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 50, height: 50) // Increased size
+                                    .frame(width: 50, height: 50)
                                     .padding(.trailing, 10)
                                 VStack(alignment: .leading) {
                                     Text("New Profile")
@@ -67,10 +82,20 @@ struct Welcome: View {
                             }
                             .padding(30)
                             .background(gradientBackground)
-                            .cornerRadius(15) // Increased corner radius
+                            .cornerRadius(15)
                         }
+                        .simultaneousGesture(TapGesture().onEnded {
+                            Task {
+                                do {
+                                    if let userId = Auth.auth().currentUser?.uid {
+                                        try await UserManager.shared.updateUserProfileType(userId: userId, userType: 1)
+                                    }
+                                } catch {
+                                    print("Failed to update user type to Employer.")
+                                }
+                            }
+                        })
                     }
-                    
                     
                     Button(action: {
                         // Action for invite code
@@ -80,15 +105,18 @@ struct Welcome: View {
                             .foregroundColor(.black)
                             .padding()
                             .background(gradientBackground)
-                            .cornerRadius(15) // Increased corner radius
-                    }.padding(.top, 15).padding(.leading, 50)
+                            .cornerRadius(15)
+                    }
+                    .padding(.top, 15)
+                    .padding(.leading, 50)
                     
                     Spacer()
                     Spacer()
                 }
                 .padding()
             }
-        }.navigationBarBackButtonHidden(true)
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
