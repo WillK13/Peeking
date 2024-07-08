@@ -101,8 +101,15 @@ final class UserManager: ObservableObject {
         userCollection.document(userId)
     }
     
-    func createNewUser(user: DBUser) async throws {
-        try userDocument(userId: user.userId).setData(from: user, merge: false)
+    func createOrUpdateUser(user: DBUser) async throws {
+        let document = try await userDocument(userId: user.userId).getDocument()
+        if document.exists {
+            // Merge existing data with new data
+            try userDocument(userId: user.userId).setData(from: user, merge: true)
+        } else {
+            // Create new user
+            try userDocument(userId: user.userId).setData(from: user, merge: false)
+        }
     }
     
     func getUser(userId: String) async throws -> DBUser {

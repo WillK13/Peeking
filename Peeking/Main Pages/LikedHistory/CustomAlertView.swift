@@ -55,10 +55,10 @@ struct CustomAlertView: View {
                         .fill(Color.red)
                         .frame(width: 30, height: 30)
                     VStack(alignment: .leading) {
-                        Text("Unlikely")
+                        Text("No Match")
                             .font(.headline)
                             .foregroundColor(.red)
-                        Text("User has swiped past, very low chance they will see your profile again")
+                        Text("User has viewed and swiped past on your profile")
                             .font(.subheadline)
                             .foregroundColor(.black)
                     }

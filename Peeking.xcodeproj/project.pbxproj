@@ -53,6 +53,8 @@
 		BE6029E72C16364400B3C080 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E62C16364400B3C080 /* TipsView.swift */; };
 		BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */; };
 		BE6029EB2C19069700B3C080 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029EA2C19069700B3C080 /* ToggleView.swift */; };
+		BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */; };
+		BEE0CE692C3C864E00542876 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE682C3C864E00542876 /* AppViewModel.swift */; };
 		BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502512C33394B00B6175B /* PhoneAuthView.swift */; };
 		BEE5025A2C3872F300B6175B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = BEE502592C3872F300B6175B /* FirebaseFirestore */; };
 		BEE5025C2C3872F300B6175B /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BEE5025B2C3872F300B6175B /* FirebaseFirestoreSwift */; };
@@ -131,6 +133,8 @@
 		BE6029E62C16364400B3C080 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
 		BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewEmployee.swift; sourceTree = "<group>"; };
 		BE6029EA2C19069700B3C080 /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
+		BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReauthenticationView.swift; sourceTree = "<group>"; };
+		BEE0CE682C3C864E00542876 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		BEE502512C33394B00B6175B /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
 		BEE5026E2C39D59300B6175B /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		BEE502712C3B293E00B6175B /* AuhenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuhenticationManager.swift; sourceTree = "<group>"; };
@@ -362,6 +366,7 @@
 			isa = PBXGroup;
 			children = (
 				BEE5027B2C3B380500B6175B /* UserManager.swift */,
+				BEE0CE682C3C864E00542876 /* AppViewModel.swift */,
 			);
 			path = FireStore;
 			sourceTree = "<group>";
@@ -373,6 +378,7 @@
 				BEE502732C3B2A5B00B6175B /* SignInAppleHelper.swift */,
 				BEE502772C3B2C8400B6175B /* SignInWithPhoneHelper.swift */,
 				BEE502792C3B34A500B6175B /* AuthenticationViewModel.swift */,
+				BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -527,6 +533,7 @@
 				BEE502762C3B2A8F00B6175B /* Utilities.swift in Sources */,
 				BE5E502D2C33264A00D36578 /* firstView.swift in Sources */,
 				BEE5026F2C39D59300B6175B /* LoadingView.swift in Sources */,
+				BEE0CE692C3C864E00542876 /* AppViewModel.swift in Sources */,
 				BE5E50002C24D17000D36578 /* newposition.swift in Sources */,
 				BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */,
 				BE5E4FFC2C24A41600D36578 /* Hobbies.swift in Sources */,
@@ -555,6 +562,7 @@
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,
 				BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */,
 				BE5E50102C26094F00D36578 /* hobbiesemployer.swift in Sources */,
+				BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */,
 				BE6029DB2C1396F300B3C080 /* MessagesView.swift in Sources */,
 				BE5E4FF82C1E4F4E00D36578 /* welcomeView.swift in Sources */,
 				BE5E4FFE2C24A73800D36578 /* ProfileConfirmation.swift in Sources */,

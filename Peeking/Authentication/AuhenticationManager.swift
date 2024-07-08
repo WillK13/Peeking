@@ -75,18 +75,29 @@ final class AuthenticationManager {
             throw URLError(.badURL)
         }
         
+        let userId = user.uid
         try await user.delete()
         
         do {
-            if let userId = Auth.auth().currentUser?.uid {
-                try await Firestore.firestore().collection("users").document(userId).delete()
-                print("Document successfully removed!")
-            }
+            try await Firestore.firestore().collection("users").document(userId).delete()
+            print("Document successfully removed!")
         } catch {
-          print("Error removing document: \(error)")
+            print("Error removing document: \(error)")
         }
     }
+    
+    func reauthenticateWithApple(tokens: SignInWithAppleResult) async throws {
+        let credential = OAuthProvider.credential(withProviderID: AuthProviderOption.apple.rawValue, idToken: tokens.token, rawNonce: tokens.nonce)
+        try await Auth.auth().currentUser?.reauthenticate(with: credential)
+    }
+    
+    func reauthenticateWithPhone(verificationID: String, smsCode: String) async throws {
+        let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationID, verificationCode: smsCode)
+        try await Auth.auth().currentUser?.reauthenticate(with: credential)
+    }
 }
+
+
 
 // MARK: SIGN IN SSO
 
@@ -128,6 +139,54 @@ extension AuthenticationManager {
         } catch {
             print("Error verifying code \(smsCode) with verification ID \(verificationID): \(error.localizedDescription)")
             throw error
+        }
+    }
+}
+
+
+@MainActor
+final class ReauthenticationViewModel: ObservableObject {
+    @Published var smsCode: String = ""
+    @Published var phoneNumber: String = ""
+    @Published var verificationID: String = ""
+    @Published var appleSignInResult: SignInWithAppleResult?
+
+    func startPhoneReauthentication(completion: @escaping (Result<Void, Error>) -> Void) {
+        Task {
+            do {
+                verificationID = try await AuthenticationManager.shared.startAuth(phoneNumber: phoneNumber)
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func reauthenticateWithPhone(completion: @escaping (Result<Void, Error>) -> Void) {
+        Task {
+            do {
+                try await AuthenticationManager.shared.reauthenticateWithPhone(verificationID: verificationID, smsCode: smsCode)
+                try await AuthenticationManager.shared.delete()
+                completion(.success(()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func reauthenticateWithApple(completion: @escaping (Result<Void, Error>) -> Void) {
+        Task {
+            do {
+                if let result = appleSignInResult {
+                    try await AuthenticationManager.shared.reauthenticateWithApple(tokens: result)
+                    try await AuthenticationManager.shared.delete()
+                    completion(.success(()))
+                } else {
+                    completion(.failure(URLError(.badServerResponse)))
+                }
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
 }

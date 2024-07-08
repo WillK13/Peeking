@@ -5,13 +5,6 @@
 //  Created by Will kaminski on 6/9/24.
 //
 
-//
-//  SettingsView.swift
-//  Peeking
-//
-//  Created by Will kaminski on 6/9/24.
-//
-
 import SwiftUI
 
 @MainActor
@@ -31,24 +24,20 @@ final class SettingViewModel2: ObservableObject {
 }
 
 struct SettingsView: View {
-    // Variables for showing different views
     @Environment(\.presentationMode) var presentationMode
     @State private var showReportProblem = false
     @State private var showSubscriptionSettings = false
     @State private var showDeleteConfirmation = false
     @State private var showLogOutConfirmation = false
     @State private var showFirstView = false
+    @State private var showReauthenticationView = false
 
     var body: some View {
-        // This is all a pop up
         NavigationView {
-            // Background
             ZStack {
                 BackgroundView()
                     .edgesIgnoringSafeArea(.all)
-                // Content
                 VStack {
-                    // Back button
                     HStack {
                         Button(action: {
                             presentationMode.wrappedValue.dismiss()
@@ -63,7 +52,7 @@ struct SettingsView: View {
                     .padding(.top, 20)
 
                     Spacer()
-                    // All of the sections
+
                     VStack(spacing: 20) {
                         Image(systemName: "gearshape.fill")
                             .foregroundColor(.white)
@@ -119,10 +108,10 @@ struct SettingsView: View {
                         .padding(.leading, 20)
                         Spacer()
                     }
-                    // Delete account and an are you sure pop up
+
                     HStack {
                         Button(action: {
-                            showDeleteConfirmation.toggle()
+                            showReauthenticationView.toggle()
                         }) {
                             Text("Delete Account")
                                 .foregroundColor(.red)
@@ -133,6 +122,7 @@ struct SettingsView: View {
                         .padding(.bottom, 30).padding(.leading, 20)
                         Spacer()
                     }
+
                     HStack {
                         Spacer()
                         Image("Duck_Body").resizable().aspectRatio(contentMode: .fill).padding(.trailing, 140.0).frame(width: 10.0, height: 70.0)
@@ -140,7 +130,7 @@ struct SettingsView: View {
 
                     Spacer()
                 }
-                // Logic for opening pop ups
+
                 if showReportProblem {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
@@ -163,17 +153,6 @@ struct SettingsView: View {
                         .padding(.horizontal, 40)
                 }
 
-                if showDeleteConfirmation {
-                    Color.black.opacity(0.4)
-                        .edgesIgnoringSafeArea(.all)
-                        .onTapGesture {
-                            showDeleteConfirmation = false
-                        }
-
-                    DeleteConfirmationView(showDeleteConfirmation: $showDeleteConfirmation, showFirstView: $showFirstView)
-                        .padding(.horizontal, 40)
-                }
-
                 if showLogOutConfirmation {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
@@ -181,6 +160,16 @@ struct SettingsView: View {
                             showLogOutConfirmation = false
                         }
                     LogOutConfirmationView(showLogOutConfirmation: $showLogOutConfirmation, showFirstView: $showFirstView)
+                        .padding(.horizontal, 40)
+                }
+
+                if showReauthenticationView {
+                    Color.black.opacity(0.4)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            showReauthenticationView = false
+                        }
+                    ReauthenticationView(showReauthenticationView: $showReauthenticationView, showFirstView: $showFirstView)
                         .padding(.horizontal, 40)
                 }
             }
@@ -370,15 +359,7 @@ struct DeleteConfirmationView: View {
                 Button(action: {
                     // Handle delete action
                     showDeleteConfirmation = false
-                    Task {
-                        do {
-                            try await viewModel2.deleteUser()
-                            //viewModel.loadCurrentUser()
-                            showFirstView = true
-                        } catch {
-                            print(error)
-                        }
-                    }
+                    showFirstView = false
                 }) {
                     Text("Yes")
                         .foregroundColor(.black)

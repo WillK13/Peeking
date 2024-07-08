@@ -14,8 +14,21 @@ final class AuthenticationViewModel: ObservableObject {
         let helper = SignInAppleHelper()
         let tokens = try await helper.startSignInWithAppleFlow()
         let authDataResult = try await AuthenticationManager.shared.signInWithApple(tokens: tokens)
-        let user = DBUser(auth: authDataResult)
-        try await UserManager.shared.createNewUser(user: user)
+        
+        // Check if user already exists and merge data
+        if let existingUser = try? await UserManager.shared.getUser(userId: authDataResult.userId) {
+            var user = DBUser(auth: authDataResult)
+            user.isProfileSetupComplete = existingUser.isProfileSetupComplete
+            user.userType = existingUser.userType
+            user.matches = existingUser.matches
+            user.likesYou = existingUser.likesYou
+            user.chats = existingUser.chats
+            user.bookmarks = existingUser.bookmarks
+            try await UserManager.shared.createOrUpdateUser(user: user)
+        } else {
+            let user = DBUser(auth: authDataResult)
+            try await UserManager.shared.createOrUpdateUser(user: user)
+        }
     }
     
     func startPhoneAuth(phoneNumber: String) async throws -> String {
@@ -24,7 +37,20 @@ final class AuthenticationViewModel: ObservableObject {
 
     func verifyPhoneCode(verificationID: String, smsCode: String) async throws {
         let authDataResult = try await AuthenticationManager.shared.verifyCode(verificationID: verificationID, smsCode: smsCode)
-        let user = DBUser(auth: authDataResult)
-        try await UserManager.shared.createNewUser(user: user)
+        
+        // Check if user already exists and merge data
+        if let existingUser = try? await UserManager.shared.getUser(userId: authDataResult.userId) {
+            var user = DBUser(auth: authDataResult)
+            user.isProfileSetupComplete = existingUser.isProfileSetupComplete
+            user.userType = existingUser.userType
+            user.matches = existingUser.matches
+            user.likesYou = existingUser.likesYou
+            user.chats = existingUser.chats
+            user.bookmarks = existingUser.bookmarks
+            try await UserManager.shared.createOrUpdateUser(user: user)
+        } else {
+            let user = DBUser(auth: authDataResult)
+            try await UserManager.shared.createOrUpdateUser(user: user)
+        }
     }
 }

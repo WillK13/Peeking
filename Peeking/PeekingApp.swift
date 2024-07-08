@@ -13,16 +13,25 @@ import UserNotifications
 @main
 struct PeekingApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject private var appViewModel = AppViewModel()
 
     var body: some Scene {
         WindowGroup {
-            if Auth.auth().currentUser == nil
-            {
-                firstView()
+            ZStack {
+                if appViewModel.isLoading {
+                    LoadingView()
+                } else {
+                    if Auth.auth().currentUser == nil {
+                        firstView()
+                    } else if appViewModel.shouldShowContentView {
+                        ContentView()
+                    } else {
+                        Welcome()
+                    }
+                }
             }
-            else
-            {
-                    ContentView()
+            .onAppear {
+                appViewModel.checkUserProfile()
             }
         }
     }
