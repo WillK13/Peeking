@@ -11,22 +11,20 @@ import FirebaseFirestore
 
 struct AuthDataResultModel {
     let userId: String
-    let dateCreated: Date
+    let lastLogIn: Date
     let isProfileSetupComplete: Bool
     let userType: Int
     var matches: [String]
     var likesYou: [String]
-    var chats: [String]
     var bookmarks: [String]
     
     init(user: User) {
         self.userId = user.uid
-        self.dateCreated = Date()
+        self.lastLogIn = Date()
         self.isProfileSetupComplete = false
         self.userType = -1
         self.matches = []
         self.likesYou = []
-        self.chats = []
         self.bookmarks = []
     }
 }

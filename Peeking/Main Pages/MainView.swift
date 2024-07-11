@@ -188,6 +188,7 @@ struct MainView: View {
                 ToggleView()
             }
         }
+        
     }
 }
 

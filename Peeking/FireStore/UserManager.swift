@@ -17,20 +17,18 @@ struct LikeSent: Codable {
 struct DBUser: Codable {
     let userId: String
     var isProfileSetupComplete: Bool?
-    let dateCreated: Date?
+    let lastLogIn: Date?
     var matches: [String]?
     var likesYou: [String]?
-    var chats: [String]?
     var bookmarks: [String]?
     var userType: Int?
     
     init(auth: AuthDataResultModel) {
         self.userId = auth.userId
         self.isProfileSetupComplete = auth.isProfileSetupComplete
-        self.dateCreated = auth.dateCreated
+        self.lastLogIn = auth.lastLogIn
         self.matches = auth.matches
         self.likesYou = auth.likesYou
-        self.chats = auth.chats
         self.bookmarks = auth.bookmarks
         self.userType = auth.userType
     }
@@ -38,19 +36,17 @@ struct DBUser: Codable {
     init(
         userId: String,
         isProfileSetupComplete: Bool? = false,
-        dateCreated: Date? = nil,
+        lastLogIn: Date? = nil,
         matches: [String]? = nil,
         likesYou: [String]? = nil,
-        chats: [String]? = nil,
         bookmarks: [String]? = nil,
         userType: Int? = nil
     ) {
         self.userId = userId
         self.isProfileSetupComplete = isProfileSetupComplete
-        self.dateCreated = dateCreated
+        self.lastLogIn = lastLogIn
         self.matches = matches
         self.likesYou = likesYou
-        self.chats = chats
         self.bookmarks = bookmarks
         self.userType = userType
     }
@@ -58,10 +54,9 @@ struct DBUser: Codable {
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
         case isProfileSetupComplete = "is_profile_setup_complete"
-        case dateCreated = "date_created"
+        case lastLogIn = "last_log_in"
         case matches = "matches"
         case likesYou = "likes_you"
-        case chats = "chats"
         case bookmarks = "bookmarks"
         case userType = "user_type"
     }
@@ -70,10 +65,9 @@ struct DBUser: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.userId = try container.decode(String.self, forKey: .userId)
         self.isProfileSetupComplete = try container.decodeIfPresent(Bool.self, forKey: .isProfileSetupComplete)
-        self.dateCreated = try container.decodeIfPresent(Date.self, forKey: .dateCreated)
+        self.lastLogIn = try container.decodeIfPresent(Date.self, forKey: .lastLogIn)
         self.matches = try container.decodeIfPresent([String].self, forKey: .matches)
         self.likesYou = try container.decodeIfPresent([String].self, forKey: .likesYou)
-        self.chats = try container.decodeIfPresent([String].self, forKey: .chats)
         self.bookmarks = try container.decodeIfPresent([String].self, forKey: .bookmarks)
         self.userType = try container.decodeIfPresent(Int.self, forKey: .userType)
     }
@@ -82,9 +76,8 @@ struct DBUser: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.userId, forKey: .userId)
         try container.encodeIfPresent(self.isProfileSetupComplete, forKey: .isProfileSetupComplete)
-        try container.encodeIfPresent(self.dateCreated, forKey: .dateCreated)
+        try container.encodeIfPresent(self.lastLogIn, forKey: .lastLogIn)
         try container.encodeIfPresent(self.matches, forKey: .matches)
-        try container.encodeIfPresent(self.likesYou, forKey: .likesYou)
         try container.encodeIfPresent(self.likesYou, forKey: .likesYou)
         try container.encodeIfPresent(self.bookmarks, forKey: .bookmarks)
         try container.encodeIfPresent(self.userType, forKey: .userType)
