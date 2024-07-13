@@ -1,3 +1,4 @@
+//
 //  ProfileSetupViewEmployee.swift
 //  Peeking
 //
@@ -5,10 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileSetupViewEmployee: View {
-    @Environment(\.presentationMode) var presentationMode // Add this line
-    var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
+    @Environment(\.presentationMode) var presentationMode
+    var fromEditProfile: Bool
 
     @State private var firstName: String = ""
     @State private var selectedMonth: String = "January"
@@ -23,14 +25,15 @@ struct ProfileSetupViewEmployee: View {
     @State private var languages: [String] = []
     @State private var fieldsOfExperience: [Experience] = []
     @State private var levelOfEducation: [String] = []
-    
+    @State private var isSaving: Bool = false
+    @State private var navigateToNextView: Bool = false
 
     var languageOptions = ["English", "Spanish", "French", "German"]
     var experienceOptions = ["Software and Development", "Cybersecurity", "IT Consulting"]
     var educationOptions = ["Highschool Graduate", "Currently enrolled in Bachelor's Degree", "Currently enrolled in Master's Degree"]
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     var days = Array(1...31).map { String($0) }
-    var years = Array(1900...2024).map { String($0) }
+    var years = Array(1924...2008).map { String($0) }
     var experienceYears = Array(0...50).map { String($0) + " yrs" }
 
     struct Experience: Identifiable {
@@ -52,7 +55,7 @@ struct ProfileSetupViewEmployee: View {
                                 if fromEditProfile {
                                     presentationMode.wrappedValue.dismiss()
                                 } else {
-                                    presentationMode.wrappedValue.dismiss() // Dismiss to go back to Welcome
+                                    presentationMode.wrappedValue.dismiss()
                                 }
                             }) {
                                 Image(systemName: "chevron.left")
@@ -193,22 +196,28 @@ struct ProfileSetupViewEmployee: View {
                         
                         Spacer()
                         if !fromEditProfile {
-                        HStack {
-                            Spacer()
-                            // Next Button
-                            NavigationLink(destination: ProfileSearchSettings()) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(isFormComplete() ? Color.black : Color.gray)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
+                            HStack {
+                                Spacer()
+                                // Next Button
+                                NavigationLink(destination: ProfileSearchSettings(), isActive: $navigateToNextView) {
+                                    Button(action: {
+                                        Task {
+                                            await saveProfile()
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(isFormComplete() ? Color.black : Color.gray)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(25)
+                                            .shadow(radius: 10)
+                                    }
+                                    .disabled(!isFormComplete() || isSaving)
+                                    .padding(.top, 30)
+                                    .padding(.bottom, 50)
+                                }
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
-                    }
                     }
                     .padding()
                 }
@@ -227,6 +236,25 @@ struct ProfileSetupViewEmployee: View {
     func loadImage() {
         guard let inputImage = inputImage else { return }
         profileImage = Image(uiImage: inputImage)
+    }
+    
+    func saveProfile() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM d yyyy"
+        guard let birthday = dateFormatter.date(from: "\(selectedMonth) \(selectedDay) \(selectedYear)") else { return }
+
+        let experienceData = fieldsOfExperience.map { ProfileUpdater.Experience(field: $0.field, years: Int($0.years.replacingOccurrences(of: " yrs", with: "")) ?? 0) }
+
+        do {
+            isSaving = true
+            try await ProfileUpdater.shared.updateEmployeeProfile(userId: userId, name: firstName, birthday: birthday, languages: languages, education: levelOfEducation, experiences: experienceData)
+            isSaving = false
+            navigateToNextView = true
+        } catch {
+            isSaving = false
+            // Handle error
+        }
     }
 }
 

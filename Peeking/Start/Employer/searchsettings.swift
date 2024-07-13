@@ -246,23 +246,24 @@ struct searchsettings: View {
                     
                     Divider().background(Color.gray)
                     // Save and Exit button
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            // Handle save and exit action
-                        }) {
-                            Image(systemName: "arrow.right")
-                                .foregroundColor(.black)
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(25)
-                                .shadow(radius: 10)
-                                .opacity(isFormComplete() ? 1.0 : 0.5)
+                    NavigationView {
+                        HStack {
+                            Spacer()
+                            // Next Button
+                            let fromEditProfile: Bool = false
+                            NavigationLink(destination: DesiredTechnicals(fromEditProfile: fromEditProfile).navigationBarBackButtonHidden(true)) {
+                                Image(systemName: "arrow.right")
+                                    .foregroundColor(.black)
+                                    .padding()
+                                    .background(Color.white)
+                                    .cornerRadius(25)
+                                    .shadow(radius: 10)
+                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                            }
+                            .disabled(!isFormComplete())
+                            .padding(.top, 30)
+                            .padding(.bottom, 50)
                         }
-                        .disabled(!isFormComplete())
-                        .padding(.top, 30)
-                        .padding(.bottom, 50)
-                        .padding(.trailing, 50)
                     }
                 }
                 .padding(.bottom, 20) // Add some bottom padding to ensure the last item is fully visible

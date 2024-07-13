@@ -69,20 +69,22 @@ final class AuthenticationManager {
     }
     
     func delete() async throws {
-        guard let user = Auth.auth().currentUser else {
-            throw URLError(.badURL)
-        }
-        
-        let userId = user.uid
-        try await user.delete()
-        
-        do {
+            guard let user = Auth.auth().currentUser else {
+                throw URLError(.badURL)
+            }
+            
+            let userId = user.uid
+            // Delete subcollections first
+            try await UserManager.shared.deleteSubcollections(userId: userId)
+            
+            // Delete the user document
             try await Firestore.firestore().collection("users").document(userId).delete()
-            print("Document successfully removed!")
-        } catch {
-            print("Error removing document: \(error)")
+            print("User document successfully removed!")
+            
+            // Delete the user account
+            try await user.delete()
+            print("User account successfully removed!")
         }
-    }
     
     func reauthenticateWithApple(tokens: SignInWithAppleResult) async throws {
         let credential = OAuthProvider.credential(withProviderID: AuthProviderOption.apple.rawValue, idToken: tokens.token, rawNonce: tokens.nonce)

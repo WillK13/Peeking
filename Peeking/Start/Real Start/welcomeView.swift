@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import FirebaseFirestore
 
 struct Welcome: View {
     
@@ -57,9 +58,30 @@ struct Welcome: View {
                                 do {
                                     if let userId = Auth.auth().currentUser?.uid {
                                         try await UserManager.shared.updateUserProfileType(userId: userId, userType: 0)
+                                        let additionalData: [String: Any] = [
+                                            "name": "",
+                                            "location": GeoPoint(latitude: 0, longitude: 0),
+                                            "age": 0,
+                                            "birthday": Date(),
+                                            "languages": [],
+                                            "education": [],
+                                            "distance": 100,
+                                            "fields": [],
+                                            "workSetting": [],
+                                            "status": [],
+                                            "start": [],
+                                            "technicals": [],
+                                            "softSkills": [],
+                                            "workEnvio": [],
+                                            "hobbies": "",
+                                            "chats": [],
+                                            "pfp": "",
+                                            "personalityPhoto": ""
+                                        ]
+                                        try await UserManager.shared.updateUserProfileForEmployee(userId: userId, additionalData: additionalData)
                                     }
                                 } catch {
-                                    print("Failed to update user type to Job-Seeker.")
+                                    print("Failed to update user profile for Job-Seeker.")
                                 }
                             }
                         })
@@ -89,9 +111,22 @@ struct Welcome: View {
                                 do {
                                     if let userId = Auth.auth().currentUser?.uid {
                                         try await UserManager.shared.updateUserProfileType(userId: userId, userType: 1)
+                                        let additionalData: [String: Any] = [
+                                            "logo": "",
+                                            "name": "",
+                                            "positions": [],
+                                            "languages": [],
+                                            "type": [],
+                                            "mission": "",
+                                            "workEnvio": "",
+                                            "softSkills": [],
+                                            "hobbies": "",
+                                            "photo": ""
+                                        ]
+                                        try await UserManager.shared.updateUserProfileForEmployer(userId: userId, additionalData: additionalData)
                                     }
                                 } catch {
-                                    print("Failed to update user type to Employer.")
+                                    print("Failed to update user profile for Employer.")
                                 }
                             }
                         })
