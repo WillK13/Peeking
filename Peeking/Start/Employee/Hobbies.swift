@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct Hobbies: View {
     @Environment(\.presentationMode) var presentationMode
@@ -14,6 +15,7 @@ struct Hobbies: View {
     @State private var inputImage: UIImage? = nil
     @State private var profileImage: Image? = nil
     @State private var showingImagePicker = false
+    @State private var navigateToNextView: Bool = false
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
 
 
@@ -164,18 +166,24 @@ struct Hobbies: View {
                         HStack {
                             Spacer()
                             // Next Button
-                            NavigationLink(destination: ProfileConfirmation()) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
-                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                            NavigationLink(destination: ProfileConfirmation(), isActive: $navigateToNextView) {
+                                Button(action: {
+                                    Task {
+                                        await saveHobbiesAndPhoto()
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.right")
+                                        .foregroundColor(.black)
+                                        .padding()
+                                        .background(Color.white)
+                                        .cornerRadius(25)
+                                        .shadow(radius: 10)
+                                        .opacity(isFormComplete() ? 1.0 : 0.5)
+                                }
+                                .disabled(!isFormComplete())
+                                .padding(.top, 30)
+                                .padding(.bottom, 50)
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
                     }
                     }
@@ -184,9 +192,9 @@ struct Hobbies: View {
                 }
                 .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                     ImagePicker(image: self.$inputImage)
-                }                    
+                }
 
-            }                    
+            }
 
         }                    .navigationBarBackButtonHidden(true)
 
@@ -200,6 +208,20 @@ struct Hobbies: View {
     func loadImage() {
         guard let inputImage = inputImage else { return }
         profileImage = Image(uiImage: inputImage)
+    }
+
+    func saveHobbiesAndPhoto() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        // Placeholder for the actual image upload logic
+        let photoURL = "https://example.com/photo.jpg"
+        
+        do {
+            try await ProfileUpdater.shared.updateHobbies(userId: userId, hobbies: hobbies, photoURL: photoURL)
+            navigateToNextView = true
+        } catch {
+            // Handle error
+        }
     }
 }
 

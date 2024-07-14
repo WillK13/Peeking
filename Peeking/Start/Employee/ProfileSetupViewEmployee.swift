@@ -238,17 +238,25 @@ struct ProfileSetupViewEmployee: View {
         profileImage = Image(uiImage: inputImage)
     }
     
+    func calculateAge(from birthday: Date) -> Int {
+        let calendar = Calendar.current
+        let now = Date()
+        let ageComponents = calendar.dateComponents([.year], from: birthday, to: now)
+        return ageComponents.year ?? 0
+    }
+    
     func saveProfile() async {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM d yyyy"
         guard let birthday = dateFormatter.date(from: "\(selectedMonth) \(selectedDay) \(selectedYear)") else { return }
 
+        let age = calculateAge(from: birthday)
         let experienceData = fieldsOfExperience.map { ProfileUpdater.Experience(field: $0.field, years: Int($0.years.replacingOccurrences(of: " yrs", with: "")) ?? 0) }
 
         do {
             isSaving = true
-            try await ProfileUpdater.shared.updateEmployeeProfile(userId: userId, name: firstName, birthday: birthday, languages: languages, education: levelOfEducation, experiences: experienceData)
+            try await ProfileUpdater.shared.updateEmployeeProfile(userId: userId, name: firstName, birthday: birthday, age: age, languages: languages, education: levelOfEducation, experiences: experienceData)
             isSaving = false
             navigateToNextView = true
         } catch {

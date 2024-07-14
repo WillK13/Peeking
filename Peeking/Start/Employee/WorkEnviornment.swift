@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct WorkEnviornment: View {
     @Environment(\.presentationMode) var presentationMode
@@ -15,9 +16,9 @@ struct WorkEnviornment: View {
     @State private var answer3: String = ""
     @State private var answer4: String = ""
     @State private var answer5: String = ""
+    @State private var navigateToNextView: Bool = false
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
 
-    
     let characterLimit = 150
 
     var body: some View {
@@ -85,37 +86,60 @@ struct WorkEnviornment: View {
                         
                         Spacer()
                         if !fromEditProfile {
-                        HStack {
-                            Spacer()
-                            // Next Button
-                            NavigationLink(destination: Hobbies(fromEditProfile: false)) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
-                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                            HStack {
+                                Spacer()
+                                // Next Button
+                                NavigationLink(destination: Hobbies(fromEditProfile: false).navigationBarBackButtonHidden(true), isActive: $navigateToNextView) {
+                                    Button(action: {
+                                        Task {
+                                            await saveWorkEnvironment()
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(.black)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(25)
+                                            .shadow(radius: 10)
+                                            .opacity(isFormComplete() ? 1.0 : 0.5)
+                                    }
+                                    .disabled(!isFormComplete())
+                                    .padding(.top, 30)
+                                    .padding(.bottom, 50)
+                                }
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
-                    }
                     }
                     .padding()
                 }
             }
-        }                    .navigationBarBackButtonHidden(true)
-
+        }
+        .navigationBarBackButtonHidden(true)
     }
 
-    
     func isFormComplete() -> Bool {
         return !answer1.isEmpty && !answer2.isEmpty && !answer3.isEmpty && !answer4.isEmpty && !answer5.isEmpty
     }
-}
+    
+    func saveWorkEnvironment() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
 
+        let workEnvio = [
+            answer1,
+            answer2,
+            answer3,
+            answer4,
+            answer5
+        ]
+
+        do {
+            try await ProfileUpdater.shared.updateWorkEnvironment(userId: userId, workEnvio: workEnvio)
+            navigateToNextView = true
+        } catch {
+            // Handle error
+        }
+    }
+}
 struct WorkEnviornment_Previews: PreviewProvider {
     static var previews: some View {
         WorkEnviornment(fromEditProfile: false)

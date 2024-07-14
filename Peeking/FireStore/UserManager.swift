@@ -58,6 +58,7 @@ struct DBUser: Codable {
     var distance: Int?
     var fields: [String]?
     var workSetting: [String]?
+    var employer: [String]?
     var status: [String]?
     var start: [String]?
     var technicals: [String]?
@@ -103,6 +104,7 @@ struct DBUser: Codable {
         fields: [String]? = nil,
         workSetting: [String]? = nil,
         status: [String]? = nil,
+        employer: [String]? = nil,
         start: [String]? = nil,
         technicals: [String]? = nil,
         softSkills: [String]? = nil,
@@ -140,6 +142,7 @@ struct DBUser: Codable {
         self.softSkills = softSkills
         self.workEnvio = workEnvio
         self.hobbies = hobbies
+        self.employer = employer
         self.chats = chats
         self.pfp = pfp
         self.personalityPhoto = personalityPhoto
@@ -175,6 +178,7 @@ struct DBUser: Codable {
         case hobbies
         case chats
         case pfp
+        case employer
         case personalityPhoto = "personality_photo"
         case logo
         case positions
@@ -208,6 +212,7 @@ struct DBUser: Codable {
         self.workEnvio = try container.decodeIfPresent([String].self, forKey: .workEnvio)
         self.hobbies = try container.decodeIfPresent(String.self, forKey: .hobbies)
         self.chats = try container.decodeIfPresent([String].self, forKey: .chats)
+        self.employer = try container.decodeIfPresent([String].self, forKey: .employer)
         self.pfp = try container.decodeIfPresent(String.self, forKey: .pfp)
         self.personalityPhoto = try container.decodeIfPresent(String.self, forKey: .personalityPhoto)
         self.logo = try container.decodeIfPresent(String.self, forKey: .logo)
@@ -242,6 +247,7 @@ struct DBUser: Codable {
         try container.encodeIfPresent(self.workEnvio, forKey: .workEnvio)
         try container.encodeIfPresent(self.hobbies, forKey: .hobbies)
         try container.encodeIfPresent(self.chats, forKey: .chats)
+        try container.encodeIfPresent(self.employer, forKey: .employer)
         try container.encodeIfPresent(self.pfp, forKey: .pfp)
         try container.encodeIfPresent(self.personalityPhoto, forKey: .personalityPhoto)
         try container.encodeIfPresent(self.logo, forKey: .logo)

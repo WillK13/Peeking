@@ -1,12 +1,20 @@
+//
+//  TechnicalsEmployee.swift
+//  Peeking
+//
+//  Created by Will kaminski on 6/23/24.
+//
+
 import SwiftUI
+import FirebaseAuth
 
 struct TechnicalsEmployee: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var technicalSkills: String = ""
     @State private var certifications: String = ""
+    @State private var navigateToNextView: Bool = false
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
 
-    
     let technicalSkillsLimit = 400
     let certificationsLimit = 300
 
@@ -45,7 +53,8 @@ struct TechnicalsEmployee: View {
                                         .cornerRadius(5)
                                 }
                             }
-                        }                                .padding(.leading)
+                        }
+                        .padding(.leading)
                         
                         HStack {
                             Spacer()
@@ -108,23 +117,29 @@ struct TechnicalsEmployee: View {
                         
                         Spacer()
                         if !fromEditProfile {
-                        HStack {
-                            Spacer()
-                            // Next Button
-                            NavigationLink(destination: HonestyStatement().navigationBarBackButtonHidden(true)) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
-                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                            HStack {
+                                Spacer()
+                                // Next Button
+                                NavigationLink(destination: HonestyStatement().navigationBarBackButtonHidden(true), isActive: $navigateToNextView) {
+                                    Button(action: {
+                                        Task {
+                                            await saveTechnicals()
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(.black)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(25)
+                                            .shadow(radius: 10)
+                                            .opacity(isFormComplete() ? 1.0 : 0.5)
+                                    }
+                                    .disabled(!isFormComplete())
+                                    .padding(.top, 30)
+                                    .padding(.bottom, 50)
+                                }
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
-                    }
                     }
                     .padding()
                 }
@@ -135,6 +150,17 @@ struct TechnicalsEmployee: View {
     
     func isFormComplete() -> Bool {
         return !technicalSkills.isEmpty && !certifications.isEmpty
+    }
+    
+    func saveTechnicals() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        do {
+            try await ProfileUpdater.shared.updateTechnicals(userId: userId, technicalSkills: technicalSkills, certifications: certifications)
+            navigateToNextView = true
+        } catch {
+            // Handle error
+        }
     }
 }
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct SoftSkills: View {
     @Environment(\.presentationMode) var presentationMode
@@ -16,9 +17,9 @@ struct SoftSkills: View {
     @State private var supportResources: String = ""
     @State private var goodManagement: String = ""
     @State private var goodEnv: String = ""
+    @State private var navigateToNextView: Bool = false
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
 
-    
     let characterLimit = 150
 
     var body: some View {
@@ -88,33 +89,37 @@ struct SoftSkills: View {
                         
                         Spacer()
                         if !fromEditProfile {
-                        HStack {
-                            Spacer()
-                            // Next Button
-                            NavigationLink(destination: WorkEnviornment(fromEditProfile: false)) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
-                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                            HStack {
+                                Spacer()
+                                // Next Button
+                                NavigationLink(destination: WorkEnviornment(fromEditProfile: false).navigationBarBackButtonHidden(true), isActive: $navigateToNextView) {
+                                    Button(action: {
+                                        Task {
+                                            await saveSoftSkills()
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(.black)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(25)
+                                            .shadow(radius: 10)
+                                            .opacity(isFormComplete() ? 1.0 : 0.5)
+                                    }
+                                    .disabled(!isFormComplete())
+                                    .padding(.top, 30)
+                                    .padding(.bottom, 50)
+                                }
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
-                    }
                     }
                     .padding()
                 }
-                
             }
-        }                    .navigationBarBackButtonHidden(true)
-
+        }
+        .navigationBarBackButtonHidden(true)
     }
 
-    
     func isFormComplete() -> Bool {
         return !workEnvironment.isEmpty &&
                !teamDynamics.isEmpty &&
@@ -122,6 +127,26 @@ struct SoftSkills: View {
                !supportResources.isEmpty &&
                !goodManagement.isEmpty &&
                !goodEnv.isEmpty
+    }
+    
+    func saveSoftSkills() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        let softSkills = [
+            workEnvironment,
+            teamDynamics,
+            workFlexibility,
+            supportResources,
+            goodManagement,
+            goodEnv
+        ]
+
+        do {
+            try await ProfileUpdater.shared.updateSoftSkills(userId: userId, softSkills: softSkills)
+            navigateToNextView = true
+        } catch {
+            // Handle error
+        }
     }
 }
 

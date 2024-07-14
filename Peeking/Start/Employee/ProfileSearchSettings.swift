@@ -6,9 +6,9 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileSearchSettings: View {
-    // Variables for distance, show views, and the current selected options
     @Environment(\.presentationMode) var presentationMode
     @State private var distance: Double = 30
     @State private var showLocationView = false
@@ -32,214 +32,159 @@ struct ProfileSearchSettings: View {
     @State private var selectedStart1 = "Choose"
     @State private var selectedStart2 = "Choose"
     @State private var selectedStart3 = "Choose"
+    
+    @State private var navigateToNextView: Bool = false
 
-    // Options for all of the drop downs.
     var fieldOptions = ["Consulting", "IT Consulting", "Management Consulting"]
     var employerOptions = ["Startup", "Small Business", "Independent Client", "Corporate"]
     var workSettingOptions = ["Remote", "In-Person", "Hybrid"]
     var employmentStatusOptions = ["Part-time", "Full-Time", "Temporary", "Internship"]
-    var StartOptions = ["Fall", "Winter", "Spring", "Summer", "Any"]
+    var startOptions = ["Fall", "Winter", "Spring", "Summer", "Any"]
 
     var body: some View {
-        //VStack with all content
-        VStack(spacing: 20) {
-            VStack {
-                //Back arrow
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black).font(.system(size: 25))
-                    }
-                    Spacer()
-                }
-                .padding([.top, .leading, .trailing])
-                
-                Text("Search Settings")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.bottom)
-            }.background(Color("TopOrange")).cornerRadius(10)
-            //The main view area
-            ScrollView {
-                VStack(spacing: 20) {
-                    //Location
+        NavigationStack {
+            VStack(spacing: 20) {
+                VStack {
                     HStack {
-                        Text("Location")
-                        Spacer()
                         Button(action: {
-                            showLocationView.toggle()
+                            presentationMode.wrappedValue.dismiss()
                         }) {
-                            HStack {
-                                Text("Position Location\nBoston, MA")
-                                    .foregroundColor(Color.black)
-                                    .multilineTextAlignment(.trailing)
-                                Image(systemName: "chevron.right")
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.black).font(.system(size: 25))
+                        }
+                        Spacer()
+                    }
+                    .padding([.top, .leading, .trailing])
+                    
+                    Text("Search Settings")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.bottom)
+                }
+                .background(Color("TopOrange"))
+                .cornerRadius(10)
+
+                ScrollView {
+                    VStack(spacing: 20) {
+                        HStack {
+                            Text("Location")
+                            Spacer()
+                            Button(action: {
+                                showLocationView.toggle()
+                            }) {
+                                HStack {
+                                    Text("Position Location\nBoston, MA")
+                                        .foregroundColor(Color.black)
+                                        .multilineTextAlignment(.trailing)
+                                    Image(systemName: "chevron.right")
+                                }
+                            }
+                            .fullScreenCover(isPresented: $showLocationView) {
+                                LocationView()
                             }
                         }
-                        .fullScreenCover(isPresented: $showLocationView) {
-                            LocationView()
+                        .padding(.horizontal)
+
+                        Divider().background(Color.gray)
+
+                        VStack(spacing: 10) {
+                            HStack {
+                                Text("Distance")
+                                Spacer()
+                            }
+                            Slider(value: $distance, in: 0...100)
+                            Text("Up to \(Int(distance)) miles")
                         }
+                        .padding(.horizontal)
+
+                        Divider().background(Color.gray)
+
+                        selectionSection(title: "Field/Niche", selectedOptions: [$selectedField1, $selectedField2, $selectedField3], options: fieldOptions)
+                        Divider().background(Color.gray)
+                        selectionSection(title: "Type of Employer", selectedOptions: [$selectedEmployer1, $selectedEmployer2, $selectedEmployer3], options: employerOptions)
+                        Divider().background(Color.gray)
+                        selectionSection(title: "Work Setting", selectedOptions: [$selectedSetting1, $selectedSetting2, $selectedSetting3], options: workSettingOptions)
+                        Divider().background(Color.gray)
+                        selectionSection(title: "Employment Status", selectedOptions: [$selectedStatus1, $selectedStatus2, $selectedStatus3], options: employmentStatusOptions)
+                        Divider().background(Color.gray)
+                        selectionSection(title: "Start Time", selectedOptions: [$selectedStart1, $selectedStart2, $selectedStart3], options: startOptions)
+                        Divider().background(Color.gray)
+
+                        HStack {
+                            Spacer()
+                            NavigationLink(destination: TechnicalsEmployee(fromEditProfile: false), isActive: $navigateToNextView) {
+                                Button(action: {
+                                    Task {
+                                        await saveProfileSettings()
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.right")
+                                        .foregroundColor(.white)
+                                        .padding()
+                                        .background(Color("BottomOrange"))
+                                        .cornerRadius(25)
+                                        .opacity(isFormComplete() ? 1.0 : 0.5)
+                                }
+                                .disabled(!isFormComplete())
+                                .padding(.top, 20)
+                            }
+                        }
+                        .padding(.trailing, 20)
                     }
-                    .padding(.horizontal)
-                    
-                    Divider().background(Color.gray)
-                    //Distance toggle
-                    VStack(spacing: 10) {
-                        HStack {
-                            Text("Distance")
-                            Spacer()
-                        }
-                        Slider(value: $distance, in: 0...100)
-                        Text("Up to \(Int(distance)) miles")
-                    }
-                    .padding(.horizontal)
-                    
-                    Divider().background(Color.gray)
-                    //The fields
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Field/Niche")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack {
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedField1, options: fieldOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedField2, options: fieldOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedField3, options: fieldOptions)
-                            Spacer()
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //The employers
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Type of Employer")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack {
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedEmployer1, options: employerOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedEmployer2, options: employerOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedEmployer3, options: employerOptions)
-                            Spacer()
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //The work setting
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Work Setting")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack(spacing: 10) {
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedSetting1, options: workSettingOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedSetting2, options: workSettingOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedSetting3, options: workSettingOptions)
-                            Spacer()
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //The employment status
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Employment Status")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack {
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedStatus1, options: employmentStatusOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedStatus2, options: employmentStatusOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedStatus3, options: employmentStatusOptions)
-                            Spacer()
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //The start time
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Start Time")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack {
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedStart1, options: StartOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedStart2, options: StartOptions)
-                            Spacer()
-                            DropdownMenuButtonStart(title: $selectedStart3, options: StartOptions)
-                            Spacer()
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //Exit
-                    HStack {
-                        Spacer()
-                        NavigationLink(destination: TechnicalsEmployee( fromEditProfile: false)) {
-                            Image(systemName: "arrow.right")
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color("BottomOrange"))
-                                .cornerRadius(25)
-                                .opacity(isFormComplete() ? 1.0 : 0.5)
-                        }
-                        .disabled(!isFormComplete())
-                        .padding(.top, 20)
-                    }.padding(.trailing, 20)
+                    .padding(.bottom, 20)
                 }
-                .padding(.bottom, 20) // Add some bottom padding to ensure the last item is fully visible
-            }.navigationBarBackButtonHidden(true)
+                .navigationBarBackButtonHidden(true)
+            }
+            .padding()
+            .navigationBarBackButtonHidden(true)
         }
-        .padding()
-        .navigationBarBackButtonHidden(true)
     }
     
+    func selectionSection(title: String, selectedOptions: [Binding<String>], options: [String]) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title)
+            HStack {
+                ForEach(0..<selectedOptions.count, id: \.self) { index in
+                    Spacer()
+                    DropdownMenuButtonStart(title: selectedOptions[index], options: options)
+                }
+            }
+        }
+        .padding()
+    }
+
     func isFormComplete() -> Bool {
         return selectedField1 != "Choose" && selectedField2 != "Choose" && selectedField3 != "Choose" &&
                selectedEmployer1 != "Choose" && selectedEmployer2 != "Choose" && selectedEmployer3 != "Choose" &&
                selectedSetting1 != "Choose" && selectedSetting2 != "Choose" && selectedSetting3 != "Choose" &&
                selectedStatus1 != "Choose" && selectedStatus2 != "Choose" && selectedStatus3 != "Choose" &&
                selectedStart1 != "Choose" && selectedStart2 != "Choose" && selectedStart3 != "Choose"
+    }
+
+    func saveProfileSettings() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        let fields = [selectedField1, selectedField2, selectedField3]
+        let employers = [selectedEmployer1, selectedEmployer2, selectedEmployer3]
+        let workSettings = [selectedSetting1, selectedSetting2, selectedSetting3]
+        let statuses = [selectedStatus1, selectedStatus2, selectedStatus3]
+        let startTimes = [selectedStart1, selectedStart2, selectedStart3]
+
+        let _: [String: Any] = [
+            "distance": Int(distance),
+            "fields": fields,
+            "employer": employers,
+            "workSetting": workSettings,
+            "status": statuses,
+            "start": startTimes
+        ]
+
+        do {
+            try await ProfileUpdater.shared.updateProfileSettings(userId: userId, distance: Int(distance), fields: fields, employer: employers, workSetting: workSettings, status: statuses, start: startTimes)
+            navigateToNextView = true
+        } catch {
+            // Handle error
+        }
     }
 }
 

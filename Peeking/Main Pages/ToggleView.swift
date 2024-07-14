@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import MapKit
+import FirebaseFirestore
+import FirebaseAuth
 
 struct ToggleView: View {
     // Variables for distance, show views, and the current selected options
@@ -243,11 +246,19 @@ struct DropdownMenuButton: View {
 //New vier when expand location
 struct LocationView: View {
     @Environment(\.presentationMode) var presentationMode
+    @State private var streetAddress: String = ""
+    @State private var city: String = ""
+    @State private var selectedState: String = "California"
+    @State private var zipCode: String = ""
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
+    @State private var isGeocoding = false
+    
+    let states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
 
     var body: some View {
-        //All of the content
         VStack(spacing: 20) {
-            //Exit page
+            // Exit page
             HStack {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
@@ -264,11 +275,36 @@ struct LocationView: View {
                 .fontWeight(.bold)
             
             // Location settings
-            Text("Location")
-            Text("Map")
-            //Exit
+            VStack(alignment: .leading) {
+                Text("Street Address")
+                TextField("Enter street address", text: $streetAddress)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom)
+                
+                Text("City")
+                TextField("Enter city", text: $city)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.bottom)
+                
+                Text("State")
+                Picker("State", selection: $selectedState) {
+                    ForEach(states, id: \.self) {
+                        Text($0)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+                .padding(.bottom)
+                
+                Text("Zip Code")
+                TextField("Enter zip code", text: $zipCode)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .keyboardType(.numberPad)
+            }
+            .padding()
+
+            // Save and Exit button
             Button(action: {
-                presentationMode.wrappedValue.dismiss()
+                saveLocation()
             }) {
                 Text("Save and Exit")
                     .foregroundColor(.white)
@@ -277,10 +313,56 @@ struct LocationView: View {
                     .cornerRadius(10)
             }
             .padding(.top, 20)
-
+            .disabled(isGeocoding)
+            
             Spacer()
         }
         .padding()
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+        }
+    }
+    
+    func saveLocation() {
+        let address = "\(streetAddress), \(city), \(selectedState), \(zipCode)"
+        geocode(address: address) { location, error in
+            if let error = error {
+                alertMessage = error.localizedDescription
+                showingAlert = true
+            } else if let location = location {
+                updateLocationInFirestore(location: location)
+            }
+        }
+    }
+    
+    func geocode(address: String, completion: @escaping (CLLocation?, Error?) -> Void) {
+        isGeocoding = true
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            isGeocoding = false
+            if let error = error {
+                completion(nil, error)
+            } else if let placemark = placemarks?.first, let location = placemark.location {
+                completion(location, nil)
+            } else {
+                completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Location not found"]))
+            }
+        }
+    }
+    
+    func updateLocationInFirestore(location: CLLocation) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let geoPoint = GeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        
+        Task {
+            do {
+                try await ProfileUpdater.shared.updateLocation(userId: userId, location: geoPoint)
+                presentationMode.wrappedValue.dismiss()
+            } catch {
+                alertMessage = error.localizedDescription
+                showingAlert = true
+            }
+        }
     }
 }
 
