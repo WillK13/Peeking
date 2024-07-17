@@ -11,32 +11,32 @@ import FirebaseFirestore
 import FirebaseAuth
 
 struct ToggleView: View {
-    // Variables for distance, show views, and the current selected options
     @Environment(\.presentationMode) var presentationMode
     @State private var distance: Double = 30
     @State private var showLocationView = false
     
-    @State private var selectedField1 = "Consulting"
-    @State private var selectedField2 = "Medical Track"
-    @State private var selectedField3 = "Healthcare"
+    @State private var selectedField1 = ""
+    @State private var selectedField2 = ""
+    @State private var selectedField3 = ""
     
-    @State private var selectedEmployer1 = "Startup"
-    @State private var selectedEmployer2 = "Small Business"
-    @State private var selectedEmployer3 = "Independent Contractor"
+    @State private var selectedEmployer1 = ""
+    @State private var selectedEmployer2 = ""
+    @State private var selectedEmployer3 = ""
     
-    @State private var selectedSetting1 = "Remote"
-    @State private var selectedSetting2 = "Hybrid"
-    @State private var selectedSetting3 = "In-Person"
+    @State private var selectedSetting1 = ""
+    @State private var selectedSetting2 = ""
+    @State private var selectedSetting3 = ""
     
-    @State private var selectedStatus1 = "Part-time"
-    @State private var selectedStatus2 = "Full-Time"
-    @State private var selectedStatus3 = "Temporary"
+    @State private var selectedStatus1 = ""
+    @State private var selectedStatus2 = ""
+    @State private var selectedStatus3 = ""
     
-    @State private var selectedStart1 = "Fall"
-    @State private var selectedStart2 = "Winter"
-    @State private var selectedStart3 = "Any"
+    @State private var selectedStart1 = ""
+    @State private var selectedStart2 = ""
+    @State private var selectedStart3 = ""
 
-    // Options for all of the drop downs.
+    @State private var isLoading = true
+
     var fieldOptions = ["Consulting", "IT Consulting", "Management Consulting"]
     var employerOptions = ["Startup", "Small Business", "Independent Client", "Corporate"]
     var workSettingOptions = ["Remote", "In-Person", "Hybrid"]
@@ -44,180 +44,251 @@ struct ToggleView: View {
     var StartOptions = ["Fall", "Winter", "Spring", "Summer", "Any"]
 
     var body: some View {
-        //VStack with all content
         VStack(spacing: 20) {
-            VStack {
-                //Back arrow
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black).font(.system(size: 25))
-                    }
-                    Spacer()
-                }
-                .padding([.top, .leading, .trailing])
-                
-                Text("Search Settings")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.bottom)
-            }.background(Color.gray.opacity(0.2)).cornerRadius(10)
-            //The main view area
-            ScrollView {
-                VStack(spacing: 20) {
-                    //Location
+            if isLoading {
+                Text("Loading...")
+            } else {
+                VStack {
                     HStack {
-                        Text("Location")
-                        Spacer()
                         Button(action: {
-                            showLocationView.toggle()
+                            presentationMode.wrappedValue.dismiss()
                         }) {
-                            HStack {
-                                Text("Position Location\nBoston, MA")
-                                    .foregroundColor(Color.black)
-                                    .multilineTextAlignment(.trailing)
-                                Image(systemName: "chevron.right")
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.black).font(.system(size: 25))
+                        }
+                        Spacer()
+                    }
+                    .padding([.top, .leading, .trailing])
+                    
+                    Text("Search Settings")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.bottom)
+                }.background(Color.gray.opacity(0.2)).cornerRadius(10)
+                
+                ScrollView {
+                    VStack(spacing: 20) {
+                        HStack {
+                            Text("Location")
+                            Spacer()
+                            Button(action: {
+                                showLocationView.toggle()
+                            }) {
+                                HStack {
+                                    Text("Position Location\nBoston, MA")
+                                        .foregroundColor(Color.black)
+                                        .multilineTextAlignment(.trailing)
+                                    Image(systemName: "chevron.right")
+                                }
+                            }
+                            .fullScreenCover(isPresented: $showLocationView) {
+                                LocationView()
                             }
                         }
-                        .fullScreenCover(isPresented: $showLocationView) {
-                            LocationView()
+                        .padding(.horizontal)
+                        
+                        Divider().background(Color.gray)
+                        
+                        VStack(spacing: 10) {
+                            HStack {
+                                Text("Distance")
+                                Spacer()
+                            }
+                            Slider(value: $distance, in: 0...100)
+                            Text("Up to \(Int(distance)) miles")
                         }
+                        .padding(.horizontal)
+                        
+                        Divider().background(Color.gray)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Field/Niche")
+                            HStack {
+                                Text("1st Choice").foregroundColor(.gray).padding(.leading)
+                                Spacer()
+                                Text("2nd Choice").foregroundColor(.gray)
+                                Spacer()
+                                Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
+                            }
+                            HStack {
+                                DropdownMenuButton(title: $selectedField1, options: fieldOptions)
+                                DropdownMenuButton(title: $selectedField2, options: fieldOptions)
+                                DropdownMenuButton(title: $selectedField3, options: fieldOptions)
+                            }
+                        }
+                        .padding()
+                        
+                        Divider().background(Color.gray)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Type of Employer")
+                            HStack {
+                                Text("1st Choice").foregroundColor(.gray).padding(.leading)
+                                Spacer()
+                                Text("2nd Choice").foregroundColor(.gray)
+                                Spacer()
+                                Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
+                            }
+                            HStack {
+                                DropdownMenuButton(title: $selectedEmployer1, options: employerOptions)
+                                DropdownMenuButton(title: $selectedEmployer2, options: employerOptions)
+                                DropdownMenuButton(title: $selectedEmployer3, options: employerOptions)
+                            }
+                        }
+                        .padding()
+                        
+                        Divider().background(Color.gray)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Work Setting")
+                            HStack {
+                                Text("1st Choice").foregroundColor(.gray).padding(.leading)
+                                Spacer()
+                                Text("2nd Choice").foregroundColor(.gray)
+                                Spacer()
+                                Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
+                            }
+                            HStack(spacing: 10) {
+                                DropdownMenuButton(title: $selectedSetting1, options: workSettingOptions)
+                                DropdownMenuButton(title: $selectedSetting2, options: workSettingOptions)
+                                DropdownMenuButton(title: $selectedSetting3, options: workSettingOptions)
+                            }
+                        }
+                        .padding()
+                        
+                        Divider().background(Color.gray)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Employment Status")
+                            HStack {
+                                Text("1st Choice").foregroundColor(.gray).padding(.leading)
+                                Spacer()
+                                Text("2nd Choice").foregroundColor(.gray)
+                                Spacer()
+                                Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
+                            }
+                            HStack {
+                                DropdownMenuButton(title: $selectedStatus1, options: employmentStatusOptions)
+                                DropdownMenuButton(title: $selectedStatus2, options: employmentStatusOptions)
+                                DropdownMenuButton(title: $selectedStatus3, options: employmentStatusOptions)
+                            }
+                        }
+                        .padding()
+                        
+                        Divider().background(Color.gray)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Start Time")
+                            HStack {
+                                Text("1st Choice").foregroundColor(.gray).padding(.leading)
+                                Spacer()
+                                Text("2nd Choice").foregroundColor(.gray)
+                                Spacer()
+                                Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
+                            }
+                            HStack {
+                                Spacer()
+                                DropdownMenuButton(title: $selectedStart1, options: StartOptions)
+                                Spacer()
+                                DropdownMenuButton(title: $selectedStart2, options: StartOptions)
+                                Spacer()
+                                DropdownMenuButton(title: $selectedStart3, options: StartOptions)
+                                Spacer()
+                            }
+                        }
+                        .padding()
+                        
+                        Divider().background(Color.gray)
+                        
+                        Button(action: {
+                            saveSettings()
+                        }) {
+                            Text("Save and Exit")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(10)
+                        }
+                        .padding(.top, 20)
                     }
-                    .padding(.horizontal)
-                    
-                    Divider().background(Color.gray)
-                    //Distance toggle
-                    VStack(spacing: 10) {
-                        HStack {
-                            Text("Distance")
-                            Spacer()
-                        }
-                        Slider(value: $distance, in: 0...100)
-                        Text("Up to \(Int(distance)) miles")
-                    }
-                    .padding(.horizontal)
-                    
-                    Divider().background(Color.gray)
-                    //The fields
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Field/Niche")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack {
-                            DropdownMenuButton(title: $selectedField1, options: fieldOptions)
-                            DropdownMenuButton(title: $selectedField2, options: fieldOptions)
-                            DropdownMenuButton(title: $selectedField3, options: fieldOptions)
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //The employers
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Type of Employer")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack {
-                            DropdownMenuButton(title: $selectedEmployer1, options: employerOptions)
-                            DropdownMenuButton(title: $selectedEmployer2, options: employerOptions)
-                            DropdownMenuButton(title: $selectedEmployer3, options: employerOptions)
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //The work setting
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Work Setting")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack(spacing: 10) {
-                            DropdownMenuButton(title: $selectedSetting1, options: workSettingOptions)
-                            DropdownMenuButton(title: $selectedSetting2, options: workSettingOptions)
-                            DropdownMenuButton(title: $selectedSetting3, options: workSettingOptions)
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //The employment status
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Employment Status")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack {
-                            DropdownMenuButton(title: $selectedStatus1, options: employmentStatusOptions)
-                            DropdownMenuButton(title: $selectedStatus2, options: employmentStatusOptions)
-                            DropdownMenuButton(title: $selectedStatus3, options: employmentStatusOptions)
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //The start time
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Start Time")
-                        HStack {
-                            Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                            Spacer()
-                            Text("2nd Choice").foregroundColor(.gray)
-                            Spacer()
-                            Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                        }
-                        HStack {
-                            Spacer()
-                            DropdownMenuButton(title: $selectedStart1, options: StartOptions)
-                            Spacer()
-                            DropdownMenuButton(title: $selectedStart2, options: StartOptions)
-                            Spacer()
-                            DropdownMenuButton(title: $selectedStart3, options: StartOptions)
-                            Spacer()
-                        }
-                    }
-                    .padding()
-                    
-                    Divider().background(Color.gray)
-                    //Exit
-                    Button(action: {
-                        // Handle save and exit action
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Save and Exit")
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                    .padding(.top, 20)
+                    .padding(.bottom, 20)
                 }
-                .padding(.bottom, 20) // Add some bottom padding to ensure the last item is fully visible
             }
         }
         .padding()
+        .onAppear {
+            loadSettings()
+        }
+    }
+
+    private func loadSettings() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists, let data = document.data() {
+                self.distance = data["distance"] as? Double ?? 30
+
+                let fields = data["fields"] as? [String] ?? []
+                if fields.count >= 3 {
+                    self.selectedField1 = fields[0]
+                    self.selectedField2 = fields[1]
+                    self.selectedField3 = fields[2]
+                }
+
+                let employers = data["employer"] as? [String] ?? []
+                if employers.count >= 3 {
+                    self.selectedEmployer1 = employers[0]
+                    self.selectedEmployer2 = employers[1]
+                    self.selectedEmployer3 = employers[2]
+                }
+
+                let settings = data["workSetting"] as? [String] ?? []
+                if settings.count >= 3 {
+                    self.selectedSetting1 = settings[0]
+                    self.selectedSetting2 = settings[1]
+                    self.selectedSetting3 = settings[2]
+                }
+
+                let statuses = data["status"] as? [String] ?? []
+                if statuses.count >= 3 {
+                    self.selectedStatus1 = statuses[0]
+                    self.selectedStatus2 = statuses[1]
+                    self.selectedStatus3 = statuses[2]
+                }
+
+                let starts = data["start"] as? [String] ?? []
+                if starts.count >= 3 {
+                    self.selectedStart1 = starts[0]
+                    self.selectedStart2 = starts[1]
+                    self.selectedStart3 = starts[2]
+                }
+            }
+            self.isLoading = false
+        }
+    }
+
+    private func saveSettings() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        let updates: [String: Any] = [
+            "distance": distance,
+            "fields": [selectedField1, selectedField2, selectedField3],
+            "employer": [selectedEmployer1, selectedEmployer2, selectedEmployer3],
+            "workSetting": [selectedSetting1, selectedSetting2, selectedSetting3],
+            "status": [selectedStatus1, selectedStatus2, selectedStatus3],
+            "start": [selectedStart1, selectedStart2, selectedStart3]
+        ]
+
+        Firestore.firestore().collection("users").document(userId).updateData(updates) { error in
+            if let error = error {
+                print("Error updating document: \(error)")
+            } else {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
     }
 }
+
 //Drop down menu for each button with the custom items above
 struct DropdownMenuButton: View {
     @Binding var title: String
