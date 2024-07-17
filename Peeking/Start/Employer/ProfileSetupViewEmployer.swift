@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileSetupViewEmployer: View {
     @Environment(\.presentationMode) var presentationMode
@@ -30,9 +31,9 @@ struct ProfileSetupViewEmployer: View {
     @State private var erTypeSearchText: String = ""
     @State private var entTypeSearchText: String = ""
     @State private var settingSearchText: String = ""
+    @State private var isSaving: Bool = false
+    @State private var navigateToNextView: Bool = false
 
-
-    
     let startTimeOptions = ["Morning", "Afternoon", "Evening", "Night"]
     let relevantFieldsOptions = ["Hospitality and Tourism", "Sales and Customer Service", "Telecommunications"]
     let workplaceLanguagesOptions = ["English", "Spanish", "French", "German"]
@@ -64,7 +65,6 @@ struct ProfileSetupViewEmployer: View {
                                     .padding(.vertical, 30.0)
                                     .font(.system(size: 70))
                                 Spacer()
-                                
                                 Button(action: {
                                     presentationMode.wrappedValue.dismiss()
                                 }) {
@@ -73,9 +73,8 @@ struct ProfileSetupViewEmployer: View {
                                         .padding()
                                         .background(Color(.white))
                                         .cornerRadius(5)
-                                }                                        .padding(.trailing, 15)
-
-                                
+                                }
+                                .padding(.trailing, 15)
                             }
                         }
                         .padding(.top)
@@ -87,7 +86,6 @@ struct ProfileSetupViewEmployer: View {
                             Spacer()
                         }
                         
-
                         // Form fields
                         VStack(alignment: .leading, spacing: 20) {
                             Group {
@@ -153,7 +151,6 @@ struct ProfileSetupViewEmployer: View {
                                     .font(.headline)
                                 SearchBar(text: $languageSearchText, options: workplaceLanguagesOptions, selectedOptions: $workplaceLanguages)
                                 
-                                
                                 Text("8. Employer Type")
                                     .font(.headline)
                                 SearchBar(text: $erTypeSearchText, options: employerTypeOptions, selectedOptions: $employerType)
@@ -166,7 +163,6 @@ struct ProfileSetupViewEmployer: View {
                                     .font(.headline)
                                 SearchBar(text: $entTypeSearchText, options: employmentTypeOptions, selectedOptions: $employmentType)
                                 
-                                
                                 Divider().background(Color.gray)
                                 
                                 Text("11. Company Mission (Optional)")
@@ -175,23 +171,28 @@ struct ProfileSetupViewEmployer: View {
                                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
                             }
                             if !fromEditProfile {
-                            // Next button
-                            HStack {
-                                Spacer()
-                                NavigationLink(destination: searchsettings()) {
-                                    Image(systemName: "arrow.right")
-                                        .foregroundColor(.black)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(25)
-                                        .shadow(radius: 10)
-                                        .opacity(isFormComplete() ? 1.0 : 0.5)
+                                // Next button
+                                HStack {
+                                    Spacer()
+                                    NavigationLink(destination: searchsettings(), isActive: $navigateToNextView) {
+                                        Button(action: {
+                                            Task {
+                                                await saveProfile()
+                                            }
+                                        }) {
+                                            Image(systemName: "arrow.right")
+                                                .foregroundColor(isFormComplete() ? Color.black : Color.gray)
+                                                .padding()
+                                                .background(Color.white)
+                                                .cornerRadius(25)
+                                                .shadow(radius: 10)
+                                        }
+                                        .disabled(!isFormComplete() || isSaving)
+                                        .padding(.top, 30)
+                                        .padding(.bottom, 50)
+                                    }
                                 }
-                                .disabled(!isFormComplete())
-                                .padding(.top, 30)
-                                .padding(.bottom, 50)
                             }
-                        }
                         }
                         .padding()
                     }
@@ -220,7 +221,34 @@ struct ProfileSetupViewEmployer: View {
         guard let inputImage = inputImage else { return }
         companyLogo = Image(uiImage: inputImage)
     }
+
+    func saveProfile() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        do {
+            isSaving = true
+            try await ProfileUpdaterEmployer.shared.updateEmployerProfile(
+                userId: userId,
+                companyName: companyName,
+                companyMission: companyMission,
+                languages: workplaceLanguages,
+                employerType: employerType,
+                positionTitle: positionTitle,
+                positionDescription: positionDescription,
+                startTime: selectedStartTime,
+                relevantFields: relevantFields,
+                workSetting: workSetting,
+                employmentType: employmentType
+            )
+            isSaving = false
+            navigateToNextView = true
+        } catch {
+            isSaving = false
+            // Handle error
+        }
+    }
 }
+
 
 struct DropdownMultiSelector: View {
     let title: String

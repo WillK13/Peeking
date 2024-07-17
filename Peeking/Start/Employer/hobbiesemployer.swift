@@ -6,16 +6,18 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct hobbiesemployer: View {
     @Environment(\.presentationMode) var presentationMode
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
 
-    
     @State private var hobbies: String = ""
     @State private var inputImage: UIImage? = nil
     @State private var profileImage: Image? = nil
     @State private var showingImagePicker = false
+    @State private var isSaving: Bool = false
+    @State private var navigateToNextView: Bool = false
 
     let characterLimit = 50
 
@@ -156,22 +158,26 @@ struct hobbiesemployer: View {
                         
                         Spacer()
                         if !fromEditProfile {
-                            
                             HStack {
                                 Spacer()
                                 // Next Button
-                                NavigationLink(destination: ProfileConfirmation()) {
-                                    Image(systemName: "arrow.right")
-                                        .foregroundColor(.black)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(25)
-                                        .shadow(radius: 10)
-                                        .opacity(isFormComplete() ? 1.0 : 0.5)
+                                NavigationLink(destination: ProfileConfirmation(), isActive: $navigateToNextView) {
+                                    Button(action: {
+                                        Task {
+                                            await saveHobbiesAndPhoto()
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(isFormComplete() ? Color.black : Color.gray)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(25)
+                                            .shadow(radius: 10)
+                                    }
+                                    .disabled(!isFormComplete() || isSaving)
+                                    .padding(.top, 30)
+                                    .padding(.bottom, 50)
                                 }
-                                .disabled(!isFormComplete())
-                                .padding(.top, 30)
-                                .padding(.bottom, 50)
                             }
                         }
                     }
@@ -184,6 +190,7 @@ struct hobbiesemployer: View {
             }
         }.navigationBarBackButtonHidden(true)
     }
+    
     func isFormComplete() -> Bool {
         return !hobbies.isEmpty && profileImage != nil
     }
@@ -191,6 +198,36 @@ struct hobbiesemployer: View {
     func loadImage() {
         guard let inputImage = inputImage else { return }
         profileImage = Image(uiImage: inputImage)
+    }
+
+    func saveHobbiesAndPhoto() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        guard let inputImage = inputImage else { return }
+        
+        do {
+            isSaving = true
+            
+            // Upload the photo to a storage service to get the URL
+            let photoURL = try await uploadPhoto(inputImage)
+            
+            try await ProfileUpdaterEmployer.shared.updateHobbiesAndPhoto(
+                userId: userId,
+                hobbies: hobbies,
+                photoURL: photoURL
+            )
+            isSaving = false
+            navigateToNextView = true
+        } catch {
+            isSaving = false
+            // Handle error
+        }
+    }
+
+    func uploadPhoto(_ image: UIImage) async throws -> String {
+        // Implement the logic to upload the image to a storage service
+        // and return the URL of the uploaded image.
+        // For now, returning a placeholder URL.
+        return "https://example.com/photo.jpg"
     }
 }
 

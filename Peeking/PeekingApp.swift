@@ -25,6 +25,7 @@ struct PeekingApp: App {
                         firstView()
                     } else if appViewModel.shouldShowContentView {
                         ContentView()
+                            .environmentObject(appViewModel)
                     } else {
                         Welcome()
                     }

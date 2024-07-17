@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct searchsettings: View {
     @Environment(\.presentationMode) var presentationMode
@@ -20,6 +21,8 @@ struct searchsettings: View {
     @State private var showEducationOptions = false
     @State private var fieldSearchText = ""
     @State private var educationSearchText = ""
+    @State private var isSaving: Bool = false
+    @State private var navigateToNextView: Bool = false
 
     // Options for all of the drop downs.
     var fieldOptions = ["Consulting", "IT Consulting", "Management Consulting", "Medical Track", "Healthcare", "Startup", "Small Business", "Independent Client", "Corporate"]
@@ -250,19 +253,23 @@ struct searchsettings: View {
                         HStack {
                             Spacer()
                             // Next Button
-                            let fromEditProfile: Bool = false
-                            NavigationLink(destination: DesiredTechnicals(fromEditProfile: fromEditProfile).navigationBarBackButtonHidden(true)) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
-                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                            NavigationLink(destination: DesiredTechnicals(fromEditProfile: false), isActive: $navigateToNextView) {
+                                Button(action: {
+                                    Task {
+                                        await saveSearchSettings()
+                                    }
+                                }) {
+                                    Image(systemName: "arrow.right")
+                                        .foregroundColor(isFormComplete() ? Color.black : Color.gray)
+                                        .padding()
+                                        .background(Color.white)
+                                        .cornerRadius(25)
+                                        .shadow(radius: 10)
+                                }
+                                .disabled(!isFormComplete() || isSaving)
+                                .padding(.top, 30)
+                                .padding(.bottom, 50)
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
                     }
                 }
@@ -276,7 +283,28 @@ struct searchsettings: View {
     func isFormComplete() -> Bool {
         return !acceptedFields.isEmpty && !acceptedEducation.isEmpty
     }
+
+    func saveSearchSettings() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        do {
+            isSaving = true
+            try await ProfileUpdaterEmployer.shared.updateSearchSettings(
+                userId: userId,
+                distance: distance,
+                experience: exp,
+                acceptedFields: acceptedFields,
+                acceptedEducation: acceptedEducation
+            )
+            isSaving = false
+            navigateToNextView = true
+        } catch {
+            isSaving = false
+            // Handle error
+        }
+    }
 }
+
 
 #Preview {
     searchsettings()

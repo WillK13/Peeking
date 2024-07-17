@@ -6,23 +6,26 @@
 //
 
 import SwiftUI
-struct ProfileViewEmployee: View {
+import FirebaseFirestore
+import FirebaseAuth
 
-    //Vars to toggle views
+struct ProfileViewEmployee: View {
     @State private var showSettings = false
     @State private var showTips = false
     @State private var showProfileDetail = false
     @State private var showEditProfile = false
 
-
+    // State variable for storing the user's name
+    @State private var userName: String = "Loading..."
+    
     var body: some View {
-        //Background
+        // Background
         ZStack {
             BackgroundView()
                 .edgesIgnoringSafeArea(.all)
-            //Content
+            // Content
             VStack {
-                //Top section with settings and tips buttons
+                // Top section with settings and tips buttons
                 HStack {
                     Button(action: {
                         showSettings.toggle()
@@ -49,22 +52,18 @@ struct ProfileViewEmployee: View {
                 }
                 .padding(.top, 20)
                 
-                //Avatar and position selector, should be pfp, can click to change
+                // Avatar and position selector, should be pfp, can click to change
                 VStack(spacing: 20) {
                     Image("profile60")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 100, height: 100).colorInvert()
                     
-                    Text("Name")
+                    Text(userName)
                         .font(.title)
-//                    if let userID = viewModel.userID {
-//                                            Text(userID)
-//                                                .font(.title)
-//                                        } else {
-//                                            Text("Loading...")
-//                                                .font(.title)
-//                                        }
+                        .onAppear {
+                            loadUserName()
+                        }
                     
                     Text("What employers see")
                         .font(.subheadline)
@@ -73,7 +72,7 @@ struct ProfileViewEmployee: View {
                 }
                 .padding(.horizontal)
                 
-                //Placeholder for content, needs to be dynamic to user data
+                // Placeholder for content, needs to be dynamic to user data
                 Rectangle()
                     .fill(Color.white)
                     .frame(width: 250.0, height: 350)
@@ -85,12 +84,12 @@ struct ProfileViewEmployee: View {
                 
                 Spacer()
                 
-                //Action buttons
+                // Action buttons
                 HStack(spacing: 20) {
                     Spacer()
                     
                     Button(action: {
-                        //Handle visibility action
+                        // Handle visibility action
                     }) {
                         VStack {
                             Image(systemName: "eye")
@@ -123,7 +122,7 @@ struct ProfileViewEmployee: View {
                 }
                 .padding(.bottom, 70).padding(.top, 10).padding(.trailing, 100)
             }
-            //Logic to open other views
+            // Logic to open other views
             if showProfileDetail {
                 Color.black.opacity(0.7)
                     .edgesIgnoringSafeArea(.all)
@@ -143,6 +142,19 @@ struct ProfileViewEmployee: View {
         }
         .sheet(isPresented: $showTips) {
             TipsView()
+        }
+    }
+    
+    // Function to load the user's name from Firestore
+    private func loadUserName() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists {
+                self.userName = document.data()?["name"] as? String ?? "Name not found"
+            } else {
+                print("User document does not exist")
+            }
         }
     }
 }

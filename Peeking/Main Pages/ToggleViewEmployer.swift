@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
+import FirebaseAuth
 
 struct ToggleViewEmployer: View {
-    // Variables for distance, show views, and the current selected options
     @Environment(\.presentationMode) var presentationMode
     @State private var distance: Double = 30
     @State private var exp: Double = 5
@@ -22,247 +23,289 @@ struct ToggleViewEmployer: View {
     @State private var fieldSearchText = ""
     @State private var educationSearchText = ""
 
+    @State private var isLoading = true
+
     // Options for all of the drop downs.
     var fieldOptions = ["Consulting", "IT Consulting", "Management Consulting", "Medical Track", "Healthcare", "Startup", "Small Business", "Independent Client", "Corporate"]
     var educationOptions = ["Currently enrolled in High School", "Highschool Graduate", "GED", "Currently enrolled in Master's Degree Program", "Currently enrolled in Associate's Degree Program", "Currently enrolled in Bachelor's Degree Program", "Currently enrolled in Doctorate Program", "Doctorate", "Associate's Degree", "Bachelor's Degree", "Master's Degree"]
 
     var body: some View {
         VStack(spacing: 20) {
-            VStack {
-                // Back arrow
-                HStack {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black).font(.system(size: 25))
-                    }
-                    Spacer()
-                }
-                .padding([.top, .leading, .trailing])
-                
-                Text("Search Settings")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.bottom)
-            }.background(Color.gray.opacity(0.2)).cornerRadius(10)
-            // The main view area
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Location
+            if isLoading {
+                Text("Loading...")
+            } else {
+                VStack {
+                    // Back arrow
                     HStack {
-                        Text("Location")
-                        Spacer()
                         Button(action: {
-                            showLocationView.toggle()
+                            presentationMode.wrappedValue.dismiss()
                         }) {
-                            HStack {
-                                Text("Position Location\nBoston, MA")
-                                    .foregroundColor(Color.black)
-                                    .multilineTextAlignment(.trailing)
-                                Image(systemName: "chevron.right")
-                            }
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.black).font(.system(size: 25))
                         }
-                        .fullScreenCover(isPresented: $showLocationView) {
-                            LocationView()
-                        }
+                        Spacer()
                     }
-                    .padding(.horizontal)
+                    .padding([.top, .leading, .trailing])
                     
-                    Divider().background(Color.gray)
-                    // Distance toggle
-                    VStack(spacing: 10) {
+                    Text("Search Settings")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.bottom)
+                }.background(Color.gray.opacity(0.2)).cornerRadius(10)
+                // The main view area
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // Location
                         HStack {
-                            Text("Distance")
+                            Text("Location")
                             Spacer()
-                        }
-                        Slider(value: $distance, in: 0...100)
-                        Text("Up to \(Int(distance)) miles")
-                    }
-                    .padding(.horizontal)
-                    
-                    Divider().background(Color.gray)
-                    // Experience toggle
-                    VStack(spacing: 10) {
-                        HStack {
-                            Text("Years of Experience")
-                            Spacer()
-                        }
-                        Slider(value: $exp, in: 0...20)
-                        Text("At least \(Int(exp)) years")
-                    }
-                    .padding(.horizontal)
-                    
-                    Divider().background(Color.gray)
-                    // Accepted Fields of Experience
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Accepted Fields of Experience")
-                        HStack {
-                            TextField("Search or add", text: $fieldSearchText, onEditingChanged: { _ in
-                                showFieldOptions = true
-                            })
-                            .padding(10)
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(15)
-                            .overlay(
+                            Button(action: {
+                                showLocationView.toggle()
+                            }) {
                                 HStack {
-                                    Spacer()
-                                    Image(systemName: "magnifyingglass")
-                                        .padding(.trailing, 10)
+                                    Text("Position Location\nBoston, MA")
+                                        .foregroundColor(Color.black)
+                                        .multilineTextAlignment(.trailing)
+                                    Image(systemName: "chevron.right")
                                 }
-                            )
+                            }
+                            .fullScreenCover(isPresented: $showLocationView) {
+                                LocationView()
+                            }
                         }
                         .padding(.horizontal)
                         
-                        if showFieldOptions {
-                            VStack {
-                                ForEach(fieldOptions.filter { $0.lowercased().contains(fieldSearchText.lowercased()) }, id: \.self) { option in
+                        Divider().background(Color.gray)
+                        // Distance toggle
+                        VStack(spacing: 10) {
+                            HStack {
+                                Text("Distance")
+                                Spacer()
+                            }
+                            Slider(value: $distance, in: 0...100)
+                            Text("Up to \(Int(distance)) miles")
+                        }
+                        .padding(.horizontal)
+                        
+                        Divider().background(Color.gray)
+                        // Experience toggle
+                        VStack(spacing: 10) {
+                            HStack {
+                                Text("Years of Experience")
+                                Spacer()
+                            }
+                            Slider(value: $exp, in: 0...20)
+                            Text("At least \(Int(exp)) years")
+                        }
+                        .padding(.horizontal)
+                        
+                        Divider().background(Color.gray)
+                        // Accepted Fields of Experience
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Accepted Fields of Experience")
+                            HStack {
+                                TextField("Search or add", text: $fieldSearchText, onEditingChanged: { _ in
+                                    showFieldOptions = true
+                                })
+                                .padding(10)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(15)
+                                .overlay(
                                     HStack {
-                                        Text(option)
-                                            .foregroundColor(Color.black)
-                                            .padding(10)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .background(Color.gray.opacity(0.2))
-                                            .cornerRadius(10)
-                                        Button(action: {
+                                        Spacer()
+                                        Image(systemName: "magnifyingglass")
+                                            .padding(.trailing, 10)
+                                    }
+                                )
+                            }
+                            .padding(.horizontal)
+                            
+                            if showFieldOptions {
+                                VStack {
+                                    ForEach(fieldOptions.filter { $0.lowercased().contains(fieldSearchText.lowercased()) }, id: \.self) { option in
+                                        HStack {
+                                            Text(option)
+                                                .foregroundColor(Color.black)
+                                                .padding(10)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .background(Color.gray.opacity(0.2))
+                                                .cornerRadius(10)
+                                            Button(action: {
+                                                if (!acceptedFields.contains(option)) {
+                                                    acceptedFields.append(option)
+                                                }
+                                                fieldSearchText = ""
+                                                showFieldOptions = false
+                                            }) {
+                                                Image(systemName: "plus.circle.fill")
+                                                    .foregroundColor(.green)
+                                                    .padding(.trailing, 10)
+                                                    .font(.system(size: 25))
+                                            }
+                                        }
+                                        .onTapGesture {
                                             if (!acceptedFields.contains(option)) {
                                                 acceptedFields.append(option)
                                             }
                                             fieldSearchText = ""
                                             showFieldOptions = false
-                                        }) {
-                                            Image(systemName: "plus.circle.fill")
-                                                .foregroundColor(.green)
-                                                .padding(.trailing, 10)
-                                                .font(.system(size: 25))
                                         }
                                     }
-                                    .onTapGesture {
-                                        if (!acceptedFields.contains(option)) {
-                                            acceptedFields.append(option)
+                                }
+                                .padding(.horizontal)
+                            }
+                            
+                            FlowLayout(alignment: .leading) {
+                                ForEach(acceptedFields, id: \.self) { field in
+                                    HStack {
+                                        Text(field)
+                                            .padding(10)
+                                            .background(Color("TopOrange"))
+                                            .cornerRadius(5)
+                                        Button(action: {
+                                            acceptedFields.removeAll { $0 == field }
+                                        }) {
+                                            Image(systemName: "minus.circle.fill")
+                                                .foregroundColor(.red)
                                         }
-                                        fieldSearchText = ""
-                                        showFieldOptions = false
                                     }
                                 }
                             }
                             .padding(.horizontal)
                         }
+                        .padding(.vertical)
                         
-                        FlowLayout(alignment: .leading) {
-                            ForEach(acceptedFields, id: \.self) { field in
-                                HStack {
-                                    Text(field)
-                                        .padding(10)
-                                        .background(Color("TopOrange"))
-                                        .cornerRadius(5)
-                                    Button(action: {
-                                        acceptedFields.removeAll { $0 == field }
-                                    }) {
-                                        Image(systemName: "minus.circle.fill")
-                                            .foregroundColor(.red)
-                                    }
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    .padding(.vertical)
-                    
-                    Divider().background(Color.gray)
-                    // Accepted Levels of Education
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Accepted Levels of Education")
-                        HStack {
-                            TextField("Search or add", text: $educationSearchText, onEditingChanged: { _ in
-                                showEducationOptions = true
-                            })
-                            .padding(10)
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(15)
-                            .overlay(
-                                HStack {
-                                    Spacer()
-                                    Image(systemName: "magnifyingglass")
-                                        .padding(.trailing, 10)
-                                }
-                            )
-                        }
-                        .padding(.horizontal)
-                        
-                        if showEducationOptions {
-                            VStack {
-                                ForEach(educationOptions.filter { $0.lowercased().contains(educationSearchText.lowercased()) }, id: \.self) { option in
+                        Divider().background(Color.gray)
+                        // Accepted Levels of Education
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Accepted Levels of Education")
+                            HStack {
+                                TextField("Search or add", text: $educationSearchText, onEditingChanged: { _ in
+                                    showEducationOptions = true
+                                })
+                                .padding(10)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(15)
+                                .overlay(
                                     HStack {
-                                        Text(option)
-                                            .foregroundColor(Color.black)
-                                            .padding(10)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .background(Color.gray.opacity(0.2))
-                                            .cornerRadius(10)
-                                        Button(action: {
+                                        Spacer()
+                                        Image(systemName: "magnifyingglass")
+                                            .padding(.trailing, 10)
+                                    }
+                                )
+                            }
+                            .padding(.horizontal)
+                            
+                            if showEducationOptions {
+                                VStack {
+                                    ForEach(educationOptions.filter { $0.lowercased().contains(educationSearchText.lowercased()) }, id: \.self) { option in
+                                        HStack {
+                                            Text(option)
+                                                .foregroundColor(Color.black)
+                                                .padding(10)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                .background(Color.gray.opacity(0.2))
+                                                .cornerRadius(10)
+                                            Button(action: {
+                                                if (!acceptedEducation.contains(option)) {
+                                                    acceptedEducation.append(option)
+                                                }
+                                                educationSearchText = ""
+                                                showEducationOptions = false
+                                            }) {
+                                                Image(systemName: "plus.circle.fill")
+                                                    .foregroundColor(.green)
+                                                    .padding(.trailing, 10)
+                                                    .font(.system(size: 25))
+                                            }
+                                        }
+                                        .onTapGesture {
                                             if (!acceptedEducation.contains(option)) {
                                                 acceptedEducation.append(option)
                                             }
                                             educationSearchText = ""
                                             showEducationOptions = false
-                                        }) {
-                                            Image(systemName: "plus.circle.fill")
-                                                .foregroundColor(.green)
-                                                .padding(.trailing, 10)
-                                                .font(.system(size: 25))
                                         }
                                     }
-                                    .onTapGesture {
-                                        if (!acceptedEducation.contains(option)) {
-                                            acceptedEducation.append(option)
+                                }
+                                .padding(.horizontal)
+                            }
+                            
+                            FlowLayout(alignment: .leading) {
+                                ForEach(acceptedEducation, id: \.self) { education in
+                                    HStack {
+                                        Text(education)
+                                            .padding(10)
+                                            .background(Color("TopOrange"))
+                                            .cornerRadius(5)
+                                        Button(action: {
+                                            acceptedEducation.removeAll { $0 == education }
+                                        }) {
+                                            Image(systemName: "minus.circle.fill")
+                                                .foregroundColor(.red)
                                         }
-                                        educationSearchText = ""
-                                        showEducationOptions = false
                                     }
                                 }
                             }
                             .padding(.horizontal)
                         }
+                        .padding(.vertical)
                         
-                        FlowLayout(alignment: .leading) {
-                            ForEach(acceptedEducation, id: \.self) { education in
-                                HStack {
-                                    Text(education)
-                                        .padding(10)
-                                        .background(Color("TopOrange"))
-                                        .cornerRadius(5)
-                                    Button(action: {
-                                        acceptedEducation.removeAll { $0 == education }
-                                    }) {
-                                        Image(systemName: "minus.circle.fill")
-                                            .foregroundColor(.red)
-                                    }
-                                }
-                            }
+                        Divider().background(Color.gray)
+                        // Save and Exit button
+                        Button(action: {
+                            saveSettings()
+                        }) {
+                            Text("Save and Exit")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(10)
                         }
-                        .padding(.horizontal)
+                        .padding(.top, 20)
                     }
-                    .padding(.vertical)
-                    
-                    Divider().background(Color.gray)
-                    // Save and Exit button
-                    Button(action: {
-                        // Handle save and exit action
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Save and Exit")
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                    .padding(.top, 20)
+                    .padding(.bottom, 20) // Add some bottom padding to ensure the last item is fully visible
                 }
-                .padding(.bottom, 20) // Add some bottom padding to ensure the last item is fully visible
             }
         }
         .padding()
+        .onAppear {
+            loadSettings()
+        }
+    }
+
+    private func loadSettings() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).collection("profile").document("profile_data").getDocument { document, error in
+            if let document = document, document.exists, let data = document.data() {
+                self.distance = data["distance"] as? Double ?? 30
+                self.exp = data["age"] as? Double ?? 5
+
+                self.acceptedFields = data["accepted_fields"] as? [String] ?? []
+                self.acceptedEducation = data["accepted_edu"] as? [String] ?? []
+            }
+            self.isLoading = false
+        }
+    }
+
+    private func saveSettings() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        let updates: [String: Any] = [
+            "distance": distance,
+            "age": exp,
+            "accepted_fields": acceptedFields,
+            "accepted_edu": acceptedEducation
+        ]
+
+        Firestore.firestore().collection("users").document(userId).collection("profile").document("profile_data").updateData(updates) { error in
+            if let error = error {
+                print("Error updating document: \(error)")
+            } else {
+                presentationMode.wrappedValue.dismiss()
+            }
+        }
     }
 }
 

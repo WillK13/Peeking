@@ -6,18 +6,20 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct enviornmentemployer: View {
     @Environment(\.presentationMode) var presentationMode
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
 
-    
     @State private var answer1: String = ""
     @State private var answer2: String = ""
     @State private var answer3: String = ""
     @State private var answer4: String = ""
     @State private var answer5: String = ""
-    
+    @State private var isSaving: Bool = false
+    @State private var navigateToNextView: Bool = false
+
     let characterLimit = 150
 
     var body: some View {
@@ -85,23 +87,28 @@ struct enviornmentemployer: View {
                         
                         Spacer()
                         if !fromEditProfile {
-                        HStack {
-                            Spacer()
-                            // Next Button
-                            NavigationLink(destination: softskillsemployer(fromEditProfile: false)) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
-                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                            HStack {
+                                Spacer()
+                                // Next Button
+                                NavigationLink(destination: softskillsemployer(fromEditProfile: false), isActive: $navigateToNextView) {
+                                    Button(action: {
+                                        Task {
+                                            await saveWorkEnvironment()
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(isFormComplete() ? Color.black : Color.gray)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(25)
+                                            .shadow(radius: 10)
+                                    }
+                                    .disabled(!isFormComplete() || isSaving)
+                                    .padding(.top, 30)
+                                    .padding(.bottom, 50)
+                                }
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
-                    }
                     }
                     .padding()
                     .navigationBarBackButtonHidden(true)
@@ -112,6 +119,21 @@ struct enviornmentemployer: View {
     
     func isFormComplete() -> Bool {
         return !answer1.isEmpty && !answer2.isEmpty && !answer3.isEmpty && !answer4.isEmpty && !answer5.isEmpty
+    }
+
+    func saveWorkEnvironment() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        do {
+            isSaving = true
+            let answers = [answer1, answer2, answer3, answer4, answer5]
+            try await ProfileUpdaterEmployer.shared.updateWorkEnvironment(userId: userId, answers: answers)
+            isSaving = false
+            navigateToNextView = true
+        } catch {
+            isSaving = false
+            // Handle error
+        }
     }
 }
 

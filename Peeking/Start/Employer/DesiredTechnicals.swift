@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct DesiredTechnicals: View {
     @Environment(\.presentationMode) var presentationMode
@@ -13,6 +14,8 @@ struct DesiredTechnicals: View {
 
     @State private var technicalSkills: String = ""
     @State private var certifications: String = ""
+    @State private var isSaving: Bool = false
+    @State private var navigateToNextView: Bool = false
     
     let technicalSkillsLimit = 400
     let certificationsLimit = 300
@@ -116,23 +119,28 @@ struct DesiredTechnicals: View {
                         
                         Spacer()
                         if !fromEditProfile {
-                        HStack {
-                            Spacer()
-                            // Next Button
-                            NavigationLink(destination: honestyemployer().navigationBarBackButtonHidden(true)) {
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(25)
-                                    .shadow(radius: 10)
-                                    .opacity(isFormComplete() ? 1.0 : 0.5)
+                            HStack {
+                                Spacer()
+                                // Next Button
+                                NavigationLink(destination: honestyemployer().navigationBarBackButtonHidden(true), isActive: $navigateToNextView) {
+                                    Button(action: {
+                                        Task {
+                                            await saveTechnicalSkills()
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(isFormComplete() ? Color.black : Color.gray)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(25)
+                                            .shadow(radius: 10)
+                                    }
+                                    .disabled(!isFormComplete() || isSaving)
+                                    .padding(.top, 30)
+                                    .padding(.bottom, 50)
+                                }
                             }
-                            .disabled(!isFormComplete())
-                            .padding(.top, 30)
-                            .padding(.bottom, 50)
                         }
-                    }
                     }
                     .padding()
                 }
@@ -143,6 +151,24 @@ struct DesiredTechnicals: View {
     
     func isFormComplete() -> Bool {
         return !technicalSkills.isEmpty && !certifications.isEmpty
+    }
+
+    func saveTechnicalSkills() async {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        do {
+            isSaving = true
+            try await ProfileUpdaterEmployer.shared.updateTechnicalSkills(
+                userId: userId,
+                technicalSkills: technicalSkills,
+                certifications: certifications
+            )
+            isSaving = false
+            navigateToNextView = true
+        } catch {
+            isSaving = false
+            // Handle error
+        }
     }
 }
 

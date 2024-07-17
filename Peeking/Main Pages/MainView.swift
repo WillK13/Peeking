@@ -18,10 +18,12 @@ struct TopCornersRounded: Shape {
     }
 }
 
-//Main view
+// Main view
 struct MainView: View {
-    //Variables to show the pricing/toggle and filling icons
-    @State private var showEmployeeTier = false
+    @EnvironmentObject var appViewModel: AppViewModel
+    
+    // Variables to show the pricing/toggle and filling icons
+    @State private var showTierView = false
     @State private var showSearchSettings = false
     @State private var isBookmarkFilled = false
     @State private var isHeartFilled = false
@@ -29,17 +31,17 @@ struct MainView: View {
 
     var body: some View {
         NavigationView {
-            //ZStack with Background
+            // ZStack with Background
             ZStack {
                 BackgroundView()
-                //VStack with the rest of the page content
+                // VStack with the rest of the page content
                 VStack {
-                    //Top Area
+                    // Top Area
                     HStack {
-                        //HStack with the number of likes remaining.
+                        // HStack with the number of likes remaining
                         HStack() {
                             Image(systemName: "heart.fill").foregroundColor(.red).padding(.all, 5.0).font(.system(size: 25))
-                            //This needs to change to become dynamic per user.
+                            // This needs to change to become dynamic per user
                             Text("3").font(.title).padding(.trailing, 5.0)
                         }
                         .background(RoundedRectangle(cornerRadius: 8).foregroundColor(.white))
@@ -48,12 +50,11 @@ struct MainView: View {
                         Spacer()
                         
                         Image("Duck_Head").resizable().aspectRatio(contentMode: .fit).frame(width: 120).padding(.top, 10.0)
-                        
-                        //Stack with the tiers and toggle buttons
+                        // Stack with the tiers and toggle buttons
                         VStack {
-                            //Needs to be dynamic for employees or employers
+                            // Needs to be dynamic for employees or employers
                             Button(action: {
-                                showEmployeeTier.toggle()
+                                showTierView.toggle()
                             }) {
                                 Image(systemName: "bag").foregroundColor(Color.white).font(.system(size: 45)).padding(.horizontal, 27.0).padding(.bottom, 10.0)
                             }
@@ -63,19 +64,18 @@ struct MainView: View {
                             }) {
                                 Image("adjust")
                             }
-                                
                         }
                     }.padding(.trailing, 20.0)
                     
-                    //Main Area
+                    // Main Area
                     ZStack {
-                        //Background white
+                        // Background white
                         Rectangle()
                             .fill(Color.white)
                             .frame(width: 395, height: 545)
                             .cornerRadius(10).padding(.top, -20)
 
-                        //Stack with the key elements.
+                        // Stack with the key elements
                         VStack(alignment: .trailing) {
                             Button(action: {
                                 isBookmarkFilled.toggle()
@@ -108,7 +108,7 @@ struct MainView: View {
                                     .foregroundColor(.black)
                             }
                             
-                            //The pages on the bottom, needs to change on click.
+                            // The pages on the bottom, needs to change on click
                             HStack {
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color("SelectColor"))
@@ -134,7 +134,7 @@ struct MainView: View {
                         .frame(width: 350, height: 500)
                     }.padding([.top, .leading, .trailing]).padding(.bottom, 5)
                     
-                    //Next Profile
+                    // Next Profile
                     TopCornersRounded(radius: 10)
                         .fill(Color.white)
                         .frame(height: 20)
@@ -144,7 +144,7 @@ struct MainView: View {
                     Spacer()
                 }
                 
-                //Overlay and Report button
+                // Overlay and Report button
                 if showOverlay {
                     Color.black.opacity(0.6)
                         .edgesIgnoringSafeArea(.all)
@@ -161,7 +161,7 @@ struct MainView: View {
                         HStack {
                             Spacer()
                             Button(action: {
-                                //Handle report action
+                                // Handle report action
                             }) {
                                 HStack {
                                     Image(systemName: "exclamationmark.circle")
@@ -181,14 +181,21 @@ struct MainView: View {
                 }
             }
             .navigationBarHidden(true)
-            .fullScreenCover(isPresented: $showEmployeeTier) {
-                EmployeeTierView()
+            .fullScreenCover(isPresented: $showTierView) {
+                if appViewModel.userType == 1 {
+                    EmployerTiersView()
+                } else {
+                    EmployeeTierView()
+                }
             }
             .sheet(isPresented: $showSearchSettings) {
-                ToggleView()
+                if appViewModel.userType == 1 {
+                    ToggleViewEmployer()
+                } else {
+                    ToggleView()
+                }
             }
         }
-        
     }
 }
 

@@ -12,6 +12,7 @@ import FirebaseFirestore
 final class AppViewModel: ObservableObject {
     @Published var isLoading: Bool = true
     @Published var shouldShowContentView: Bool = false
+    @Published var userType: Int?
 
     func checkUserProfile() {
         guard let userId = Auth.auth().currentUser?.uid else {
@@ -26,6 +27,7 @@ final class AppViewModel: ObservableObject {
             if let documentSnapshot = documentSnapshot, documentSnapshot.exists {
                 let data = documentSnapshot.data()
                 let isProfileSetupComplete = data?["is_profile_setup_complete"] as? Bool ?? false
+                self.userType = data?["user_type"] as? Int
                 self.shouldShowContentView = isProfileSetupComplete
             } else {
                 self.shouldShowContentView = false
@@ -33,3 +35,4 @@ final class AppViewModel: ObservableObject {
         }
     }
 }
+

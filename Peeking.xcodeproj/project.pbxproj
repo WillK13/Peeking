@@ -66,6 +66,7 @@
 		BEE5027A2C3B34A500B6175B /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502792C3B34A500B6175B /* AuthenticationViewModel.swift */; };
 		BEE5027C2C3B380500B6175B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE5027B2C3B380500B6175B /* UserManager.swift */; };
 		BEFCA0272C432F0900A6C120 /* ProfileUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFCA0262C432F0900A6C120 /* ProfileUpdater.swift */; };
+		BEFCA0292C485DCF00A6C120 /* ProfileUpdaterEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFCA0282C485DCF00A6C120 /* ProfileUpdaterEmployer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +146,7 @@
 		BEE502792C3B34A500B6175B /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		BEE5027B2C3B380500B6175B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		BEFCA0262C432F0900A6C120 /* ProfileUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUpdater.swift; sourceTree = "<group>"; };
+		BEFCA0282C485DCF00A6C120 /* ProfileUpdaterEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUpdaterEmployer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -370,6 +372,7 @@
 				BEE5027B2C3B380500B6175B /* UserManager.swift */,
 				BEE0CE682C3C864E00542876 /* AppViewModel.swift */,
 				BEFCA0262C432F0900A6C120 /* ProfileUpdater.swift */,
+				BEFCA0282C485DCF00A6C120 /* ProfileUpdaterEmployer.swift */,
 			);
 			path = FireStore;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				BE5E50062C2608FD00D36578 /* DesiredTechnicals.swift in Sources */,
 				BE5E500C2C26093D00D36578 /* enviornmentemployer.swift in Sources */,
 				BE5E4FF02C1CC8B100D36578 /* ProfileSearchSettings.swift in Sources */,
+				BEFCA0292C485DCF00A6C120 /* ProfileUpdaterEmployer.swift in Sources */,
 				BEE502722C3B293E00B6175B /* AuhenticationManager.swift in Sources */,
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,
 				BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */,
