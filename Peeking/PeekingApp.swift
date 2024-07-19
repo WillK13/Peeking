@@ -21,14 +21,15 @@ struct PeekingApp: App {
                 if appViewModel.isLoading {
                     LoadingView()
                 } else {
-                    if Auth.auth().currentUser == nil {
-                        firstView()
-                    } else if appViewModel.shouldShowContentView {
-                        ContentView()
-                            .environmentObject(appViewModel)
-                    } else {
-                        Welcome()
-                    }
+//                    if Auth.auth().currentUser == nil {
+//                        firstView()
+//                    } else if appViewModel.shouldShowContentView {
+//                        ContentView()
+//                            .environmentObject(appViewModel)
+//                    } else {
+//                        Welcome()
+//                    }
+                    ProfileConfirmation()
                 }
             }
             .onAppear {

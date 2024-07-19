@@ -67,16 +67,16 @@ struct Welcome: View {
                                             "education": [],
                                             "distance": 100,
                                             "fields": [],
-                                            "workSetting": [],
+                                            "work_setting": [],
                                             "status": [],
                                             "start": [],
                                             "technicals": [],
-                                            "softSkills": [],
+                                            "soft_skills": [],
                                             "workEnvio": [],
                                             "hobbies": "",
                                             "chats": [],
                                             "pfp": "",
-                                            "personalityPhoto": ""
+                                            "personality_photo": ""
                                         ]
                                         try await UserManager.shared.updateUserProfileForEmployee(userId: userId, additionalData: additionalData)
                                     }
@@ -119,7 +119,7 @@ struct Welcome: View {
                                             "type": [],
                                             "mission": "",
                                             "workEnvio": "",
-                                            "softSkills": [],
+                                            "soft_skills": [],
                                             "hobbies": "",
                                             "photo": ""
                                         ]

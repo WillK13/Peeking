@@ -53,6 +53,9 @@
 		BE6029E72C16364400B3C080 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E62C16364400B3C080 /* TipsView.swift */; };
 		BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */; };
 		BE6029EB2C19069700B3C080 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029EA2C19069700B3C080 /* ToggleView.swift */; };
+		BE77FACD2C498A8900D7F3D0 /* ProfileCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FACC2C498A8900D7F3D0 /* ProfileCardView.swift */; };
+		BE77FACF2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FACE2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift */; };
+		BE77FAD12C4B077900D7F3D0 /* ProfileActionButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FAD02C4B077900D7F3D0 /* ProfileActionButtons.swift */; };
 		BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */; };
 		BEE0CE692C3C864E00542876 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE682C3C864E00542876 /* AppViewModel.swift */; };
 		BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502512C33394B00B6175B /* PhoneAuthView.swift */; };
@@ -135,6 +138,9 @@
 		BE6029E62C16364400B3C080 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
 		BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewEmployee.swift; sourceTree = "<group>"; };
 		BE6029EA2C19069700B3C080 /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
+		BE77FACC2C498A8900D7F3D0 /* ProfileCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCardView.swift; sourceTree = "<group>"; };
+		BE77FACE2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileConfirmationEmployer.swift; sourceTree = "<group>"; };
+		BE77FAD02C4B077900D7F3D0 /* ProfileActionButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionButtons.swift; sourceTree = "<group>"; };
 		BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReauthenticationView.swift; sourceTree = "<group>"; };
 		BEE0CE682C3C864E00542876 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		BEE502512C33394B00B6175B /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
@@ -201,6 +207,7 @@
 				BE5E500B2C26093D00D36578 /* enviornmentemployer.swift */,
 				BE5E500D2C26094500D36578 /* softskillsemployer.swift */,
 				BE5E500F2C26094F00D36578 /* hobbiesemployer.swift */,
+				BE77FACE2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift */,
 			);
 			path = Employer;
 			sourceTree = "<group>";
@@ -315,6 +322,7 @@
 		BE6029CD2C13951400B3C080 /* Main Pages */ = {
 			isa = PBXGroup;
 			children = (
+				BEFCA02A2C49873C00A6C120 /* Swiping */,
 				BE6029CE2C13963400B3C080 /* MainView.swift */,
 				BE6029EA2C19069700B3C080 /* ToggleView.swift */,
 				BE5E4FE02C1B769500D36578 /* ToggleViewEmployer.swift */,
@@ -387,6 +395,15 @@
 				BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		BEFCA02A2C49873C00A6C120 /* Swiping */ = {
+			isa = PBXGroup;
+			children = (
+				BE77FACC2C498A8900D7F3D0 /* ProfileCardView.swift */,
+				BE77FAD02C4B077900D7F3D0 /* ProfileActionButtons.swift */,
+			);
+			path = Swiping;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -560,6 +577,8 @@
 				BEE502742C3B2A5B00B6175B /* SignInAppleHelper.swift in Sources */,
 				BE6029EB2C19069700B3C080 /* ToggleView.swift in Sources */,
 				BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */,
+				BE77FACD2C498A8900D7F3D0 /* ProfileCardView.swift in Sources */,
+				BE77FAD12C4B077900D7F3D0 /* ProfileActionButtons.swift in Sources */,
 				BE6029C42C136B6A00B3C080 /* BackgroundView.swift in Sources */,
 				BE5E4FE12C1B769600D36578 /* ToggleViewEmployer.swift in Sources */,
 				BE5E50062C2608FD00D36578 /* DesiredTechnicals.swift in Sources */,
@@ -576,6 +595,7 @@
 				BE5E4FFE2C24A73800D36578 /* ProfileConfirmation.swift in Sources */,
 				BE6029902C13603B00B3C080 /* PeekingApp.swift in Sources */,
 				BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */,
+				BE77FACF2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift in Sources */,
 				BE5E50122C2644FA00D36578 /* EditProfile.swift in Sources */,
 				BE5E4FF62C1E485200D36578 /* SoftSkills.swift in Sources */,
 				BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */,

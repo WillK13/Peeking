@@ -93,7 +93,7 @@ final class ProfileUpdater {
         }
         
         if let workSetting = workSetting {
-            updates["workSetting"] = workSetting
+            updates["work_setting"] = workSetting
         }
         
         if let status = status {
@@ -109,23 +109,20 @@ final class ProfileUpdater {
     }
     
     func updateTechnicals(userId: String, technicalSkills: String, certifications: String) async throws {
-        let updates: [String: Any] = [
-            "technicals": [
-                "skills": technicalSkills,
-                "certifications": certifications
+            let updates: [String: Any] = [
+                "technicals": [technicalSkills, certifications]
             ]
-        ]
-        
-        let userRef = userDocument(userId: userId)
-        try await userRef.updateData(updates)
-    }
+            
+            let userRef = userDocument(userId: userId)
+            try await userRef.updateData(updates)
+        }
     
     func updateSoftSkills(userId: String, softSkills: [String]) async throws {
-        let updates: [String: Any] = ["softSkills": softSkills]
-        
-        let userRef = userDocument(userId: userId)
-        try await userRef.updateData(updates)
-    }
+            let updates: [String: Any] = ["soft_skills": softSkills]
+            
+            let userRef = userDocument(userId: userId)
+            try await userRef.updateData(updates)
+        }
     
     func updateWorkEnvironment(userId: String, workEnvio: [String]) async throws {
         let updates: [String: Any] = ["workEnvio": workEnvio]
@@ -137,7 +134,7 @@ final class ProfileUpdater {
     func updateHobbies(userId: String, hobbies: String, photoURL: String) async throws {
         let updates: [String: Any] = [
             "hobbies": hobbies,
-            "personalityPhoto": photoURL
+            "personality_photo": photoURL
         ]
         
         let userRef = userDocument(userId: userId)

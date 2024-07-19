@@ -123,7 +123,7 @@ final class ProfileUpdaterEmployer {
             userId: String,
             softSkills: [String]
         ) async throws {
-            let updates: [String: Any] = ["softSkills": softSkills]
+            let updates: [String: Any] = ["soft_skills": softSkills]
             
             let userRef = userDocument(userId: userId)
             try await userRef.updateData(updates)
@@ -136,7 +136,7 @@ final class ProfileUpdaterEmployer {
        ) async throws {
            let updates: [String: Any] = [
                "hobbies": hobbies,
-               "personalityPhoto": photoURL
+               "personality_photo": photoURL
            ]
            
            let userRef = userDocument(userId: userId)

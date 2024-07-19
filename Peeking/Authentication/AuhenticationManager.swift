@@ -1,5 +1,5 @@
 //
-//  AuhenticationManager.swift
+//  AuthenticationManager.swift
 //  Peeking
 //
 //  Created by Will kaminski on 7/7/24.
@@ -18,7 +18,7 @@ struct AuthDataResultModel {
     var likesYou: [String]
     var bookmarks: [String]
     
-    init(user: User) {
+    init(user: FirebaseAuth.User) {
         self.userId = user.uid
         self.lastLogIn = Date()
         self.isProfileSetupComplete = false
@@ -69,22 +69,22 @@ final class AuthenticationManager {
     }
     
     func delete() async throws {
-            guard let user = Auth.auth().currentUser else {
-                throw URLError(.badURL)
-            }
-            
-            let userId = user.uid
-            // Delete subcollections first
-            try await UserManager.shared.deleteSubcollections(userId: userId)
-            
-            // Delete the user document
-            try await Firestore.firestore().collection("users").document(userId).delete()
-            print("User document successfully removed!")
-            
-            // Delete the user account
-            try await user.delete()
-            print("User account successfully removed!")
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badURL)
         }
+        
+        let userId = user.uid
+        // Delete subcollections first
+        try await UserManager.shared.deleteSubcollections(userId: userId)
+        
+        // Delete the user document
+        try await Firestore.firestore().collection("users").document(userId).delete()
+        print("User document successfully removed!")
+        
+        // Delete the user account
+        try await user.delete()
+        print("User account successfully removed!")
+    }
     
     func reauthenticateWithApple(tokens: SignInWithAppleResult) async throws {
         let credential = OAuthProvider.credential(withProviderID: AuthProviderOption.apple.rawValue, idToken: tokens.token, rawNonce: tokens.nonce)
@@ -96,8 +96,6 @@ final class AuthenticationManager {
         try await Auth.auth().currentUser?.reauthenticate(with: credential)
     }
 }
-
-
 
 // MARK: SIGN IN SSO
 
@@ -143,6 +141,7 @@ extension AuthenticationManager {
     }
 }
 
+// MARK: Reauthentication ViewModel
 
 @MainActor
 final class ReauthenticationViewModel: ObservableObject {

@@ -161,7 +161,7 @@ struct hobbiesemployer: View {
                             HStack {
                                 Spacer()
                                 // Next Button
-                                NavigationLink(destination: ProfileConfirmation(), isActive: $navigateToNextView) {
+                                NavigationLink(destination: ProfileConfirmationEmployer(), isActive: $navigateToNextView) {
                                     Button(action: {
                                         Task {
                                             await saveHobbiesAndPhoto()

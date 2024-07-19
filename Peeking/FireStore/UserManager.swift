@@ -14,9 +14,10 @@ struct LikeSent: Codable {
     let status: String
 }
 
-struct Experience: Codable {
-    let field: String
-    let exp: Int
+struct Experience: Codable, Identifiable {
+    @DocumentID var id: String? = UUID().uuidString
+    var field: String
+    var years: Int
 }
 
 struct Recommendation: Codable {
@@ -58,17 +59,17 @@ struct DBUser: Codable {
     var education: [String]?
     var distance: Int?
     var fields: [String]?
-    var workSetting: [String]?
+    var work_setting: [String]?
     var employer: [String]?
     var status: [String]?
     var start: [String]?
     var technicals: [String]?
-    var softSkills: [String]?
+    var soft_skills: [String]?
     var workEnvio: [String]?
     var hobbies: String?
     var chats: [String]?
     var pfp: String?
-    var personalityPhoto: String?
+    var personality_photo: String?
     // Employer-specific fields
     var logo: String?
     var positions: [String]?
@@ -103,17 +104,17 @@ struct DBUser: Codable {
         education: [String]? = nil,
         distance: Int? = nil,
         fields: [String]? = nil,
-        workSetting: [String]? = nil,
+        work_setting: [String]? = nil,
         status: [String]? = nil,
         employer: [String]? = nil,
         start: [String]? = nil,
         technicals: [String]? = nil,
-        softSkills: [String]? = nil,
+        soft_skills: [String]? = nil,
         workEnvio: [String]? = nil,
         hobbies: String? = nil,
         chats: [String]? = nil,
         pfp: String? = nil,
-        personalityPhoto: String? = nil,
+        personality_photo: String? = nil,
         // Employer-specific fields
         logo: String? = nil,
         positions: [String]? = nil,
@@ -136,17 +137,17 @@ struct DBUser: Codable {
         self.education = education
         self.distance = distance
         self.fields = fields
-        self.workSetting = workSetting
+        self.work_setting = work_setting
         self.status = status
         self.start = start
         self.technicals = technicals
-        self.softSkills = softSkills
+        self.soft_skills = soft_skills
         self.workEnvio = workEnvio
         self.hobbies = hobbies
         self.employer = employer
         self.chats = chats
         self.pfp = pfp
-        self.personalityPhoto = personalityPhoto
+        self.personality_photo = personality_photo
         self.logo = logo
         self.positions = positions
         self.mission = mission
@@ -170,17 +171,17 @@ struct DBUser: Codable {
         case education
         case distance
         case fields
-        case workSetting = "work_setting"
+        case work_setting = "work_setting"
         case status
         case start
         case technicals
-        case softSkills = "soft_skills"
+        case soft_skills = "soft_skills"
         case workEnvio = "work_envio"
         case hobbies
         case chats
         case pfp
         case employer
-        case personalityPhoto = "personality_photo"
+        case personality_photo = "personality_photo"
         case logo
         case positions
         case mission
@@ -205,17 +206,17 @@ struct DBUser: Codable {
         self.education = try container.decodeIfPresent([String].self, forKey: .education)
         self.distance = try container.decodeIfPresent(Int.self, forKey: .distance)
         self.fields = try container.decodeIfPresent([String].self, forKey: .fields)
-        self.workSetting = try container.decodeIfPresent([String].self, forKey: .workSetting)
+        self.work_setting = try container.decodeIfPresent([String].self, forKey: .work_setting)
         self.status = try container.decodeIfPresent([String].self, forKey: .status)
         self.start = try container.decodeIfPresent([String].self, forKey: .start)
         self.technicals = try container.decodeIfPresent([String].self, forKey: .technicals)
-        self.softSkills = try container.decodeIfPresent([String].self, forKey: .softSkills)
+        self.soft_skills = try container.decodeIfPresent([String].self, forKey: .soft_skills)
         self.workEnvio = try container.decodeIfPresent([String].self, forKey: .workEnvio)
         self.hobbies = try container.decodeIfPresent(String.self, forKey: .hobbies)
         self.chats = try container.decodeIfPresent([String].self, forKey: .chats)
         self.employer = try container.decodeIfPresent([String].self, forKey: .employer)
         self.pfp = try container.decodeIfPresent(String.self, forKey: .pfp)
-        self.personalityPhoto = try container.decodeIfPresent(String.self, forKey: .personalityPhoto)
+        self.personality_photo = try container.decodeIfPresent(String.self, forKey: .personality_photo)
         self.logo = try container.decodeIfPresent(String.self, forKey: .logo)
         self.positions = try container.decodeIfPresent([String].self, forKey: .positions)
         self.mission = try container.decodeIfPresent(String.self, forKey: .mission)
@@ -240,17 +241,17 @@ struct DBUser: Codable {
         try container.encodeIfPresent(self.education, forKey: .education)
         try container.encodeIfPresent(self.distance, forKey: .distance)
         try container.encodeIfPresent(self.fields, forKey: .fields)
-        try container.encodeIfPresent(self.workSetting, forKey: .workSetting)
+        try container.encodeIfPresent(self.work_setting, forKey: .work_setting)
         try container.encodeIfPresent(self.status, forKey: .status)
         try container.encodeIfPresent(self.start, forKey: .start)
         try container.encodeIfPresent(self.technicals, forKey: .technicals)
-        try container.encodeIfPresent(self.softSkills, forKey: .softSkills)
+        try container.encodeIfPresent(self.soft_skills, forKey: .soft_skills)
         try container.encodeIfPresent(self.workEnvio, forKey: .workEnvio)
         try container.encodeIfPresent(self.hobbies, forKey: .hobbies)
         try container.encodeIfPresent(self.chats, forKey: .chats)
         try container.encodeIfPresent(self.employer, forKey: .employer)
         try container.encodeIfPresent(self.pfp, forKey: .pfp)
-        try container.encodeIfPresent(self.personalityPhoto, forKey: .personalityPhoto)
+        try container.encodeIfPresent(self.personality_photo, forKey: .personality_photo)
         try container.encodeIfPresent(self.logo, forKey: .logo)
         try container.encodeIfPresent(self.positions, forKey: .positions)
         try container.encodeIfPresent(self.mission, forKey: .mission)
@@ -333,7 +334,7 @@ final class UserManager: ObservableObject {
         if userType == 0 {
             // Job-Seeker
             try await addLikeSent(userId: userId, like: LikeSent(user_id: "", status: ""))
-            try await addExperience(userId: userId, experience: Experience(field: "", exp: 0))
+            try await addExperience(userId: userId, experience: Experience(field: "", years: 0))
             try await addRecommendation(userId: userId, recommendation: Recommendation(user_id: "", rank: ""))
         } else if userType == 1 {
             // Employer
