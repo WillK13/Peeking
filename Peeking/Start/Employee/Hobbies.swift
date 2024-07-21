@@ -16,8 +16,8 @@ struct Hobbies: View {
     @State private var profileImage: Image? = nil
     @State private var showingImagePicker = false
     @State private var navigateToNextView: Bool = false
+    @State private var isSaving: Bool = false // Add a state for the saving process
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
-
 
     let characterLimit = 50
 
@@ -180,7 +180,7 @@ struct Hobbies: View {
                                         .shadow(radius: 10)
                                         .opacity(isFormComplete() ? 1.0 : 0.5)
                                 }
-                                .disabled(!isFormComplete())
+                                .disabled(!isFormComplete() || isSaving)
                                 .padding(.top, 30)
                                 .padding(.bottom, 50)
                             }
@@ -213,14 +213,27 @@ struct Hobbies: View {
     func saveHobbiesAndPhoto() async {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        // Placeholder for the actual image upload logic
-        let photoURL = "https://example.com/photo.jpg"
-        
-        do {
-            try await ProfileUpdater.shared.updateHobbies(userId: userId, hobbies: hobbies, photoURL: photoURL)
-            navigateToNextView = true
-        } catch {
-            // Handle error
+        guard let inputImage = inputImage else { return }
+
+        isSaving = true
+
+        StorageManager.shared.uploadProfileImage(userId: userId, image: inputImage) { result in
+            switch result {
+            case .success(let photoURL):
+                Task {
+                    do {
+                        try await ProfileUpdater.shared.updateHobbies(userId: userId, hobbies: hobbies, photoURL: photoURL)
+                        navigateToNextView = true
+                    } catch {
+                        // Handle error
+                    }
+                    isSaving = false
+                }
+            case .failure(let error):
+                // Handle error
+                print("Failed to upload image: \(error)")
+                isSaving = false
+            }
         }
     }
 }
