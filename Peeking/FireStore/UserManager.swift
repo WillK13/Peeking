@@ -176,7 +176,7 @@ struct DBUser: Codable {
         case start
         case technicals
         case soft_skills = "soft_skills"
-        case workEnvio = "work_envio"
+        case workEnvio
         case hobbies
         case chats
         case pfp
@@ -187,76 +187,6 @@ struct DBUser: Codable {
         case mission
         case type
         case photo
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.userId = try container.decode(String.self, forKey: .userId)
-        self.isProfileSetupComplete = try container.decodeIfPresent(Bool.self, forKey: .isProfileSetupComplete)
-        self.lastLogIn = try container.decodeIfPresent(Date.self, forKey: .lastLogIn)
-        self.matches = try container.decodeIfPresent([String].self, forKey: .matches)
-        self.likesYou = try container.decodeIfPresent([String].self, forKey: .likesYou)
-        self.bookmarks = try container.decodeIfPresent([String].self, forKey: .bookmarks)
-        self.userType = try container.decodeIfPresent(Int.self, forKey: .userType)
-        self.name = try container.decodeIfPresent(String.self, forKey: .name)
-        self.location = try container.decodeIfPresent(GeoPoint.self, forKey: .location)
-        self.age = try container.decodeIfPresent(Int.self, forKey: .age)
-        self.birthday = try container.decodeIfPresent(Date.self, forKey: .birthday)
-        self.languages = try container.decodeIfPresent([String].self, forKey: .languages)
-        self.education = try container.decodeIfPresent([String].self, forKey: .education)
-        self.distance = try container.decodeIfPresent(Int.self, forKey: .distance)
-        self.fields = try container.decodeIfPresent([String].self, forKey: .fields)
-        self.work_setting = try container.decodeIfPresent([String].self, forKey: .work_setting)
-        self.status = try container.decodeIfPresent([String].self, forKey: .status)
-        self.start = try container.decodeIfPresent([String].self, forKey: .start)
-        self.technicals = try container.decodeIfPresent([String].self, forKey: .technicals)
-        self.soft_skills = try container.decodeIfPresent([String].self, forKey: .soft_skills)
-        self.workEnvio = try container.decodeIfPresent([String].self, forKey: .workEnvio)
-        self.hobbies = try container.decodeIfPresent(String.self, forKey: .hobbies)
-        self.chats = try container.decodeIfPresent([String].self, forKey: .chats)
-        self.employer = try container.decodeIfPresent([String].self, forKey: .employer)
-        self.pfp = try container.decodeIfPresent(String.self, forKey: .pfp)
-        self.personality_photo = try container.decodeIfPresent(String.self, forKey: .personality_photo)
-        self.logo = try container.decodeIfPresent(String.self, forKey: .logo)
-        self.positions = try container.decodeIfPresent([String].self, forKey: .positions)
-        self.mission = try container.decodeIfPresent(String.self, forKey: .mission)
-        self.type = try container.decodeIfPresent([String].self, forKey: .type)
-        self.photo = try container.decodeIfPresent(String.self, forKey: .photo)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.userId, forKey: .userId)
-        try container.encodeIfPresent(self.isProfileSetupComplete, forKey: .isProfileSetupComplete)
-        try container.encodeIfPresent(self.lastLogIn, forKey: .lastLogIn)
-        try container.encodeIfPresent(self.matches, forKey: .matches)
-        try container.encodeIfPresent(self.likesYou, forKey: .likesYou)
-        try container.encodeIfPresent(self.bookmarks, forKey: .bookmarks)
-        try container.encodeIfPresent(self.userType, forKey: .userType)
-        try container.encodeIfPresent(self.name, forKey: .name)
-        try container.encodeIfPresent(self.location, forKey: .location)
-        try container.encodeIfPresent(self.age, forKey: .age)
-        try container.encodeIfPresent(self.birthday, forKey: .birthday)
-        try container.encodeIfPresent(self.languages, forKey: .languages)
-        try container.encodeIfPresent(self.education, forKey: .education)
-        try container.encodeIfPresent(self.distance, forKey: .distance)
-        try container.encodeIfPresent(self.fields, forKey: .fields)
-        try container.encodeIfPresent(self.work_setting, forKey: .work_setting)
-        try container.encodeIfPresent(self.status, forKey: .status)
-        try container.encodeIfPresent(self.start, forKey: .start)
-        try container.encodeIfPresent(self.technicals, forKey: .technicals)
-        try container.encodeIfPresent(self.soft_skills, forKey: .soft_skills)
-        try container.encodeIfPresent(self.workEnvio, forKey: .workEnvio)
-        try container.encodeIfPresent(self.hobbies, forKey: .hobbies)
-        try container.encodeIfPresent(self.chats, forKey: .chats)
-        try container.encodeIfPresent(self.employer, forKey: .employer)
-        try container.encodeIfPresent(self.pfp, forKey: .pfp)
-        try container.encodeIfPresent(self.personality_photo, forKey: .personality_photo)
-        try container.encodeIfPresent(self.logo, forKey: .logo)
-        try container.encodeIfPresent(self.positions, forKey: .positions)
-        try container.encodeIfPresent(self.mission, forKey: .mission)
-        try container.encodeIfPresent(self.type, forKey: .type)
-        try container.encodeIfPresent(self.photo, forKey: .photo)
     }
 }
 

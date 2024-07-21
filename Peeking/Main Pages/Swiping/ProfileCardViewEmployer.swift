@@ -145,6 +145,7 @@ struct ProfileCardViewEmployer: View {
             }
         }
     }
+
     
     private func loadProfileData(userId: String) {
         let profileRef = Firestore.firestore().collection("users").document(userId).collection("profile").document("profile_data")
