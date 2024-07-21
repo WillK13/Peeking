@@ -55,10 +55,10 @@ struct ProfileCardView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(index == currentStep ? Color("SelectColor") : Color("NotSelectedColor"))
                             .frame(width: 65, height: 15)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.black, lineWidth: 2)
-                            )
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(Color.black, lineWidth: 2)
+//                            )
                         Spacer()
                     }
                 }

@@ -23,6 +23,7 @@ struct PeekingApp: App {
                 } else {
 //                    if Auth.auth().currentUser == nil {
 //                        firstView()
+//                            .environmentObject(appViewModel)
 //                    } else if appViewModel.shouldShowContentView {
 //                        ContentView()
 //                            .environmentObject(appViewModel)
@@ -30,7 +31,9 @@ struct PeekingApp: App {
 //                        Welcome()
 //                            .environmentObject(appViewModel)
 //                    }
-                    ProfileConfirmationEmployer()
+                    // Commenting out ProfileConfirmationEmployer
+                     ProfileConfirmationEmployer()
+                        .environmentObject(appViewModel)
                 }
             }
             .onAppear {

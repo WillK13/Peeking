@@ -10,6 +10,7 @@ import FirebaseAuth
 
 struct ProfileConfirmationEmployer: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var appViewModel: AppViewModel
     @State private var currentStep = 0
     @State private var navigateToMainView = false
     @State private var showLoadingIndicator = false
@@ -100,6 +101,7 @@ struct ProfileConfirmationEmployer: View {
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $navigateToMainView) {
                 ContentView()
+                    .environmentObject(appViewModel)
             }
         }
     }

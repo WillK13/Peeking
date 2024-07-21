@@ -24,6 +24,19 @@ struct ProfileActionButtons: View {
                 }
                 .padding([.top, .trailing])
             }
+            HStack {
+                Spacer()
+                Button(action: {
+                    //Open the pop up
+                }, label: {
+                    Text("View")
+                        .font(.caption2)
+                        .fontWeight(.regular)
+                        .foregroundColor(Color.black)
+                        .background(Color.white)
+                        .cornerRadius(5)
+                })
+            }.padding(.trailing, 19)
             Spacer()
             HStack {
                 Spacer()
