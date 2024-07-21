@@ -29,16 +29,16 @@ struct ContentView: View {
                     Image("tgmessages").renderingMode(.template)
                 }
             if appViewModel.userType == 0 {
-                            ProfileViewEmployee()
-                                .tabItem {
-                                    Image("tgprofile").renderingMode(.template)
-                                }
-                        } else if appViewModel.userType == 1 {
-                            ProfileViewEmployer()
-                                .tabItem {
-                                    Image("tgprofile").renderingMode(.template)
-                                }
-                        }
+                ProfileViewEmployee()
+                    .tabItem {
+                        Image("tgprofile").renderingMode(.template)
+                    }
+            } else if appViewModel.userType == 1 {
+                ProfileViewEmployer()
+                    .tabItem {
+                        Image("tgprofile").renderingMode(.template)
+                    }
+            }
         }.navigationBarBackButtonHidden(true)
     }
 }

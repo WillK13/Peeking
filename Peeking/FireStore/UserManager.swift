@@ -29,7 +29,7 @@ struct Profile: Codable {
     let title: String
     let description: String
     let time: [String]
-    let field: [String]
+    let fields: [String]
     let setting: [String]
     let enroll: [String]
     let employment_type: [String]
@@ -338,7 +338,7 @@ final class UserManager: ObservableObject {
             try await addRecommendation(userId: userId, recommendation: Recommendation(user_id: "", rank: ""))
         } else if userType == 1 {
             // Employer
-            try await addProfile(userId: userId, profile: Profile(title: "", description: "", time: [], field: [], setting: [], enroll: [], employment_type: [], location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [], accepted_edu: [], technicals: [], chats: []))
+            try await addProfile(userId: userId, profile: Profile(title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [], location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [], accepted_edu: [], technicals: [], chats: []))
             try await addProfileLikeSent(userId: userId, like: LikeSent(user_id: "", status: ""))
             try await addProfileRecommendation(userId: userId, recommendation: Recommendation(user_id: "", rank: ""))
         }

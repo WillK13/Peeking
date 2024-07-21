@@ -28,8 +28,9 @@ struct PeekingApp: App {
 //                            .environmentObject(appViewModel)
 //                    } else {
 //                        Welcome()
+//                            .environmentObject(appViewModel)
 //                    }
-                    ProfileConfirmation()
+                    ProfileConfirmationEmployer()
                 }
             }
             .onAppear {

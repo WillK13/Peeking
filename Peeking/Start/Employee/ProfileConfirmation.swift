@@ -10,6 +10,7 @@ import FirebaseAuth
 
 struct ProfileConfirmation: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var appViewModel: AppViewModel
     @State private var currentStep = 0
     @State private var navigateToMainView = false
     @State private var showLoadingIndicator = false
@@ -100,6 +101,7 @@ struct ProfileConfirmation: View {
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $navigateToMainView) {
                 ContentView()
+                    .environmentObject(appViewModel)
             }
         }
     }
@@ -108,5 +110,6 @@ struct ProfileConfirmation: View {
 struct ProfileConfirmation_Previews: PreviewProvider {
     static var previews: some View {
         ProfileConfirmation()
+            .environmentObject(AppViewModel())
     }
 }

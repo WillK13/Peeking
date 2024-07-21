@@ -101,10 +101,8 @@ final class ProfileUpdaterEmployer {
             certifications: String
         ) async throws {
             let updates: [String: Any] = [
-                "technicals.skills": technicalSkills,
-                "technicals.certifications": certifications
+                "technicals": [technicalSkills, certifications]
             ]
-            
             let profileRef = profileDocument(userId: userId)
             try await profileRef.updateData(updates)
         }
