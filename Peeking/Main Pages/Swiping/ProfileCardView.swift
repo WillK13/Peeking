@@ -14,17 +14,31 @@ struct ProfileCardView: View {
     @Binding var currentStep: Int
     @State private var user: DBUser? = nil
     @State private var experiences: [Experience] = []
+    @State private var personalityPhotoURL: String? = nil
 
     var body: some View {
         ZStack {
-            // Background view for testing
-            BackgroundView()
-
             Rectangle()
                 .fill(Color.white)
                 .frame(width: 395, height: 545)
                 .cornerRadius(10)
-                .padding(.top, -20)
+                
+            
+            
+            if let personalityPhotoURL = personalityPhotoURL {
+                AsyncImage(url: URL(string: personalityPhotoURL)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .edgesIgnoringSafeArea(.all)
+                        .opacity(currentStep == 4 ? 1.0 : 0.5)
+//                        .blur(radius: currentStep == 4 ? 0 : 10)
+                } placeholder: {
+                    Color.gray.opacity(0.2)
+                        .edgesIgnoringSafeArea(.all)
+                }
+            }
+
 
             VStack {
                 if let user = user {
@@ -55,10 +69,6 @@ struct ProfileCardView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .fill(index == currentStep ? Color("SelectColor") : Color("NotSelectedColor"))
                             .frame(width: 65, height: 15)
-//                            .overlay(
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(Color.black, lineWidth: 2)
-//                            )
                         Spacer()
                     }
                 }
@@ -103,6 +113,7 @@ struct ProfileCardView: View {
                     let user = try document.data(as: DBUser.self)
                     self.user = user
                     loadExperiences(userId: userId)
+                    fetchPersonalityPhoto(userId: userId)
                 } catch {
                     print("Error decoding user data: \(error)")
                 }
@@ -111,7 +122,7 @@ struct ProfileCardView: View {
             }
         }
     }
-    
+
     private func loadExperiences(userId: String) {
         let experiencesRef = Firestore.firestore().collection("users").document(userId).collection("experience")
         experiencesRef.getDocuments { (snapshot, error) in
@@ -123,6 +134,17 @@ struct ProfileCardView: View {
                         try? doc.data(as: Experience.self)
                     }
                 }
+            }
+        }
+    }
+
+    private func fetchPersonalityPhoto(userId: String) {
+        StorageManager.shared.getProfileImageURL(userId: userId, folder: "personality") { result in
+            switch result {
+            case .success(let url):
+                self.personalityPhotoURL = url
+            case .failure(let error):
+                print("Failed to fetch personality photo URL: \(error)")
             }
         }
     }
@@ -180,7 +202,7 @@ struct UserProfileView: View {
                             .padding(.vertical, 5)
                             .padding(.horizontal, 18)
                             .background(Color.white)
-                            .cornerRadius(5)
+                            .cornerRadius(50)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 50)
                                     .stroke(Color.black, lineWidth: 1)
@@ -203,7 +225,7 @@ struct UserProfileView: View {
                             .padding(.vertical, 5)
                             .padding(.horizontal, 18)
                             .background(Color.white)
-                            .cornerRadius(5)
+                            .cornerRadius(50)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 50)
                                     .stroke(Color.black, lineWidth: 1)
@@ -550,6 +572,7 @@ struct HobbiesView: View {
         .padding([.leading, .trailing], 5.0)
     }
 }
+
 struct ProfileCardView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileCardView(currentStep: .constant(0))

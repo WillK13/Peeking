@@ -15,13 +15,13 @@ final class StorageManager {
 
     private init() {}
 
-    func uploadProfileImage(userId: String, image: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
+    func uploadProfileImage(userId: String, image: UIImage, folder: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard let imageData = image.jpegData(compressionQuality: 0.75) else {
             completion(.failure(StorageError.failedToConvertImage))
             return
         }
 
-        let storageRef = storage.child("images/pfp/\(userId).jpg")
+        let storageRef = storage.child("images/\(folder)/\(userId).jpg")
 
         storageRef.putData(imageData, metadata: nil) { metadata, error in
             guard error == nil else {
@@ -35,6 +35,17 @@ final class StorageManager {
                     return
                 }
                 completion(.success(downloadURL.absoluteString))
+            }
+        }
+    }
+
+    func getProfileImageURL(userId: String, folder: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let storageRef = storage.child("images/\(folder)/\(userId).jpg")
+        storageRef.downloadURL { url, error in
+            if let error = error {
+                completion(.failure(error))
+            } else if let url = url {
+                completion(.success(url.absoluteString))
             }
         }
     }

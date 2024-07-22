@@ -29,53 +29,57 @@ final class ProfileUpdater {
         var years: Int
     }
     
-    func updateEmployeeProfile(userId: String, name: String?, birthday: Date?, age: Int?, languages: [String]?, education: [String]?, experiences: [Experience]?) async throws {
-        var updates: [String: Any] = [:]
-        
-        if let name = name {
-            updates["name"] = name
-        }
-        
-        if let birthday = birthday {
-            updates["birthday"] = Timestamp(date: birthday)
-        }
-        
-        if let age = age {
-            updates["age"] = age
-        }
-        
-        if let languages = languages {
-            updates["languages"] = languages
-        }
-        
-        if let education = education {
-            updates["education"] = education
-        }
-        
-        // Batch update for user profile
-        let batch = Firestore.firestore().batch()
-        
-        // Update user document
-        let userRef = userDocument(userId: userId)
-        batch.updateData(updates, forDocument: userRef)
-        
-        // Clear existing experiences if new experiences are provided
-        if let experiences = experiences {
-            let experienceDocs = try await experienceCollection(userId: userId).getDocuments()
-            for document in experienceDocs.documents {
-                batch.deleteDocument(document.reference)
+    func updateEmployeeProfile(userId: String, name: String?, birthday: Date?, age: Int?, languages: [String]?, education: [String]?, experiences: [Experience]?, photoURL: String? = nil) async throws {
+            var updates: [String: Any] = [:]
+            
+            if let name = name {
+                updates["name"] = name
             }
             
-            // Add new experiences
-            for experience in experiences {
-                let experienceRef = experienceCollection(userId: userId).document()
-                try batch.setData(from: experience, forDocument: experienceRef)
+            if let birthday = birthday {
+                updates["birthday"] = Timestamp(date: birthday)
             }
+            
+            if let age = age {
+                updates["age"] = age
+            }
+            
+            if let languages = languages {
+                updates["languages"] = languages
+            }
+            
+            if let education = education {
+                updates["education"] = education
+            }
+            
+            if let photoURL = photoURL {
+                updates["pfp"] = photoURL
+            }
+            
+            // Batch update for user profile
+            let batch = Firestore.firestore().batch()
+            
+            // Update user document
+            let userRef = userDocument(userId: userId)
+            batch.updateData(updates, forDocument: userRef)
+            
+            // Clear existing experiences if new experiences are provided
+            if let experiences = experiences {
+                let experienceDocs = try await experienceCollection(userId: userId).getDocuments()
+                for document in experienceDocs.documents {
+                    batch.deleteDocument(document.reference)
+                }
+                
+                // Add new experiences
+                for experience in experiences {
+                    let experienceRef = experienceCollection(userId: userId).document()
+                    try batch.setData(from: experience, forDocument: experienceRef)
+                }
+            }
+            
+            // Commit the batch
+            try await batch.commit()
         }
-        
-        // Commit the batch
-        try await batch.commit()
-    }
     
     func updateProfileSettings(userId: String, distance: Int?, fields: [String]?, employer: [String]?, workSetting: [String]?, status: [String]?, start: [String]?) async throws {
         var updates: [String: Any] = [:]

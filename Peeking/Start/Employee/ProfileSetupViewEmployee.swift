@@ -256,14 +256,38 @@ struct ProfileSetupViewEmployee: View {
 
         do {
             isSaving = true
-            try await ProfileUpdater.shared.updateEmployeeProfile(userId: userId, name: firstName, birthday: birthday, age: age, languages: languages, education: levelOfEducation, experiences: experienceData)
-            isSaving = false
-            navigateToNextView = true
+            
+            guard let inputImage = inputImage else {
+                try await ProfileUpdater.shared.updateEmployeeProfile(userId: userId, name: firstName, birthday: birthday, age: age, languages: languages, education: levelOfEducation, experiences: experienceData)
+                isSaving = false
+                navigateToNextView = true
+                return
+            }
+            
+            StorageManager.shared.uploadProfileImage(userId: userId, image: inputImage, folder: "pfp") { result in
+                switch result {
+                case .success(let photoURL):
+                    Task {
+                        do {
+                            try await ProfileUpdater.shared.updateEmployeeProfile(userId: userId, name: firstName, birthday: birthday, age: age, languages: languages, education: levelOfEducation, experiences: experienceData, photoURL: photoURL)
+                            isSaving = false
+                            navigateToNextView = true
+                        } catch {
+                            // Handle error
+                        }
+                    }
+                case .failure(let error):
+                    // Handle error
+                    print("Failed to upload image: \(error)")
+                    isSaving = false
+                }
+            }
         } catch {
             isSaving = false
             // Handle error
         }
     }
+
 }
 
 struct SearchBar: View {

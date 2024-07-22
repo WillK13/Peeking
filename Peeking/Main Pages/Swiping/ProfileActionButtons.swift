@@ -33,10 +33,10 @@ struct ProfileActionButtons: View {
                         .font(.caption2)
                         .fontWeight(.regular)
                         .foregroundColor(Color.black)
-                        .background(Color.white)
-                        .cornerRadius(5)
-                })
-            }.padding(.trailing, 19)
+                        .padding(5)
+                }).background(Color.white).cornerRadius(5)
+            }.padding(.trailing, 15)
+                
             Spacer()
             HStack {
                 Spacer()

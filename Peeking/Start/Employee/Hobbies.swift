@@ -217,7 +217,7 @@ struct Hobbies: View {
 
         isSaving = true
 
-        StorageManager.shared.uploadProfileImage(userId: userId, image: inputImage) { result in
+        StorageManager.shared.uploadProfileImage(userId: userId, image: inputImage, folder: "personality") { result in
             switch result {
             case .success(let photoURL):
                 Task {
@@ -236,6 +236,7 @@ struct Hobbies: View {
             }
         }
     }
+
 }
 
 struct Hobbies_Previews: PreviewProvider {
