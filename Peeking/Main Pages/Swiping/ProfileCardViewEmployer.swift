@@ -14,25 +14,38 @@ struct ProfileCardViewEmployer: View {
     @State private var user: DBUser? = nil
     @State private var profile: Profile? = nil
     @State private var showMission: Bool = false
+    @State private var photoURL: String? = nil
+    @State private var logoURL: String? = nil
     @EnvironmentObject var appViewModel: AppViewModel
 
     var body: some View {
         ZStack {
-            // Background view for testing
-            BackgroundView()
-
             Rectangle()
                 .fill(Color.white)
                 .frame(width: 395, height: 545)
                 .cornerRadius(10)
-                .padding(.top, -20)
+
+            if let photoURL = photoURL {
+                AsyncImage(url: URL(string: photoURL)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .edgesIgnoringSafeArea(.all)
+                        .opacity(currentStep == 4 ? 1.0 : 0.5)
+                        .cornerRadius(10)
+                } placeholder: {
+                    Color.gray.opacity(0.3)
+                        .edgesIgnoringSafeArea(.all)
+                        .cornerRadius(10)
+                }
+            }
 
             VStack {
                 if let user = user, let profile = profile {
                     VStack(alignment: .leading) {
                         switch currentStep {
                         case 0:
-                            EmployerProfileView(user: user, profile: profile, showMission: $showMission)
+                            EmployerProfileView(user: user, profile: profile, showMission: $showMission, logoURL: logoURL)
                         case 1:
                             EmployerTechnicalCertificationsView(profile: profile)
                         case 2:
@@ -60,7 +73,7 @@ struct ProfileCardViewEmployer: View {
                 .padding(.top, 20)
             }
             .frame(width: 350, height: 500)
-            
+
             VStack {
                 HStack {
                     Spacer()
@@ -137,6 +150,8 @@ struct ProfileCardViewEmployer: View {
                     let user = try document.data(as: DBUser.self)
                     self.user = user
                     loadProfileData(userId: userId)
+                    fetchPhoto(userId: userId)
+                    fetchLogo(userId: userId)
                 } catch {
                     print("Error decoding employer data: \(error)")
                 }
@@ -146,7 +161,6 @@ struct ProfileCardViewEmployer: View {
         }
     }
 
-    
     private func loadProfileData(userId: String) {
         let profileRef = Firestore.firestore().collection("users").document(userId).collection("profile").document("profile_data")
         profileRef.getDocument { (document, error) in
@@ -162,224 +176,27 @@ struct ProfileCardViewEmployer: View {
             }
         }
     }
-}
 
-
-struct EmployerWorkEnvironmentView: View {
-    let user: DBUser
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            VStack(alignment: .leading) {
-                HStack{
-                    Text("General Work Environment")
-                        .font(.headline)
-                        .fontWeight(.regular)
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 18)
-                        .background(Color.blue.opacity(0.3))
-                        .cornerRadius(50)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 50)
-                                .stroke(Color.black, lineWidth: 1)
-                        )
-                        .padding([.leading, .trailing, .top])
-                    Spacer()
-                }
-                HStack {
-                    if let generalWorkEnvironment = user.workEnvio?[0].split(separator: ",").map(String.init) {
-                        VStack(alignment: .leading) {
-                            ForEach(generalWorkEnvironment, id: \.self) { item in
-                                HStack {
-                                    Text("• \(item)")
-                                        .padding(.leading)
-                                    Spacer()
-                                }
-                                .padding(.vertical, 5)
-                            }
-                        }
-                        .padding([.leading, .trailing])
-                        .padding(.bottom, 20)
-                        .padding(.top, 10)
-                    } else {
-                        Text("No general work environment listed")
-                            .padding([.leading, .trailing])
-                            .padding(.bottom, 20)
-                            .padding(.top, 10)
-                    }
-                    Spacer()
-                }
-                Spacer()
-            }
-
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("Team Dynamics")
-                        .font(.headline)
-                        .fontWeight(.regular)
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 18)
-                        .background(Color.blue.opacity(0.3))
-                        .cornerRadius(50)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 50)
-                                .stroke(Color.black, lineWidth: 1)
-                        )
-                        .padding([.leading, .trailing, .top])
-                    Spacer()
-                }
-                HStack {
-                    if let teamDynamics = user.workEnvio?[1].split(separator: ",").map(String.init) {
-                        VStack(alignment: .leading) {
-                            ForEach(teamDynamics, id: \.self) { item in
-                                HStack {
-                                    Text("• \(item)")
-                                        .padding(.leading)
-                                    Spacer()
-                                }
-                                .padding(.vertical, 5)
-                            }
-                        }
-                        .padding([.leading, .trailing])
-                        .padding(.bottom, 20)
-                        .padding(.top, 10)
-                    } else {
-                        Text("No team dynamics listed")
-                            .padding([.leading, .trailing])
-                            .padding(.bottom, 20)
-                            .padding(.top, 10)
-                    }
-                    Spacer()
-                }
-                Spacer()
-            }
-
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("Work Hour Flexibility")
-                        .font(.headline)
-                        .fontWeight(.regular)
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 18)
-                        .background(Color.blue.opacity(0.3))
-                        .cornerRadius(50)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 50)
-                                .stroke(Color.black, lineWidth: 1)
-                        )
-                        .padding([.leading, .trailing, .top])
-                    Spacer()
-                }
-                HStack {
-                    if let workHourFlexibility = user.workEnvio?[2].split(separator: ",").map(String.init) {
-                        VStack(alignment: .leading) {
-                            ForEach(workHourFlexibility, id: \.self) { item in
-                                HStack {
-                                    Text("• \(item)")
-                                        .padding(.leading)
-                                    Spacer()
-                                }
-                                .padding(.vertical, 5)
-                            }
-                        }
-                        .padding([.leading, .trailing])
-                        .padding(.bottom, 20)
-                        .padding(.top, 10)
-                    } else {
-                        Text("No work hour flexibility listed")
-                            .padding([.leading, .trailing])
-                            .padding(.bottom, 20)
-                            .padding(.top, 10)
-                    }
-                    Spacer()
-                }
-                Spacer()
+    private func fetchPhoto(userId: String) {
+        StorageManager.shared.getProfileImageURL(userId: userId, folder: "photo") { result in
+            switch result {
+            case .success(let url):
+                self.photoURL = url
+            case .failure(let error):
+                print("Failed to fetch photo URL: \(error)")
             }
         }
-        .padding([.leading, .trailing], 5.0)
     }
-}
 
-struct EmployerTechnicalCertificationsView: View {
-    let profile: Profile
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            VStack(alignment: .leading) {
-                Text("Desired Technicals")
-                    .font(.headline)
-                    .fontWeight(.regular)
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 18)
-                    .background(Color.green.opacity(0.3))
-                    .cornerRadius(50)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 50)
-                            .stroke(Color.black, lineWidth: 1)
-                    )
-                    .padding([.leading, .trailing, .top])
-                
-                if let technicals = profile.technicals.first?.split(separator: ",").map(String.init) {
-                    VStack(alignment: .leading) {
-                        ForEach(technicals, id: \.self) { technical in
-                            HStack {
-                                Text("• \(technical)")
-                                    .padding(.leading)
-                                Spacer()
-                            }
-                            .padding(.vertical, 5)
-                        }
-                    }
-                    .padding([.leading, .trailing])
-                    .padding(.bottom, 20)
-                    .padding(.top, 10)
-                } else {
-                    Text("No desired technicals listed")
-                        .padding([.leading, .trailing])
-                        .padding(.bottom, 20)
-                        .padding(.top, 10)
-                }
-                Spacer()
-            }
-
-            VStack(alignment: .leading) {
-                Text("Desired Certifications")
-                    .font(.headline)
-                    .fontWeight(.regular)
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 18)
-                    .background(Color.green.opacity(0.3))
-                    .cornerRadius(50)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 50)
-                            .stroke(Color.black, lineWidth: 1)
-                    )
-                    .padding([.leading, .trailing, .top])
-                
-                if let certifications = profile.technicals.dropFirst().first?.split(separator: ",").map(String.init) {
-                    VStack(alignment: .leading) {
-                        ForEach(certifications, id: \.self) { certification in
-                            HStack {
-                                Text("• \(certification)")
-                                    .padding(.leading)
-                                Spacer()
-                            }
-                            .padding(.vertical, 5)
-                        }
-                    }
-                    .padding([.leading, .trailing])
-                    .padding(.bottom, 20)
-                    .padding(.top, 10)
-                } else {
-                    Text("No desired certifications listed")
-                        .padding([.leading, .trailing])
-                        .padding(.bottom, 20)
-                        .padding(.top, 10)
-                }
-                Spacer()
+    private func fetchLogo(userId: String) {
+        StorageManager.shared.getProfileImageURL(userId: userId, folder: "logo") { result in
+            switch result {
+            case .success(let url):
+                self.logoURL = url
+            case .failure(let error):
+                print("Failed to fetch logo URL: \(error)")
             }
         }
-        .padding([.leading, .trailing], 5.0)
     }
 }
 
@@ -387,6 +204,7 @@ struct EmployerProfileView: View {
     let user: DBUser
     let profile: Profile
     @Binding var showMission: Bool
+    let logoURL: String?
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -398,10 +216,24 @@ struct EmployerProfileView: View {
                     .onTapGesture {
                         showMission = true
                     }
+
+                if let logoURL = logoURL {
+                    AsyncImage(url: URL(string: logoURL)) { image in
+                        image
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .cornerRadius(5)
+                    } placeholder: {
+                        Color.gray.opacity(0.3)
+                            .frame(width: 40, height: 40)
+                            .cornerRadius(5)
+                    }
+                }
+
                 Spacer()
             }
             .padding(.top, 10)
-            
+
             Divider()
                 .background(Color.black)
                 .padding(.leading)
@@ -425,7 +257,7 @@ struct EmployerProfileView: View {
             .padding([.leading, .trailing])
             .padding(.bottom, 10)
             .padding(.top, -5)
-            
+
             HStack {
                 Text(profile.description)
                     .font(.subheadline)
@@ -519,7 +351,7 @@ struct EmployerProfileView: View {
                 .font(.headline)
                 .fontWeight(.regular)
                 .padding(.leading)
-            
+
             Divider()
                 .background(Color.black)
                 .padding(.leading)
@@ -549,6 +381,224 @@ struct EmployerProfileView: View {
     }
 }
 
+struct EmployerWorkEnvironmentView: View {
+    let user: DBUser
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            VStack(alignment: .leading) {
+                HStack{
+                    Text("General Work Environment")
+                        .font(.headline)
+                        .fontWeight(.regular)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 18)
+                        .background(Color("WE-SS"))
+                        .cornerRadius(50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 50)
+                                .stroke(Color.black, lineWidth: 1)
+                        )
+                        .padding([.leading, .trailing, .top])
+                    Spacer()
+                }
+                HStack {
+                    if let generalWorkEnvironment = user.workEnvio?[0].split(separator: ",").map(String.init) {
+                        VStack(alignment: .leading) {
+                            ForEach(generalWorkEnvironment, id: \.self) { item in
+                                HStack {
+                                    Text("• \(item)")
+                                        .padding(.leading)
+                                    Spacer()
+                                }
+                                .padding(.vertical, 5)
+                            }
+                        }
+                        .padding([.leading, .trailing])
+                        .padding(.bottom, 20)
+                        .padding(.top, 10)
+                    } else {
+                        Text("No general work environment listed")
+                            .padding([.leading, .trailing])
+                            .padding(.bottom, 20)
+                            .padding(.top, 10)
+                    }
+                    Spacer()
+                }
+                Spacer()
+            }
+
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("Team Dynamics")
+                        .font(.headline)
+                        .fontWeight(.regular)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 18)
+                        .background(Color("WE-SS"))
+                        .cornerRadius(50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 50)
+                                .stroke(Color.black, lineWidth: 1)
+                        )
+                        .padding([.leading, .trailing, .top])
+                    Spacer()
+                }
+                HStack {
+                    if let teamDynamics = user.workEnvio?[1].split(separator: ",").map(String.init) {
+                        VStack(alignment: .leading) {
+                            ForEach(teamDynamics, id: \.self) { item in
+                                HStack {
+                                    Text("• \(item)")
+                                        .padding(.leading)
+                                    Spacer()
+                                }
+                                .padding(.vertical, 5)
+                            }
+                        }
+                        .padding([.leading, .trailing])
+                        .padding(.bottom, 20)
+                        .padding(.top, 10)
+                    } else {
+                        Text("No team dynamics listed")
+                            .padding([.leading, .trailing])
+                            .padding(.bottom, 20)
+                            .padding(.top, 10)
+                    }
+                    Spacer()
+                }
+                Spacer()
+            }
+
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("Work Hour Flexibility")
+                        .font(.headline)
+                        .fontWeight(.regular)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 18)
+                        .background(Color("WE-SS"))
+                        .cornerRadius(50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 50)
+                                .stroke(Color.black, lineWidth: 1)
+                        )
+                        .padding([.leading, .trailing, .top])
+                    Spacer()
+                }
+                HStack {
+                    if let workHourFlexibility = user.workEnvio?[2].split(separator: ",").map(String.init) {
+                        VStack(alignment: .leading) {
+                            ForEach(workHourFlexibility, id: \.self) { item in
+                                HStack {
+                                    Text("• \(item)")
+                                        .padding(.leading)
+                                    Spacer()
+                                }
+                                .padding(.vertical, 5)
+                            }
+                        }
+                        .padding([.leading, .trailing])
+                        .padding(.bottom, 20)
+                        .padding(.top, 10)
+                    } else {
+                        Text("No work hour flexibility listed")
+                            .padding([.leading, .trailing])
+                            .padding(.bottom, 20)
+                            .padding(.top, 10)
+                    }
+                    Spacer()
+                }
+                Spacer()
+            }
+        }
+        .padding([.leading, .trailing], 5.0)
+    }
+}
+
+struct EmployerTechnicalCertificationsView: View {
+    let profile: Profile
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            VStack(alignment: .leading) {
+                Text("Desired Technicals")
+                    .font(.headline)
+                    .fontWeight(.regular)
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 18)
+                    .background(Color("Techs"))
+                    .cornerRadius(50)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 50)
+                            .stroke(Color.black, lineWidth: 1)
+                    )
+                    .padding([.leading, .trailing, .top])
+                
+                if let technicals = profile.technicals.first?.split(separator: ",").map(String.init) {
+                    VStack(alignment: .leading) {
+                        ForEach(technicals, id: \.self) { technical in
+                            HStack {
+                                Text("• \(technical)")
+                                    .padding(.leading)
+                                Spacer()
+                            }
+                            .padding(.vertical, 5)
+                        }
+                    }
+                    .padding([.leading, .trailing])
+                    .padding(.bottom, 20)
+                    .padding(.top, 10)
+                } else {
+                    Text("No desired technicals listed")
+                        .padding([.leading, .trailing])
+                        .padding(.bottom, 20)
+                        .padding(.top, 10)
+                }
+                Spacer()
+            }
+
+            VStack(alignment: .leading) {
+                Text("Desired Certifications")
+                    .font(.headline)
+                    .fontWeight(.regular)
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 18)
+                    .background(Color("Techs"))
+                    .cornerRadius(50)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 50)
+                            .stroke(Color.black, lineWidth: 1)
+                    )
+                    .padding([.leading, .trailing, .top])
+                
+                if let certifications = profile.technicals.dropFirst().first?.split(separator: ",").map(String.init) {
+                    VStack(alignment: .leading) {
+                        ForEach(certifications, id: \.self) { certification in
+                            HStack {
+                                Text("• \(certification)")
+                                    .padding(.leading)
+                                Spacer()
+                            }
+                            .padding(.vertical, 5)
+                        }
+                    }
+                    .padding([.leading, .trailing])
+                    .padding(.bottom, 20)
+                    .padding(.top, 10)
+                } else {
+                    Text("No desired certifications listed")
+                        .padding([.leading, .trailing])
+                        .padding(.bottom, 20)
+                        .padding(.top, 10)
+                }
+                Spacer()
+            }
+        }
+        .padding([.leading, .trailing], 5.0)
+    }
+}
+
 struct EmployerSupportManagementView: View {
     let user: DBUser
 
@@ -561,7 +611,7 @@ struct EmployerSupportManagementView: View {
                         .fontWeight(.regular)
                         .padding(.vertical, 5)
                         .padding(.horizontal, 18)
-                        .background(Color.blue.opacity(0.3))
+                        .background(Color("WE-SS"))
                         .cornerRadius(50)
                         .overlay(
                             RoundedRectangle(cornerRadius: 50)
@@ -603,7 +653,7 @@ struct EmployerSupportManagementView: View {
                         .fontWeight(.regular)
                         .padding(.vertical, 5)
                         .padding(.horizontal, 18)
-                        .background(Color.blue.opacity(0.3))
+                        .background(Color("WE-SS"))
                         .cornerRadius(50)
                         .overlay(
                             RoundedRectangle(cornerRadius: 50)

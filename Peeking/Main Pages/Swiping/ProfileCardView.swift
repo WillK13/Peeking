@@ -32,10 +32,12 @@ struct ProfileCardView: View {
                         .aspectRatio(contentMode: .fill)
                         .edgesIgnoringSafeArea(.all)
                         .opacity(currentStep == 4 ? 1.0 : 0.5)
+                        .cornerRadius(10)
 //                        .blur(radius: currentStep == 4 ? 0 : 10)
                 } placeholder: {
-                    Color.gray.opacity(0.2)
+                    Color.gray.opacity(0)
                         .edgesIgnoringSafeArea(.all)
+                        .cornerRadius(10)
                 }
             }
 
@@ -253,7 +255,7 @@ struct TechnicalSkillsView: View {
                     .fontWeight(.regular)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 18)
-                    .background(Color.green.opacity(0.3))
+                    .background(Color("Techs"))
                     .cornerRadius(50)
                     .overlay(
                         RoundedRectangle(cornerRadius: 50)
@@ -290,7 +292,7 @@ struct TechnicalSkillsView: View {
                 .fontWeight(.regular)
                 .padding(.vertical, 5)
                 .padding(.horizontal, 18)
-                .background(Color.green.opacity(0.3))
+                .background(Color("Techs"))
                 .cornerRadius(50)
                 .overlay(
                     RoundedRectangle(cornerRadius: 50)
@@ -336,7 +338,7 @@ struct SoftSkillsView: View {
                     .fontWeight(.regular)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 18)
-                    .background(Color.blue.opacity(0.3))
+                    .background(Color("WE-SS"))
                     .cornerRadius(50)
                     .overlay(
                         RoundedRectangle(cornerRadius: 50)
@@ -373,7 +375,7 @@ struct SoftSkillsView: View {
                 .fontWeight(.regular)
                 .padding(.vertical, 5)
                 .padding(.horizontal, 18)
-                .background(Color.blue.opacity(0.3))
+                .background(Color("WE-SS"))
                 .cornerRadius(50)
                 .overlay(
                     RoundedRectangle(cornerRadius: 50)
@@ -407,7 +409,7 @@ struct SoftSkillsView: View {
                 .fontWeight(.regular)
                 .padding(.vertical, 5)
                 .padding(.horizontal, 18)
-                .background(Color.blue.opacity(0.3))
+                .background(Color("WE-SS"))
                 .cornerRadius(50)
                 .overlay(
                     RoundedRectangle(cornerRadius: 50)
@@ -453,7 +455,7 @@ struct HandleChallengesView: View {
                     .fontWeight(.regular)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 18)
-                    .background(Color.blue.opacity(0.3))
+                    .background(Color("WE-SS"))
                     .cornerRadius(50)
                     .overlay(
                         RoundedRectangle(cornerRadius: 50)
@@ -491,7 +493,7 @@ struct HandleChallengesView: View {
                     .fontWeight(.regular)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 18)
-                    .background(Color.blue.opacity(0.3))
+                    .background(Color("WE-SS"))
                     .cornerRadius(50)
                     .overlay(
                         RoundedRectangle(cornerRadius: 50)

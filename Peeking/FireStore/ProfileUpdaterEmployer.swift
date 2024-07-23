@@ -44,7 +44,8 @@ final class ProfileUpdaterEmployer {
         startTime: [String],
         relevantFields: [String],
         workSetting: [String],
-        employmentType: [String]
+        employmentType: [String],
+        logoURL: String? // New parameter for logo URL
     ) async throws {
         var updates: [String: Any] = [:]
         
@@ -53,6 +54,9 @@ final class ProfileUpdaterEmployer {
         updates["languages"] = languages
         updates["type"] = employerType
         updates["mission"] = companyMission
+        if let logoURL = logoURL {
+            updates["logo"] = logoURL
+        }
         
         // Batch update for user profile
         let batch = Firestore.firestore().batch()
@@ -134,7 +138,7 @@ final class ProfileUpdaterEmployer {
        ) async throws {
            let updates: [String: Any] = [
                "hobbies": hobbies,
-               "personality_photo": photoURL
+               "photo": photoURL
            ]
            
            let userRef = userDocument(userId: userId)

@@ -224,30 +224,65 @@ struct ProfileSetupViewEmployer: View {
 
     func saveProfile() async {
         guard let userId = Auth.auth().currentUser?.uid else { return }
-        
-        do {
-            isSaving = true
-            try await ProfileUpdaterEmployer.shared.updateEmployerProfile(
-                userId: userId,
-                companyName: companyName,
-                companyMission: companyMission,
-                languages: workplaceLanguages,
-                employerType: employerType,
-                positionTitle: positionTitle,
-                positionDescription: positionDescription,
-                startTime: selectedStartTime,
-                relevantFields: relevantFields,
-                workSetting: workSetting,
-                employmentType: employmentType
-            )
-            isSaving = false
-            navigateToNextView = true
-        } catch {
-            isSaving = false
-            // Handle error
+
+        if let inputImage = inputImage {
+            StorageManager.shared.uploadProfileImage(userId: userId, image: inputImage, folder: "logo") { result in
+                switch result {
+                case .success(let logoURL):
+                    Task {
+                        do {
+                            try await ProfileUpdaterEmployer.shared.updateEmployerProfile(
+                                userId: userId,
+                                companyName: companyName,
+                                companyMission: companyMission,
+                                languages: workplaceLanguages,
+                                employerType: employerType,
+                                positionTitle: positionTitle,
+                                positionDescription: positionDescription,
+                                startTime: selectedStartTime,
+                                relevantFields: relevantFields,
+                                workSetting: workSetting,
+                                employmentType: employmentType,
+                                logoURL: logoURL // Add logoURL to the update
+                            )
+                            navigateToNextView = true
+                        } catch {
+                            // Handle error
+                        }
+                    }
+                case .failure(let error):
+                    // Handle error
+                    print("Failed to upload image: \(error)")
+                }
+                isSaving = false
+            }
+        } else {
+            Task {
+                do {
+                    try await ProfileUpdaterEmployer.shared.updateEmployerProfile(
+                        userId: userId,
+                        companyName: companyName,
+                        companyMission: companyMission,
+                        languages: workplaceLanguages,
+                        employerType: employerType,
+                        positionTitle: positionTitle,
+                        positionDescription: positionDescription,
+                        startTime: selectedStartTime,
+                        relevantFields: relevantFields,
+                        workSetting: workSetting,
+                        employmentType: employmentType,
+                        logoURL: nil // No logo URL provided
+                    )
+                    navigateToNextView = true
+                } catch {
+                    // Handle error
+                }
+                isSaving = false
+            }
         }
     }
 }
+
 
 
 struct DropdownMultiSelector: View {

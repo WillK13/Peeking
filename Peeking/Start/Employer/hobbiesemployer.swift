@@ -207,27 +207,31 @@ struct hobbiesemployer: View {
         do {
             isSaving = true
             
-            // Upload the photo to a storage service to get the URL
-            let photoURL = try await uploadPhoto(inputImage)
-            
-            try await ProfileUpdaterEmployer.shared.updateHobbiesAndPhoto(
-                userId: userId,
-                hobbies: hobbies,
-                photoURL: photoURL
-            )
-            isSaving = false
-            navigateToNextView = true
+            StorageManager.shared.uploadProfileImage(userId: userId, image: inputImage, folder: "photo") { result in
+                switch result {
+                case .success(let photoURL):
+                    Task {
+                        do {
+                            try await ProfileUpdaterEmployer.shared.updateHobbiesAndPhoto(
+                                userId: userId,
+                                hobbies: hobbies,
+                                photoURL: photoURL
+                            )
+                            navigateToNextView = true
+                        } catch {
+                            // Handle error
+                        }
+                    }
+                case .failure(let error):
+                    // Handle error
+                    print("Failed to upload image: \(error)")
+                }
+                isSaving = false
+            }
         } catch {
             isSaving = false
             // Handle error
         }
-    }
-
-    func uploadPhoto(_ image: UIImage) async throws -> String {
-        // Implement the logic to upload the image to a storage service
-        // and return the URL of the uploaded image.
-        // For now, returning a placeholder URL.
-        return "https://example.com/photo.jpg"
     }
 }
 
