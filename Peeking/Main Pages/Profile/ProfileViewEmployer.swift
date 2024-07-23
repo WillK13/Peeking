@@ -19,6 +19,7 @@ struct ProfileViewEmployer: View {
     @State private var showDeleteConfirmation = false
     @State private var showEditProfile = false
     @State private var showFirstView = false
+    @State private var photoURL: String? = nil
 
     var body: some View {
         // Background
@@ -90,6 +91,7 @@ struct ProfileViewEmployer: View {
                     }
                     .onAppear {
                         loadPositions()
+                        loadUserPhoto()
                     }
                     
                     Text("What job-seekers see")
@@ -99,15 +101,32 @@ struct ProfileViewEmployer: View {
                 }
                 .padding(.horizontal)
                 
-                // Placeholder for content
-                Rectangle()
-                    .fill(Color.white)
-                    .frame(width: 250.0, height: 350)
-                    .cornerRadius(10)
-                    .padding(.horizontal, 50.0)
+                // User's photo
+                if let photoURL = photoURL {
+                    AsyncImage(url: URL(string: photoURL)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 250, height: 350)
+                            .cornerRadius(10)
+                    } placeholder: {
+                        Color.gray.opacity(0.3)
+                            .frame(width: 250, height: 350)
+                            .cornerRadius(10)
+                    }
                     .onTapGesture {
                         showProfileDetail.toggle()
                     }
+                } else {
+                    Rectangle()
+                        .fill(Color.white)
+                        .frame(width: 250, height: 350)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 50.0)
+                        .onTapGesture {
+                            showProfileDetail.toggle()
+                        }
+                }
                 
                 Spacer()
                 
@@ -214,6 +233,35 @@ struct ProfileViewEmployer: View {
                 }
             } else {
                 print("Profile document does not exist")
+            }
+        }
+    }
+    
+    // Function to load the employer's photo from Firestore
+    private func loadUserPhoto() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let photo = document.data()?["photo"] as? String {
+                    fetchPhoto(userId: userId, photo: photo)
+                } else {
+                    print("Photo not found in user document")
+                }
+            } else {
+                print("User document does not exist")
+            }
+        }
+    }
+
+    // Function to fetch the photo URL from Firebase Storage
+    private func fetchPhoto(userId: String, photo: String) {
+        StorageManager.shared.getProfileImageURL(userId: userId, folder: "photo") { result in
+            switch result {
+            case .success(let url):
+                self.photoURL = url
+            case .failure(let error):
+                print("Failed to fetch photo URL: \(error)")
             }
         }
     }

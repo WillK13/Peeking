@@ -15,8 +15,9 @@ struct ProfileViewEmployee: View {
     @State private var showProfileDetail = false
     @State private var showEditProfile = false
 
-    // State variable for storing the user's name
+    // State variables for storing the user's data
     @State private var userName: String = "Loading..."
+    @State private var personalityPhotoURL: String? = nil
     
     var body: some View {
         // Background
@@ -62,7 +63,7 @@ struct ProfileViewEmployee: View {
                     Text(userName)
                         .font(.title)
                         .onAppear {
-                            loadUserName()
+                            loadUserData()
                         }
                     
                     Text("What employers see")
@@ -72,15 +73,32 @@ struct ProfileViewEmployee: View {
                 }
                 .padding(.horizontal)
                 
-                // Placeholder for content, needs to be dynamic to user data
-                Rectangle()
-                    .fill(Color.white)
-                    .frame(width: 250.0, height: 350)
-                    .cornerRadius(10)
-                    .padding(.horizontal, 50.0)
+                // User's personality photo
+                if let personalityPhotoURL = personalityPhotoURL {
+                    AsyncImage(url: URL(string: personalityPhotoURL)) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 250, height: 350)
+                            .cornerRadius(10)
+                    } placeholder: {
+                        Color.gray.opacity(0.3)
+                            .frame(width: 250, height: 350)
+                            .cornerRadius(10)
+                    }
                     .onTapGesture {
                         showProfileDetail.toggle()
                     }
+                } else {
+                    Rectangle()
+                        .fill(Color.white)
+                        .frame(width: 250, height: 350)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 50.0)
+                        .onTapGesture {
+                            showProfileDetail.toggle()
+                        }
+                }
                 
                 Spacer()
                 
@@ -145,13 +163,14 @@ struct ProfileViewEmployee: View {
         }
     }
     
-    // Function to load the user's name from Firestore
-    private func loadUserName() {
+    // Function to load the user's data from Firestore
+    private func loadUserData() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
 
         Firestore.firestore().collection("users").document(userId).getDocument { document, error in
             if let document = document, document.exists {
                 self.userName = document.data()?["name"] as? String ?? "Name not found"
+                self.personalityPhotoURL = document.data()?["personality_photo"] as? String
             } else {
                 print("User document does not exist")
             }

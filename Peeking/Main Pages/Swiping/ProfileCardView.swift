@@ -31,11 +31,11 @@ struct ProfileCardView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .edgesIgnoringSafeArea(.all)
-                        .opacity(currentStep == 4 ? 1.0 : 0.5)
+                        .opacity(currentStep == 4 ? 1.0 : 0.2)
                         .cornerRadius(10)
 //                        .blur(radius: currentStep == 4 ? 0 : 10)
                 } placeholder: {
-                    Color.gray.opacity(0)
+                    Color.gray.opacity(0.3)
                         .edgesIgnoringSafeArea(.all)
                         .cornerRadius(10)
                 }
