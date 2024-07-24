@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
+import CoreLocation
 
 struct ToggleViewEmployer: View {
     @Environment(\.presentationMode) var presentationMode
@@ -22,6 +23,8 @@ struct ToggleViewEmployer: View {
     @State private var showEducationOptions = false
     @State private var fieldSearchText = ""
     @State private var educationSearchText = ""
+
+    @State private var locationText: String = "Loading..."
 
     @State private var isLoading = true
 
@@ -46,7 +49,7 @@ struct ToggleViewEmployer: View {
                         Spacer()
                     }
                     .padding([.top, .leading, .trailing])
-                    
+
                     Text("Search Settings")
                         .font(.title)
                         .fontWeight(.bold)
@@ -63,7 +66,7 @@ struct ToggleViewEmployer: View {
                                 showLocationView.toggle()
                             }) {
                                 HStack {
-                                    Text("Position Location\nBoston, MA")
+                                    Text(locationText)
                                         .foregroundColor(Color.black)
                                         .multilineTextAlignment(.trailing)
                                     Image(systemName: "chevron.right")
@@ -74,7 +77,7 @@ struct ToggleViewEmployer: View {
                             }
                         }
                         .padding(.horizontal)
-                        
+
                         Divider().background(Color.gray)
                         // Distance toggle
                         VStack(spacing: 10) {
@@ -86,7 +89,7 @@ struct ToggleViewEmployer: View {
                             Text("Up to \(Int(distance)) miles")
                         }
                         .padding(.horizontal)
-                        
+
                         Divider().background(Color.gray)
                         // Experience toggle
                         VStack(spacing: 10) {
@@ -98,7 +101,7 @@ struct ToggleViewEmployer: View {
                             Text("At least \(Int(exp)) years")
                         }
                         .padding(.horizontal)
-                        
+
                         Divider().background(Color.gray)
                         // Accepted Fields of Experience
                         VStack(alignment: .leading, spacing: 10) {
@@ -119,7 +122,7 @@ struct ToggleViewEmployer: View {
                                 )
                             }
                             .padding(.horizontal)
-                            
+
                             if showFieldOptions {
                                 VStack {
                                     ForEach(fieldOptions.filter { $0.lowercased().contains(fieldSearchText.lowercased()) }, id: \.self) { option in
@@ -154,7 +157,7 @@ struct ToggleViewEmployer: View {
                                 }
                                 .padding(.horizontal)
                             }
-                            
+
                             FlowLayout(alignment: .leading) {
                                 ForEach(acceptedFields, id: \.self) { field in
                                     HStack {
@@ -174,7 +177,7 @@ struct ToggleViewEmployer: View {
                             .padding(.horizontal)
                         }
                         .padding(.vertical)
-                        
+
                         Divider().background(Color.gray)
                         // Accepted Levels of Education
                         VStack(alignment: .leading, spacing: 10) {
@@ -195,7 +198,7 @@ struct ToggleViewEmployer: View {
                                 )
                             }
                             .padding(.horizontal)
-                            
+
                             if showEducationOptions {
                                 VStack {
                                     ForEach(educationOptions.filter { $0.lowercased().contains(educationSearchText.lowercased()) }, id: \.self) { option in
@@ -230,7 +233,7 @@ struct ToggleViewEmployer: View {
                                 }
                                 .padding(.horizontal)
                             }
-                            
+
                             FlowLayout(alignment: .leading) {
                                 ForEach(acceptedEducation, id: \.self) { education in
                                     HStack {
@@ -250,7 +253,7 @@ struct ToggleViewEmployer: View {
                             .padding(.horizontal)
                         }
                         .padding(.vertical)
-                        
+
                         Divider().background(Color.gray)
                         // Save and Exit button
                         Button(action: {
@@ -271,6 +274,7 @@ struct ToggleViewEmployer: View {
         .padding()
         .onAppear {
             loadSettings()
+            fetchUserLocation()
         }
     }
 
@@ -307,18 +311,48 @@ struct ToggleViewEmployer: View {
             }
         }
     }
+
+    private func fetchUserLocation() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists, let data = document.data() {
+                if let geoPoint = data["location"] as? GeoPoint {
+                    let location = CLLocation(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+                    geocodeLocation(location: location)
+                } else {
+                    locationText = "Location not set"
+                }
+            } else {
+                locationText = "Location not set"
+            }
+        }
+    }
+
+    private func geocodeLocation(location: CLLocation) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let placemark = placemarks?.first {
+                let city = placemark.locality ?? ""
+                let state = placemark.administrativeArea ?? ""
+                locationText = "\(city), \(state)"
+            } else {
+                locationText = "Location not found"
+            }
+        }
+    }
 }
 
 // Helper view for flowing layout
 struct FlowLayout<Content: View>: View {
     let alignment: HorizontalAlignment
     let content: Content
-    
+
     init(alignment: HorizontalAlignment, @ViewBuilder content: () -> Content) {
         self.alignment = alignment
         self.content = content()
     }
-    
+
     var body: some View {
         VStack(alignment: alignment) {
             content

@@ -73,7 +73,7 @@ struct ProfileSearchSettings: View {
                                 showLocationView.toggle()
                             }) {
                                 HStack {
-                                    Text("Position Location\nBoston, MA")
+                                    Text("Select Location")
                                         .foregroundColor(Color.black)
                                         .multilineTextAlignment(.trailing)
                                     Image(systemName: "chevron.right")

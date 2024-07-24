@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE0A08952C51B6E800D5D102 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0A08942C51B6E800D5D102 /* LocationView.swift */; };
 		BE5E4FE12C1B769600D36578 /* ToggleViewEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FE02C1B769500D36578 /* ToggleViewEmployer.swift */; };
 		BE5E4FEC2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FEB2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift */; };
 		BE5E4FEE2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FED2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift */; };
@@ -93,6 +94,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BE0A08942C51B6E800D5D102 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		BE5E4FE02C1B769500D36578 /* ToggleViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleViewEmployer.swift; sourceTree = "<group>"; };
 		BE5E4FEB2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupViewEmployer.swift; sourceTree = "<group>"; };
 		BE5E4FED2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupViewEmployee.swift; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 				BE6029D52C1396AE00B3C080 /* LikedHistory */,
 				BE6029DA2C1396F300B3C080 /* MessagesView.swift */,
 				BE6029DC2C13970100B3C080 /* Profile */,
+				BE0A08942C51B6E800D5D102 /* LocationView.swift */,
 			);
 			path = "Main Pages";
 			sourceTree = "<group>";
@@ -581,6 +584,7 @@
 				BE6029D42C13969000B3C080 /* UnlockedLikedView.swift in Sources */,
 				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
 				BE5E50042C26071100D36578 /* searchsettings.swift in Sources */,
+				BE0A08952C51B6E800D5D102 /* LocationView.swift in Sources */,
 				BE5E4FF22C1E371800D36578 /* TechnicalsEmployee.swift in Sources */,
 				BE6029D22C13966D00B3C080 /* LikedView.swift in Sources */,
 				BE5E500E2C26094500D36578 /* softskillsemployer.swift in Sources */,

@@ -22,7 +22,7 @@ struct ProfileActionButtons: View {
                         .frame(width: 32, height: 40)
                         .foregroundColor(.black)
                 }
-                .padding([.top, .trailing])
+                .padding(.top)
             }
             HStack {
                 Spacer()
@@ -45,10 +45,10 @@ struct ProfileActionButtons: View {
                 }) {
                     Image(systemName: "heart")
                         .resizable()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 45, height: 35)
                         .foregroundColor(.black)
                 }
-                .padding(.bottom, 40)
+                .padding(.bottom, 25)
             }
             HStack {
                 Spacer()

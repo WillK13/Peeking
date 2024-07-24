@@ -14,23 +14,25 @@ struct ToggleView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var distance: Double = 30
     @State private var showLocationView = false
-    
+
+    @State private var locationText: String = "Loading..."
+
     @State private var selectedField1 = ""
     @State private var selectedField2 = ""
     @State private var selectedField3 = ""
-    
+
     @State private var selectedEmployer1 = ""
     @State private var selectedEmployer2 = ""
     @State private var selectedEmployer3 = ""
-    
+
     @State private var selectedSetting1 = ""
     @State private var selectedSetting2 = ""
     @State private var selectedSetting3 = ""
-    
+
     @State private var selectedStatus1 = ""
     @State private var selectedStatus2 = ""
     @State private var selectedStatus3 = ""
-    
+
     @State private var selectedStart1 = ""
     @State private var selectedStart2 = ""
     @State private var selectedStart3 = ""
@@ -59,13 +61,13 @@ struct ToggleView: View {
                         Spacer()
                     }
                     .padding([.top, .leading, .trailing])
-                    
+
                     Text("Search Settings")
                         .font(.title)
                         .fontWeight(.bold)
                         .padding(.bottom)
                 }.background(Color.gray.opacity(0.2)).cornerRadius(10)
-                
+
                 ScrollView {
                     VStack(spacing: 20) {
                         HStack {
@@ -75,7 +77,7 @@ struct ToggleView: View {
                                 showLocationView.toggle()
                             }) {
                                 HStack {
-                                    Text("Position Location\nBoston, MA")
+                                    Text(locationText)
                                         .foregroundColor(Color.black)
                                         .multilineTextAlignment(.trailing)
                                     Image(systemName: "chevron.right")
@@ -86,9 +88,9 @@ struct ToggleView: View {
                             }
                         }
                         .padding(.horizontal)
-                        
+
                         Divider().background(Color.gray)
-                        
+
                         VStack(spacing: 10) {
                             HStack {
                                 Text("Distance")
@@ -98,9 +100,9 @@ struct ToggleView: View {
                             Text("Up to \(Int(distance)) miles")
                         }
                         .padding(.horizontal)
-                        
+
                         Divider().background(Color.gray)
-                        
+
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Field/Niche")
                             HStack {
@@ -117,9 +119,9 @@ struct ToggleView: View {
                             }
                         }
                         .padding()
-                        
+
                         Divider().background(Color.gray)
-                        
+
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Type of Employer")
                             HStack {
@@ -136,9 +138,9 @@ struct ToggleView: View {
                             }
                         }
                         .padding()
-                        
+
                         Divider().background(Color.gray)
-                        
+
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Work Setting")
                             HStack {
@@ -155,9 +157,9 @@ struct ToggleView: View {
                             }
                         }
                         .padding()
-                        
+
                         Divider().background(Color.gray)
-                        
+
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Employment Status")
                             HStack {
@@ -174,9 +176,9 @@ struct ToggleView: View {
                             }
                         }
                         .padding()
-                        
+
                         Divider().background(Color.gray)
-                        
+
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Start Time")
                             HStack {
@@ -197,9 +199,9 @@ struct ToggleView: View {
                             }
                         }
                         .padding()
-                        
+
                         Divider().background(Color.gray)
-                        
+
                         Button(action: {
                             saveSettings()
                         }) {
@@ -218,6 +220,7 @@ struct ToggleView: View {
         .padding()
         .onAppear {
             loadSettings()
+            fetchUserLocation()
         }
     }
 
@@ -242,7 +245,7 @@ struct ToggleView: View {
                     self.selectedEmployer3 = employers[2]
                 }
 
-                let settings = data["workSetting"] as? [String] ?? []
+                let settings = data["work_setting"] as? [String] ?? []
                 if settings.count >= 3 {
                     self.selectedSetting1 = settings[0]
                     self.selectedSetting2 = settings[1]
@@ -287,6 +290,36 @@ struct ToggleView: View {
             }
         }
     }
+
+    private func fetchUserLocation() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists, let data = document.data() {
+                if let geoPoint = data["location"] as? GeoPoint {
+                    let location = CLLocation(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+                    geocodeLocation(location: location)
+                } else {
+                    locationText = "Location not set"
+                }
+            } else {
+                locationText = "Location not set"
+            }
+        }
+    }
+
+    private func geocodeLocation(location: CLLocation) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let placemark = placemarks?.first {
+                let city = placemark.locality ?? ""
+                let state = placemark.administrativeArea ?? ""
+                locationText = "\(city), \(state)"
+            } else {
+                locationText = "Location not found"
+            }
+        }
+    }
 }
 
 //Drop down menu for each button with the custom items above
@@ -314,129 +347,6 @@ struct DropdownMenuButton: View {
         }
     }
 }
-//New vier when expand location
-struct LocationView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @State private var streetAddress: String = ""
-    @State private var city: String = ""
-    @State private var selectedState: String = "California"
-    @State private var zipCode: String = ""
-    @State private var showingAlert = false
-    @State private var alertMessage = ""
-    @State private var isGeocoding = false
-    
-    let states = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
-
-    var body: some View {
-        VStack(spacing: 20) {
-            // Exit page
-            HStack {
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.black).font(.system(size: 25))
-                }
-                Spacer()
-            }
-            .padding()
-
-            Text("Location Settings")
-                .font(.title)
-                .fontWeight(.bold)
-            
-            // Location settings
-            VStack(alignment: .leading) {
-                Text("Street Address")
-                TextField("Enter street address", text: $streetAddress)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom)
-                
-                Text("City")
-                TextField("Enter city", text: $city)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.bottom)
-                
-                Text("State")
-                Picker("State", selection: $selectedState) {
-                    ForEach(states, id: \.self) {
-                        Text($0)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-                .padding(.bottom)
-                
-                Text("Zip Code")
-                TextField("Enter zip code", text: $zipCode)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .keyboardType(.numberPad)
-            }
-            .padding()
-
-            // Save and Exit button
-            Button(action: {
-                saveLocation()
-            }) {
-                Text("Save and Exit")
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            }
-            .padding(.top, 20)
-            .disabled(isGeocoding)
-            
-            Spacer()
-        }
-        .padding()
-        .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-        }
-    }
-    
-    func saveLocation() {
-        let address = "\(streetAddress), \(city), \(selectedState), \(zipCode)"
-        geocode(address: address) { location, error in
-            if let error = error {
-                alertMessage = error.localizedDescription
-                showingAlert = true
-            } else if let location = location {
-                updateLocationInFirestore(location: location)
-            }
-        }
-    }
-    
-    func geocode(address: String, completion: @escaping (CLLocation?, Error?) -> Void) {
-        isGeocoding = true
-        let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(address) { placemarks, error in
-            isGeocoding = false
-            if let error = error {
-                completion(nil, error)
-            } else if let placemark = placemarks?.first, let location = placemark.location {
-                completion(location, nil)
-            } else {
-                completion(nil, NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Location not found"]))
-            }
-        }
-    }
-    
-    func updateLocationInFirestore(location: CLLocation) {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        let geoPoint = GeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        
-        Task {
-            do {
-                try await ProfileUpdater.shared.updateLocation(userId: userId, location: geoPoint)
-                presentationMode.wrappedValue.dismiss()
-            } catch {
-                alertMessage = error.localizedDescription
-                showingAlert = true
-            }
-        }
-    }
-}
-
 #Preview {
     ToggleView()
 }

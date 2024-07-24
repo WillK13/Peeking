@@ -18,6 +18,7 @@ struct PhoneAuthView: View {
     @State private var showWelcomeView = false
     @State private var showMainView = false
     @ObservedObject var authViewModel: AuthenticationViewModel
+    @State private var isVerified = false
     
     var body: some View {
         ZStack {
@@ -32,83 +33,83 @@ struct PhoneAuthView: View {
                         Image(systemName: "arrow.left")
                             .foregroundColor(.white)
                             .padding()
+                            .background(Color.black.opacity(0.5))
+                            .clipShape(Circle())
                     }
                     Spacer()
                 }
+                .padding(.top, 20)
 
-                if !isCodeSent {
-                    TextField("Enter your phone number", text: $phoneNumber)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 350.0)
-                        .keyboardType(.phonePad)
-                        .padding(.top, 200.0)
-                    
-                    Button(action: {
-                        Task {
-                            do {
-                                try await phoneHelper.startSignInWithPhoneFlow(phoneNumber: "+1\(phoneNumber)")
-                                isCodeSent = true
-                            } catch {
-                                errorMessage = "Failed to send verification code."
-                            }
-                        }
-                    }) {
-                        Text("Send Verification Code")
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
-                    }
-                    Spacer()
-                } else {
-                    TextField("Enter your code", text: $phoneHelper.smsCode)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.numberPad)
-                        .padding()
-                    Spacer()
-                    Button(action: {
-                        Task {
-                            do {
-                                try await authViewModel.verifyPhoneCode(verificationID: phoneHelper.verificationID ?? "", smsCode: phoneHelper.smsCode)
-                                // After verification, check if the user profile is created
-                                if let user = try? AuthenticationManager.shared.getAuthenticatedUser(),
-                                   let dbUser = try? await UserManager.shared.getUser(userId: user.userId) {
-                                    if dbUser.isProfileSetupComplete == true {
-                                        showMainView = true
-                                    } else {
-                                        showWelcomeView = true
+                Spacer()
+                
+                Text(isCodeSent ? "Enter Verification Code" : "Enter your Phone Number")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 30)
+                    .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+                
+                VStack(spacing: 20) {
+                    if !isCodeSent {
+                        CustomTextField1(text: $phoneNumber, placeholder: "Phone Number", keyboardType: .phonePad)
+                        
+                        CustomButton(action: {
+                            Task {
+                                do {
+                                    try await phoneHelper.startSignInWithPhoneFlow(phoneNumber: "+1\(phoneNumber)")
+                                    withAnimation {
+                                        isCodeSent = true
+                                    }
+                                } catch {
+                                    withAnimation {
+                                        errorMessage = "Failed to send verification code."
                                     }
                                 }
-                            } catch {
-                                errorMessage = "Failed to verify code."
                             }
-                        }
-                    }) {
-                        Text("Verify Code")
-                            .foregroundColor(.black)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
+                        }, title: "Send Verification Code", color: .white)
+                    } else {
+                        CustomTextField1(text: $phoneHelper.smsCode, placeholder: "Verification Code", keyboardType: .numberPad)
+                        
+                        CustomButton(action: {
+                            Task {
+                                do {
+                                    try await authViewModel.verifyPhoneCode(verificationID: phoneHelper.verificationID ?? "", smsCode: phoneHelper.smsCode)
+                                    withAnimation {
+                                        isVerified = true
+                                        showVerificationPopup = true
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        Task {
+                                            if let user = try? AuthenticationManager.shared.getAuthenticatedUser(),
+                                               let dbUser = try? await UserManager.shared.getUser(userId: user.userId) {
+                                                if dbUser.isProfileSetupComplete == true {
+                                                    showMainView = true
+                                                } else {
+                                                    showWelcomeView = true
+                                                }
+                                            }
+                                        }
+                                    }
+                                } catch {
+                                    withAnimation {
+                                        isVerified = false
+                                        errorMessage = "Failed to verify code."
+                                    }
+                                }
+                            }
+                        }, title: "Verify Code", color: .white)
                     }
-                    Spacer()
                 }
-
+                .padding(.horizontal, 40)
+                
+                Spacer()
+                
                 if let errorMessage = errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(radius: 10)
+                    ErrorView(errorMessage: errorMessage)
                 }
 
                 if showVerificationPopup {
-                    Text("Phone number verified successfully!")
-                        .foregroundColor(.green)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(radius: 10)
+                    VerificationSuccessView(isVerified: isVerified)
                 }
             }
             .padding()
@@ -118,6 +119,88 @@ struct PhoneAuthView: View {
         }
         .fullScreenCover(isPresented: $showMainView) {
             ContentView()
+        }
+    }
+}
+
+struct CustomTextField1: View {
+    @Binding var text: String
+    var placeholder: String
+    var keyboardType: UIKeyboardType
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white)
+                .shadow(radius: 5)
+            TextField(placeholder, text: $text)
+                .padding()
+                .keyboardType(keyboardType)
+        }
+        .frame(height: 50)
+    }
+}
+
+struct CustomButton: View {
+    var action: () -> Void
+    var title: String
+    var color: Color
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .foregroundColor(.black)
+                .fontWeight(.bold)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(color)
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                .scaleEffect(1.1)
+        }
+        .animation(.easeInOut(duration: 0.2), value: 1.1)
+    }
+}
+
+struct ErrorView: View {
+    var errorMessage: String
+    
+    var body: some View {
+        Text(errorMessage)
+            .foregroundColor(.red)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(radius: 10)
+            .transition(.move(edge: .bottom).combined(with: .opacity))
+            .animation(.easeInOut(duration: 0.5), value: errorMessage)
+    }
+}
+
+struct VerificationSuccessView: View {
+    var isVerified: Bool
+    
+    var body: some View {
+        VStack {
+            if isVerified {
+                Text("Phone number verified successfully!")
+                    .foregroundColor(.green)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 10)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.easeInOut(duration: 0.5), value: isVerified)
+            } else {
+                Text("Verification failed. Please try again.")
+                    .foregroundColor(.red)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 10)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .animation(.easeInOut(duration: 0.5), value: isVerified)
+            }
         }
     }
 }
