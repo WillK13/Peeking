@@ -29,10 +29,11 @@ struct ProfileCardViewEmployer: View {
                 AsyncImage(url: URL(string: photoURL)) { image in
                     image
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .edgesIgnoringSafeArea(.all)
-                        .opacity(currentStep == 4 ? 1.0 : 0.2)
+                        .scaledToFill()  // Ensures the image fills the space
+                        .frame(width: 395, height: 545)  // Matches the white box dimensions
+                        .clipped()  // Clips any overflowing parts
                         .cornerRadius(10)
+                        .opacity(currentStep == 4 ? 1.0 : 0.2)
                 } placeholder: {
                     Color.gray.opacity(0.3)
                         .edgesIgnoringSafeArea(.all)

@@ -109,7 +109,7 @@ struct SoftSkills: View {
                                     .disabled(!isFormComplete())
                                     .padding(.top, 30)
                                     .padding(.bottom, 50)
-                                }
+                                }.disabled(!isFormComplete())
                             }
                         }
                     }
@@ -182,6 +182,7 @@ struct CustomTextField: View {
                         isEditing = true
                     }
                     .frame(height: 100)
+                    .cornerRadius(10)
                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
             }
             

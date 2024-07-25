@@ -68,6 +68,7 @@ struct honestyemployer: View {
                         }
                         .padding(10)
                         .background(Color.white)
+                        .cornerRadius(10)
                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
 
                         Text("By ticking the box, you confirm the above")

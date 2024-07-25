@@ -86,7 +86,6 @@ struct Hobbies: View {
                                 Text("(ie: DJ-ing, origami, gardening)")
                                     .foregroundColor(.gray)
                                     .italic()
-                                    .padding([.horizontal])
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             ZStack(alignment: .leading) {
@@ -101,8 +100,8 @@ struct Hobbies: View {
                                             hobbies = String(newValue.prefix(characterLimit))
                                         }
                                     }
-                                    .padding(.horizontal, 5)
                                     .frame(height: 100)
+                                    .cornerRadius(10)
                                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
                             }
                             Text("\(hobbies.count)/\(characterLimit) characters")
@@ -128,14 +127,8 @@ struct Hobbies: View {
                                 .padding(.horizontal)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            HStack {
-                                Spacer()
-                                ZStack {
-                                    Rectangle()
-                                        .fill(Color.gray.opacity(0.3))
-                                        .frame(width: 200.0, height: 150)
-                                        .cornerRadius(10)
-                                    
+                            VStack {
+                                HStack {
                                     if let profileImage = profileImage {
                                         profileImage
                                             .resizable()
@@ -144,11 +137,17 @@ struct Hobbies: View {
                                             .clipShape(Rectangle())
                                             .cornerRadius(10)
                                     } else {
-                                        Image(systemName: "photo")
-                                            .foregroundColor(.gray)
+                                        Rectangle()
+                                            .fill(Color.gray.opacity(0.3))
+                                            .frame(width: 200.0, height: 150)
+                                            .cornerRadius(10)
+                                            .overlay(
+                                                Image(systemName: "photo")
+                                                    .foregroundColor(.gray)
+                                            )
                                     }
-                                }.padding(.trailing, 150)
-                                Spacer()
+                                    Image("uploadimage")
+                                }
                             }
                             .onTapGesture {
                                 self.showingImagePicker = true
@@ -183,7 +182,7 @@ struct Hobbies: View {
                                 .disabled(!isFormComplete() || isSaving)
                                 .padding(.top, 30)
                                 .padding(.bottom, 50)
-                            }
+                            }.disabled(!isFormComplete() || isSaving)
                         }
                     }
                     }

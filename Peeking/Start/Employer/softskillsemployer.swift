@@ -110,7 +110,7 @@ struct softskillsemployer: View {
                                     .disabled(!isFormComplete() || isSaving)
                                     .padding(.top, 30)
                                     .padding(.bottom, 50)
-                                }
+                                }.disabled(!isFormComplete() || isSaving)
                             }
                         }
                     }

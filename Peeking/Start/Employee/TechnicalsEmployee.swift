@@ -73,46 +73,13 @@ struct TechnicalsEmployee: View {
                         }
                         // Technical Skills
                         VStack(alignment: .leading) {
-                            VStack {
-                                Text("1. Give us a bank of your technical skills.")
-                                    .padding([.top, .horizontal])
-                                    .padding(.bottom, 5)
-                                    .cornerRadius(10)
-                                    .fixedSize(horizontal: true, vertical: true) // Prevent cutting off
-                                VStack(alignment: .leading) {
-                                    Text("Inspiration:")
-                                    Text("1. Landscaper - Pest Management")
-                                    Text("2. Software Engineer - Python, C++")
-                                    Text("3. Chef - Menu Planning")
-                                }
-                                .foregroundColor(.gray)
-                                .padding(.trailing, 30)
-                                .italic()
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-                            .padding([.horizontal, .bottom])
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
-                            
-                            TextEditorWithLimit(text: $technicalSkills, characterLimit: technicalSkillsLimit, placeholder: "Type here...")
-                                .frame(height: 150) // Extended height
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                            CustomTextField2(title: "1. Give us a bank of your technical skills.", text: $technicalSkills, characterLimit: technicalSkillsLimit)
                         }
                         .padding(.bottom, 20)
                         
                         // Certifications
                         VStack(alignment: .leading) {
-                            Text("2. Please list any technical or professional certifications you have.")
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
-                                .fixedSize(horizontal: false, vertical: true)
-                            
-                            TextEditorWithLimit(text: $certifications, characterLimit: certificationsLimit, placeholder: "Type here...")
-                                .frame(height: 150) // Extended height
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                            CustomTextField(title: "2. Please list any technical or professional certifications you have.", text: $certifications, characterLimit: certificationsLimit)
                         }
                         
                         Spacer()
@@ -137,7 +104,7 @@ struct TechnicalsEmployee: View {
                                     .disabled(!isFormComplete())
                                     .padding(.top, 30)
                                     .padding(.bottom, 50)
-                                }
+                                }.disabled(!isFormComplete())
                             }
                         }
                     }
@@ -188,7 +155,70 @@ struct TextEditorWithLimit: View {
                     .onTapGesture {
                         isEditing = true
                     }
+                    .padding(.horizontal)
             }
+            Text("\(text.count)/\(characterLimit) characters")
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding(.trailing)
+                .frame(alignment: .trailing)
+        }
+    }
+}
+
+
+struct CustomTextField2: View {
+    var title: String
+    @Binding var text: String
+    var characterLimit: Int
+    
+    @State private var isEditing = false
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            VStack {
+                Text(title)
+                    
+                
+                VStack(alignment: .leading) {
+                    Text("Inspiration:")
+                        .font(.body)
+                    Text("1. Landscaper - Pest Management")
+                        .font(.body)
+                    Text("2. Software Engineer - Python, C++")
+                        .font(.body)
+                    Text("3. Chef - Menu Planning")
+                        .font(.body)
+                }
+                .foregroundColor(.gray)
+                .padding(.trailing, 30)
+                .italic()
+            }.padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
+                .fixedSize(horizontal: false, vertical: true)
+            
+            ZStack(alignment: .leading) {
+                if text.isEmpty && !isEditing {
+                    Text("Type here...")
+                        .foregroundColor(.gray)
+                        .padding(.leading, 5)
+                }
+                TextEditor(text: $text)
+                    .onChange(of: text) { oldValue, newValue in
+                        if newValue.count > characterLimit {
+                            text = String(newValue.prefix(characterLimit))
+                        }
+                    }
+                    .onTapGesture {
+                        isEditing = true
+                    }
+                    .frame(height: 100)
+                    .cornerRadius(10)
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+            }
+            
             Text("\(text.count)/\(characterLimit) characters")
                 .font(.footnote)
                 .foregroundColor(.gray)
@@ -197,6 +227,10 @@ struct TextEditorWithLimit: View {
         }
     }
 }
+
+
+
+
 
 struct TechnicalsEmployee_Previews: PreviewProvider {
     static var previews: some View {

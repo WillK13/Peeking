@@ -23,24 +23,21 @@ struct ProfileCardView: View {
                 .frame(width: 395, height: 545)
                 .cornerRadius(10)
                 
-            
-            
             if let personalityPhotoURL = personalityPhotoURL {
                 AsyncImage(url: URL(string: personalityPhotoURL)) { image in
                     image
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .edgesIgnoringSafeArea(.all)
-                        .opacity(currentStep == 4 ? 1.0 : 0.2)
+                        .scaledToFill()  // Ensures the image fills the space
+                        .frame(width: 395, height: 545)  // Matches the white box dimensions
+                        .clipped()  // Clips any overflowing parts
                         .cornerRadius(10)
-//                        .blur(radius: currentStep == 4 ? 0 : 10)
+                        .opacity(currentStep == 4 ? 1.0 : 0.2)
                 } placeholder: {
                     Color.gray.opacity(0.3)
-                        .edgesIgnoringSafeArea(.all)
+                        .frame(width: 395, height: 545)
                         .cornerRadius(10)
                 }
             }
-
 
             VStack {
                 if let user = user {

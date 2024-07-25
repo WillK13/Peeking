@@ -35,7 +35,7 @@ struct ProfileActionButtons: View {
                         .foregroundColor(Color.black)
                         .padding(5)
                 }).background(Color.white).cornerRadius(5)
-            }.padding(.trailing, 15)
+            }
                 
             Spacer()
             HStack {

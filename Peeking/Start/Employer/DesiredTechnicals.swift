@@ -75,46 +75,14 @@ struct DesiredTechnicals: View {
                         }
                         // Technical Skills
                         VStack(alignment: .leading) {
-                            VStack {
-                                Text("1. Give us a bank of desired technical skills for this position.")
-                                    .padding([.top, .horizontal])
-                                    .padding(.bottom, 5)
-                                    .cornerRadius(10)
-                                    .fixedSize(horizontal: false, vertical: true) // Prevent cutting off
-                                VStack(alignment: .leading) {
-                                    Text("Inspiration:")
-                                    Text("1. Landscaper - \"Pest Management\"")
-                                    Text("2. Software Engineer - \"Python, C++\"")
-                                    Text("3. Chef - \"Menu Planning\"")
-                                }
-                                .foregroundColor(.gray)
-                                .padding(.trailing, 30)
-                                .italic()
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-                            .padding([.horizontal, .bottom])
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
-                            
-                            TextEditorWithLimit(text: $technicalSkills, characterLimit: technicalSkillsLimit, placeholder: "Type here...")
-                                .frame(height: 150) // Extended height
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                                CustomTextField2(title: "1. Give us a bank of desired technical skills for this position.", text: $technicalSkills, characterLimit: technicalSkillsLimit)
+                                
                         }
                         .padding(.bottom, 20)
                         
                         // Certifications
                         VStack(alignment: .leading) {
-                            Text("2. List any technical or professional certifications you look for in this positon.")
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
-                                .fixedSize(horizontal: false, vertical: true)
-                            
-                            TextEditorWithLimit(text: $certifications, characterLimit: certificationsLimit, placeholder: "Type here...")
-                                .frame(height: 150) // Extended height
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                            CustomTextField(title: "2. List any technical or professional certifications you look for in this positon.", text: $certifications, characterLimit: certificationsLimit)
                         }
                         
                         Spacer()
@@ -138,7 +106,7 @@ struct DesiredTechnicals: View {
                                     .disabled(!isFormComplete() || isSaving)
                                     .padding(.top, 30)
                                     .padding(.bottom, 50)
-                                }
+                                }.disabled(!isFormComplete() || isSaving)
                             }
                         }
                     }

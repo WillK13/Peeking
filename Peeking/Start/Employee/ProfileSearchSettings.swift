@@ -127,7 +127,7 @@ struct ProfileSearchSettings: View {
                                 }
                                 .disabled(!isFormComplete())
                                 .padding(.top, 20)
-                            }
+                            }.disabled(!isFormComplete())
                         }
                         .padding(.trailing, 20)
                     }

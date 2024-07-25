@@ -57,10 +57,10 @@ struct HonestyStatement: View {
                             }
                             Text("I'm ready to be honest!")
                                 .padding(.trailing, 10)
-                                .cornerRadius(10)
                         }
                         .padding(10)
                         .background(Color.white)
+                        .cornerRadius(10)
                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
 
                         Text("By ticking the box, you confirm the above")

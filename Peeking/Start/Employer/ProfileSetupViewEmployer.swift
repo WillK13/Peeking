@@ -129,9 +129,7 @@ struct ProfileSetupViewEmployer: View {
                                     .padding(.trailing, 100)
                                 
                                 Text("4. Position Description")
-                                TextEditorWithLimit(text: $positionDescription, characterLimit: 100, placeholder: "Type here...")
-                                    .frame(height: 100)
-                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                                TextFieldWithLimit2(text: $positionDescription, characterLimit: 100)
                                 
                                 Divider().background(Color.gray)
                                 
@@ -166,9 +164,8 @@ struct ProfileSetupViewEmployer: View {
                                 Divider().background(Color.gray)
                                 
                                 Text("11. Company Mission (Optional)")
-                                TextEditorWithLimit(text: $companyMission, characterLimit: 100, placeholder: "Type here...")
-                                    .frame(height: 100)
-                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                                TextFieldWithLimit2(text: $companyMission, characterLimit: 100)
+                                    
                             }
                             if !fromEditProfile {
                                 // Next button
@@ -190,7 +187,7 @@ struct ProfileSetupViewEmployer: View {
                                         .disabled(!isFormComplete() || isSaving)
                                         .padding(.top, 30)
                                         .padding(.bottom, 50)
-                                    }
+                                    }.disabled(!isFormComplete() || isSaving)
                                 }
                             }
                         }
@@ -376,6 +373,45 @@ struct TextFieldWithLimit: View {
         }
     }
 }
+
+struct TextFieldWithLimit2: View {
+    @Binding var text: String
+    var characterLimit: Int
+    
+    @State private var isEditing = false
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+
+            ZStack(alignment: .leading) {
+                if text.isEmpty && !isEditing {
+                    Text("Type here...")
+                        .foregroundColor(.gray)
+                        .padding(.leading, 5)
+                }
+                TextEditor(text: $text)
+                    .onChange(of: text) { oldValue, newValue in
+                        if newValue.count > characterLimit {
+                            text = String(newValue.prefix(characterLimit))
+                        }
+                    }
+                    .onTapGesture {
+                        isEditing = true
+                    }
+                    .frame(height: 100)
+                    .cornerRadius(10)
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+            }
+            
+            Text("\(text.count)/\(characterLimit) characters")
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding(.trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+    }
+}
+
 
 
 
