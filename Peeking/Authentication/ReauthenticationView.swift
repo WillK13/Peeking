@@ -40,9 +40,12 @@ struct ReauthenticationView: View {
                     Text("Re-authenticate with Phone")
                         .foregroundColor(.white)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color("TopOrange"))
                         .cornerRadius(10)
                 }
+                
+                
+                
             } else {
                 TextField("Phone Number", text: $viewModel.phoneNumber)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -62,34 +65,38 @@ struct ReauthenticationView: View {
                     Text("Send Verification Code")
                         .foregroundColor(.white)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color("TopOrange"))
                         .cornerRadius(10)
                 }
-            }
-
-            // Apple re-authentication
-            SignInWithAppleButtonViewRepresentable(type: .signIn, style: .black)
-                .onTapGesture {
-                    Task {
-                        do {
-                            let result = try await SignInAppleHelper().startSignInWithAppleFlow()
-                            viewModel.appleSignInResult = result
-                            viewModel.reauthenticateWithApple { result in
-                                switch result {
-                                case .success:
-                                    showFirstView = true
-                                    showReauthenticationView = false
-                                case .failure(let error):
-                                    errorMessage = error.localizedDescription
+                
+                
+                
+                // Apple re-authentication
+                SignInWithAppleButtonViewRepresentable(type: .signIn, style: .black)
+                    .onTapGesture {
+                        Task {
+                            do {
+                                let result = try await SignInAppleHelper().startSignInWithAppleFlow()
+                                viewModel.appleSignInResult = result
+                                viewModel.reauthenticateWithApple { result in
+                                    switch result {
+                                    case .success:
+                                        showFirstView = true
+                                        showReauthenticationView = false
+                                    case .failure(let error):
+                                        errorMessage = error.localizedDescription
+                                    }
                                 }
+                            } catch {
+                                errorMessage = error.localizedDescription
                             }
-                        } catch {
-                            errorMessage = error.localizedDescription
                         }
                     }
-                }
-                .frame(width: 250.0, height: 50)
-                .cornerRadius(8)
+                    .frame(width: 250.0, height: 50)
+                    .cornerRadius(8)
+            }
+
+            
 
             if let errorMessage = errorMessage {
                 Text(errorMessage)
