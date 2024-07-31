@@ -159,7 +159,9 @@ struct ProfileSearchSettings: View {
             HStack {
                 ForEach(0..<selectedOptions.count, id: \.self) { index in
                     Spacer()
-                    DropdownMenuButtonStart(title: selectedOptions[index], options: options)
+                    DropdownMenuButtonStart(title: selectedOptions[index], options: options.filter { option in
+                        !selectedOptions.map { $0.wrappedValue }.contains(option) || selectedOptions[index].wrappedValue == option
+                    })
                 }
             }
         }

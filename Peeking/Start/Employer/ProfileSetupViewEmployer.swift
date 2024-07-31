@@ -18,12 +18,12 @@ struct ProfileSetupViewEmployer: View {
     @State private var inputImage: UIImage? = nil
     @State private var positionTitle: String = ""
     @State private var positionDescription: String = ""
-    @State private var selectedStartTime: [String] = []
+    @State private var selectedStartTime: String = ""
     @State private var relevantFields: [String] = []
     @State private var workplaceLanguages: [String] = []
-    @State private var employerType: [String] = []
-    @State private var workSetting: [String] = []
-    @State private var employmentType: [String] = []
+    @State private var selectedEmployerType: String = ""
+    @State private var selectedWorkSetting: String = ""
+    @State private var selectedEmploymentType: String = ""
     @State private var companyMission: String = ""
     @State private var languageSearchText: String = ""
     @State private var fieldsSearchText: String = ""
@@ -137,7 +137,7 @@ struct ProfileSetupViewEmployer: View {
                                 
                                 Text("5. Start Time")
                                     .font(.headline)
-                                SearchBar(text: $timeSearchText, options: startTimeOptions, selectedOptions: $selectedStartTime)
+                                SingleSelectSearchBar(text: $timeSearchText, options: startTimeOptions, selectedOption: $selectedStartTime)
                                 
                             }
                             
@@ -153,15 +153,15 @@ struct ProfileSetupViewEmployer: View {
                                 
                                 Text("8. Employer Type")
                                     .font(.headline)
-                                SearchBar(text: $erTypeSearchText, options: employerTypeOptions, selectedOptions: $employerType)
+                                SingleSelectSearchBar(text: $erTypeSearchText, options: employerTypeOptions, selectedOption: $selectedEmployerType)
                                 
                                 Text("9. Work Setting")
                                     .font(.headline)
-                                SearchBar(text: $settingSearchText, options: workSettingOptions, selectedOptions: $workSetting)
+                                SingleSelectSearchBar(text: $settingSearchText, options: workSettingOptions, selectedOption: $selectedWorkSetting)
                                 
                                 Text("10. Employment Type")
                                     .font(.headline)
-                                SearchBar(text: $entTypeSearchText, options: employmentTypeOptions, selectedOptions: $employmentType)
+                                SingleSelectSearchBar(text: $entTypeSearchText, options: employmentTypeOptions, selectedOption: $selectedEmploymentType)
                                 
                                 Divider().background(Color.gray)
                                 
@@ -212,9 +212,9 @@ struct ProfileSetupViewEmployer: View {
                !selectedStartTime.isEmpty &&
                !relevantFields.isEmpty &&
                !workplaceLanguages.isEmpty &&
-               !employerType.isEmpty &&
-               !workSetting.isEmpty &&
-               !employmentType.isEmpty
+               !selectedEmployerType.isEmpty &&
+               !selectedWorkSetting.isEmpty &&
+               !selectedEmploymentType.isEmpty
     }
     
     func loadImage() {
@@ -236,13 +236,13 @@ struct ProfileSetupViewEmployer: View {
                                 companyName: companyName,
                                 companyMission: companyMission,
                                 languages: workplaceLanguages,
-                                employerType: employerType,
+                                employerType: [selectedEmployerType],
                                 positionTitle: positionTitle,
                                 positionDescription: positionDescription,
-                                startTime: selectedStartTime,
+                                startTime: [selectedStartTime],
                                 relevantFields: relevantFields,
-                                workSetting: workSetting,
-                                employmentType: employmentType,
+                                workSetting: [selectedWorkSetting],
+                                employmentType: [selectedEmploymentType],
                                 logoURL: logoURL // Add logoURL to the update
                             )
                             navigateToNextView = true
@@ -264,13 +264,13 @@ struct ProfileSetupViewEmployer: View {
                         companyName: companyName,
                         companyMission: companyMission,
                         languages: workplaceLanguages,
-                        employerType: employerType,
+                        employerType: [selectedEmployerType],
                         positionTitle: positionTitle,
                         positionDescription: positionDescription,
-                        startTime: selectedStartTime,
+                        startTime: [selectedStartTime],
                         relevantFields: relevantFields,
-                        workSetting: workSetting,
-                        employmentType: employmentType,
+                        workSetting: [selectedWorkSetting],
+                        employmentType: [selectedEmploymentType],
                         logoURL: nil // No logo URL provided
                     )
                     navigateToNextView = true
@@ -283,75 +283,72 @@ struct ProfileSetupViewEmployer: View {
     }
 }
 
-
-
-struct DropdownMultiSelector: View {
-    let title: String
+struct SingleSelectSearchBar: View {
+    @Binding var text: String
     let options: [String]
-    @Binding var selections: [String]
-
+    @Binding var selectedOption: String
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            TextField(title, text: .constant(""))
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .disabled(true)
-                .overlay(
-                    HStack {
-                        Spacer()
-                        Image(systemName: "magnifyingglass")
-                            .padding(.trailing, 10)
-                    }
-                )
-                .onTapGesture {
-                    showOptions.toggle()
-                }
-            
-            if showOptions {
-                ForEach(options, id: \.self) { option in
-                    Button(action: {
-                        if !selections.contains(option) {
-                            selections.append(option)
+        VStack {
+            HStack {
+                TextField("Search or select", text: $text)
+                    .padding(10)
+                    .background(Color.white)
+                    .cornerRadius(15)
+                    .overlay(
+                        HStack {
+                            Spacer()
+                            Image(systemName: "magnifyingglass")
+                                .padding(.trailing, 10)
                         }
-                    }) {
+                    )
+            }.padding(.trailing, 120).padding(.bottom, 10)
+            if !text.isEmpty {
+                VStack {
+                    ForEach(options.filter { $0.lowercased().contains(text.lowercased()) }, id: \.self) { option in
                         HStack {
                             Text(option)
+                                .foregroundColor(Color.black)
+                                .padding(5)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color.white)
+                                .cornerRadius(20)
                             Spacer()
-                            if selections.contains(option) {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                    }
-                }
-            }
-
-            FlowLayout(alignment: .leading) {
-                ForEach(selections, id: \.self) { selection in
-                    HStack {
-                        Text(selection)
-                            .padding(10)
+                            Image(systemName: "plus").foregroundColor(.black)
+                        }.padding(5)
                             .background(Color.white)
-                            .cornerRadius(50)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 50)
-                                    .stroke(Color.black, lineWidth: 2)
-                            )
-                        Button(action: {
-                            selections.removeAll { $0 == selection }
-                        }) {
-                            Image(systemName: "minus.circle.fill")
-                                .foregroundColor(.red)
+                            .cornerRadius(20)
+                        .onTapGesture {
+                            selectedOption = option
+                            text = ""
                         }
                     }
-                    .padding([.leading, .bottom], 10)
                 }
+                .padding(.horizontal)
+            }
+            
+            if !selectedOption.isEmpty {
+                HStack {
+                    Text(selectedOption)
+                        .padding(10)
+                        .background(Color.white)
+                        .cornerRadius(50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 50)
+                                .stroke(Color.black, lineWidth: 2)
+                        )
+                    Button(action: {
+                        selectedOption = ""
+                    }) {
+                        Image(systemName: "minus.circle.fill")
+                            .foregroundColor(.red)
+                    }
+                    Spacer()
+                }
+                .padding([.leading, .bottom], 20).padding(.top, 10)
             }
         }
     }
-
-    @State private var showOptions = false
 }
 
 struct TextFieldWithLimit: View {
@@ -414,9 +411,6 @@ struct TextFieldWithLimit2: View {
         }
     }
 }
-
-
-
 
 struct ProfileSetupViewEmployer_Previews: PreviewProvider {
     static var previews: some View {

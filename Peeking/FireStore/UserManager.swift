@@ -40,6 +40,8 @@ struct Profile: Codable {
     let accepted_edu: [String]
     let technicals: [String]
     let chats: [String]
+    let GPT_WorkEnvio: [String]
+    let GPT_Technicals: [String]
 }
 
 struct DBUser: Codable {
@@ -70,6 +72,8 @@ struct DBUser: Codable {
     var chats: [String]?
     var pfp: String?
     var personality_photo: String?
+    var GPT_WorkEnvio: [String]?
+    var GPT_Technicals: [String]?
     // Employer-specific fields
     var logo: String?
     var positions: [String]?
@@ -115,6 +119,8 @@ struct DBUser: Codable {
         chats: [String]? = nil,
         pfp: String? = nil,
         personality_photo: String? = nil,
+        GPT_WorkEnvio: [String]? = nil,
+        GPT_Technicals: [String]? = nil,
         // Employer-specific fields
         logo: String? = nil,
         positions: [String]? = nil,
@@ -148,6 +154,8 @@ struct DBUser: Codable {
         self.chats = chats
         self.pfp = pfp
         self.personality_photo = personality_photo
+        self.GPT_WorkEnvio = GPT_WorkEnvio
+        self.GPT_Technicals = GPT_Technicals
         self.logo = logo
         self.positions = positions
         self.mission = mission
@@ -182,6 +190,8 @@ struct DBUser: Codable {
         case pfp
         case employer
         case personality_photo = "personality_photo"
+        case GPT_WorkEnvio = "GPT_WorkEnvio"
+        case GPT_Technicals = "GPT_Technicals"
         case logo
         case positions
         case mission
@@ -268,7 +278,7 @@ final class UserManager: ObservableObject {
             try await addRecommendation(userId: userId, recommendation: Recommendation(user_id: "", rank: ""))
         } else if userType == 1 {
             // Employer
-            try await addProfile(userId: userId, profile: Profile(title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [], location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [], accepted_edu: [], technicals: [], chats: []))
+            try await addProfile(userId: userId, profile: Profile(title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [], location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [], accepted_edu: [], technicals: [], chats: [], GPT_WorkEnvio: [], GPT_Technicals: []))
             try await addProfileLikeSent(userId: userId, like: LikeSent(user_id: "", status: ""))
             try await addProfileRecommendation(userId: userId, recommendation: Recommendation(user_id: "", rank: ""))
         }

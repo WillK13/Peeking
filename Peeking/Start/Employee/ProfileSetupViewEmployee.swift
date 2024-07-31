@@ -322,12 +322,16 @@ struct SearchBar: View {
                     HStack {
                         Text(option)
                             .foregroundColor(Color.black)
+                            .padding(5)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(20)
                         Spacer()
                         Image(systemName: "plus").foregroundColor(.black)
                     }
-                    .padding()
-                    .background(Color.gray.opacity(0.4))
-                    .cornerRadius(10)
+                    .padding(5)
+                    .background(Color.white)
+                    .cornerRadius(20)
                 }
                 .padding(.horizontal)
             }
@@ -350,7 +354,7 @@ struct SearchBar: View {
                                 .foregroundColor(.red)
                         }
                         Spacer()
-                    }.padding([.leading, .bottom], 20)
+                    }.padding([.leading, .bottom], 20).padding(.top, 10)
                 }
             }
         }
