@@ -42,11 +42,13 @@ struct ProfileSetupViewEmployer: View {
     let employmentTypeOptions = ["Part-time", "Full-time", "Internship"]
 
     var body: some View {
+        
         NavigationStack {
-            ScrollView {
+            
                 ZStack {
                     BackgroundView()
                         .edgesIgnoringSafeArea(.all)
+                ScrollView {
                     VStack(alignment: .leading) {
                         // Custom back button
                         HStack {
@@ -200,6 +202,7 @@ struct ProfileSetupViewEmployer: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        
     }
     
     func isFormComplete() -> Bool {

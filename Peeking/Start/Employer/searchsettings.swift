@@ -7,12 +7,17 @@
 
 import SwiftUI
 import FirebaseAuth
+import CoreLocation
+import MapKit
+import FirebaseFirestore
 
 struct searchsettings: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var distance: Double = 30
     @State private var exp: Double = 5
     @State private var showLocationView = false
+    @State private var locationText: String = "Loading..."
+    @State private var userLocation: CLLocationCoordinate2D?
 
     // State variables for selected options
     @State private var acceptedFields: [String] = []
@@ -59,7 +64,7 @@ struct searchsettings: View {
                             showLocationView.toggle()
                         }) {
                             HStack {
-                                Text("Select Location")
+                                Text(locationText)
                                     .foregroundColor(Color.black)
                                     .multilineTextAlignment(.trailing)
                                 Image(systemName: "chevron.right")
@@ -278,10 +283,18 @@ struct searchsettings: View {
         }
         .padding()
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            fetchUserLocation()
+        }
+        .onChange(of: showLocationView) { newValue in
+            if !newValue {
+                fetchUserLocation()
+            }
+        }
     }
     
     func isFormComplete() -> Bool {
-        return !acceptedFields.isEmpty && !acceptedEducation.isEmpty
+        return !acceptedFields.isEmpty && !acceptedEducation.isEmpty && userLocation != nil && locationText != "Location not set"
     }
 
     func saveSearchSettings() async {
@@ -303,8 +316,39 @@ struct searchsettings: View {
             // Handle error
         }
     }
-}
+    
+    private func fetchUserLocation() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
 
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists, let data = document.data() {
+                if let geoPoint = data["location"] as? GeoPoint {
+                    let location = CLLocation(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+                    geocodeLocation(location: location)
+                } else {
+                    locationText = "Location not set"
+                }
+            } else {
+                locationText = "Location not set"
+            }
+        }
+    }
+
+    private func geocodeLocation(location: CLLocation) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let placemark = placemarks?.first {
+                let city = placemark.locality ?? ""
+                let state = placemark.administrativeArea ?? ""
+                locationText = "\(city), \(state)"
+                userLocation = location.coordinate
+            } else {
+                locationText = "Location not found"
+                userLocation = nil
+            }
+        }
+    }
+}
 
 #Preview {
     searchsettings()

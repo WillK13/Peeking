@@ -7,11 +7,16 @@
 
 import SwiftUI
 import FirebaseAuth
+import CoreLocation
+import MapKit
+import FirebaseFirestore
 
 struct ProfileSearchSettings: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var distance: Double = 30
     @State private var showLocationView = false
+    @State private var locationText: String = "Loading..."
+    @State private var userLocation: CLLocationCoordinate2D?
     
     @State private var selectedField1 = "Choose"
     @State private var selectedField2 = "Choose"
@@ -73,7 +78,7 @@ struct ProfileSearchSettings: View {
                                 showLocationView.toggle()
                             }) {
                                 HStack {
-                                    Text("Select Location")
+                                    Text(locationText)
                                         .foregroundColor(Color.black)
                                         .multilineTextAlignment(.trailing)
                                     Image(systemName: "chevron.right")
@@ -138,6 +143,14 @@ struct ProfileSearchSettings: View {
             .padding()
             .navigationBarBackButtonHidden(true)
         }
+        .onAppear {
+            fetchUserLocation()
+        }
+        .onChange(of: showLocationView) { newValue in
+            if !newValue {
+                fetchUserLocation()
+            }
+        }
     }
     
     func selectionSection(title: String, selectedOptions: [Binding<String>], options: [String]) -> some View {
@@ -158,7 +171,8 @@ struct ProfileSearchSettings: View {
                selectedEmployer1 != "Choose" && selectedEmployer2 != "Choose" && selectedEmployer3 != "Choose" &&
                selectedSetting1 != "Choose" && selectedSetting2 != "Choose" && selectedSetting3 != "Choose" &&
                selectedStatus1 != "Choose" && selectedStatus2 != "Choose" && selectedStatus3 != "Choose" &&
-               selectedStart1 != "Choose" && selectedStart2 != "Choose" && selectedStart3 != "Choose"
+               selectedStart1 != "Choose" && selectedStart2 != "Choose" && selectedStart3 != "Choose" &&
+               locationText != "Location not set" && locationText != "Location not found"
     }
 
     func saveProfileSettings() async {
@@ -184,6 +198,38 @@ struct ProfileSearchSettings: View {
             navigateToNextView = true
         } catch {
             // Handle error
+        }
+    }
+    
+    private func fetchUserLocation() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists, let data = document.data() {
+                if let geoPoint = data["location"] as? GeoPoint {
+                    let location = CLLocation(latitude: geoPoint.latitude, longitude: geoPoint.longitude)
+                    geocodeLocation(location: location)
+                } else {
+                    locationText = "Location not set"
+                }
+            } else {
+                locationText = "Location not set"
+            }
+        }
+    }
+
+    private func geocodeLocation(location: CLLocation) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let placemark = placemarks?.first {
+                let city = placemark.locality ?? ""
+                let state = placemark.administrativeArea ?? ""
+                locationText = city.isEmpty && state.isEmpty ? "Location not found" : "\(city), \(state)"
+                userLocation = location.coordinate
+            } else {
+                locationText = "Location not found"
+                userLocation = nil
+            }
         }
     }
 }

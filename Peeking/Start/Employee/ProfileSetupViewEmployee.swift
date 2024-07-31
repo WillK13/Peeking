@@ -44,10 +44,11 @@ struct ProfileSetupViewEmployee: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
+            
                 ZStack {
                     BackgroundView()
                         .edgesIgnoringSafeArea(.all)
+                    ScrollView {
                     VStack(alignment: .leading) {
                         
                         HStack {
