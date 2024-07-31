@@ -15,6 +15,8 @@ struct firstView: View {
     @State private var showPhoneAuthView = false
     @State private var showWelcomeView = false
     @State private var showContentView = false
+    let urlTerms = URL(string: "https://www.google.com")!
+    let urlPrivacyPolicy = URL(string: "https://www.stackoverflow.com")!
     
     var body: some View {
         ZStack {
@@ -22,12 +24,60 @@ struct firstView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-                Text("Welcome to Peeking")
-                    .font(.title)
+                Spacer()
+                Text("Peeking")
+                    .font(.largeTitle)
+                    .foregroundColor(Color.white)
                     .padding(.bottom, 10.0)
-                Text("Choose your sign-in method")
-                    .padding(.bottom, 20.0)
+                Image("Duck_Body")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 120)
+                    .padding(.bottom, 35)
+                Text("Simplified Mobile")
+                    .font(.title2)
+                    .foregroundColor(Color.white)
+                   
+                Text(" Job-Matching")
+                    .font(.title2)
+                    .foregroundColor(Color.white)
+                Spacer()
+                VStack(alignment: .center) {
+                    
+                    
+                    Button(action: { UIApplication.shared.open(self.urlTerms) }) {
+                        Text("By signing in by “Phone Number” or “Apple ID”, you agree to our ")
+                        + Text("Terms")
+                            .foregroundColor(Color.blue)
+                            .underline()
+                        + Text(".")
+                    }
+                    .foregroundColor(Color.black)
+                    .font(.subheadline)
+                    .italic()
+                    
+                    
+                    
+                    Button(action: { UIApplication.shared.open(self.urlPrivacyPolicy) }) {
+                        Text("Find out how we handle your data in our  ")
+                        + Text("Privacy Policy")
+                            .foregroundColor(Color.blue)
+                            .underline()
+                        + Text(".")
+                    }
+                    .foregroundColor(Color.black)
+                    .font(.subheadline)
+                    .italic()
+ 
+                    
+                }.multilineTextAlignment(.center)
+                    .padding(.horizontal, 30.0)
                 
+                Text("Log In / Sign Up")
+                    .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
+                    .padding(.top, 20)
+                    .padding(.bottom, 10)
+                    
                 Button(action: {
                         showPhoneAuthView = true
                 }) {
@@ -35,16 +85,16 @@ struct firstView: View {
                         VStack(alignment: .leading) {
                             Text("Phone Number")
                                 .font(.title3)
+                                .fontWeight(.semibold)
                                 .foregroundColor(Color.black)
                         }
-                        .padding()
-                        .frame(width: 250.0, height: 75)
+                        .frame(width: 320.0, height: 50)
                     }
                     .background(Color.white)
-                    .cornerRadius(8)
+                    .cornerRadius(50)
                 }
                 
-                SignInWithAppleButtonViewRepresentable(type: .signIn, style: .black)
+                SignInWithAppleButtonViewRepresentable(type: .signIn, style: .white)
                     .onTapGesture {
                         Task {
                             do {
@@ -64,9 +114,18 @@ struct firstView: View {
                             }
                         }
                     }
-                    .frame(width: 250.0, height: 75)
-                    .cornerRadius(8)
-                    .padding()
+                    .frame(width: 320.0, height: 55)
+                    .cornerRadius(50)
+                    .padding(.top, 10)
+                    .padding(.bottom, 20)
+                
+                Text("Support?")
+                    .onTapGesture {
+                        UIApplication.shared.open(URL(string: "https://google.com")!)
+                    }
+                    .fontWeight(.semibold)
+                    .opacity(0.8)
+                    
             }
         }
         .fullScreenCover(isPresented: $showPhoneAuthView) {
