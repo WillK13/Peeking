@@ -27,6 +27,10 @@ final class ProfileUpdaterEmployer {
         profileCollection(userId: userId).document("profile_data")
     }
     
+    private func profileLikesSentCollection(userId: String) -> CollectionReference {
+        profileCollection(userId: userId).document("profile_data").collection("likes_sent")
+    }
+    
     struct Position: Codable, Identifiable {
         var id: String = UUID().uuidString
         var title: String
@@ -45,7 +49,16 @@ final class ProfileUpdaterEmployer {
         relevantFields: [String],
         workSetting: [String],
         employmentType: [String],
-        logoURL: String? // New parameter for logo URL
+        logoURL: String? = nil,
+        GPT_Technicals: [String]? = nil,
+        GPT_WorkEnvio: [String]? = nil,
+        likes_remaining: Int? = nil,
+        recommendations: [String]? = nil,
+        matches: [String]? = nil,
+        likesYou: [String]? = nil,
+        bookmarks: [String]? = nil,
+        soft_skills: [String]? = nil,
+        workEnvio: [String]? = nil
     ) async throws {
         var updates: [String: Any] = [:]
         
@@ -58,6 +71,14 @@ final class ProfileUpdaterEmployer {
             updates["logo"] = logoURL
         }
         
+        if let GPT_Technicals = GPT_Technicals {
+            updates["GPT_Technicals"] = GPT_Technicals
+        }
+        
+        if let GPT_WorkEnvio = GPT_WorkEnvio {
+            updates["GPT_WorkEnvio"] = GPT_WorkEnvio
+        }
+
         // Batch update for user profile
         let batch = Firestore.firestore().batch()
         
@@ -66,7 +87,7 @@ final class ProfileUpdaterEmployer {
         batch.updateData(updates, forDocument: userRef)
         
         // Update profile subcollection
-        let profileUpdates: [String: Any] = [
+        var profileUpdates: [String: Any] = [
             "title": positionTitle,
             "description": positionDescription,
             "time": startTime,
@@ -74,8 +95,40 @@ final class ProfileUpdaterEmployer {
             "setting": workSetting,
             "employment_type": employmentType
         ]
+
+        if let likes_remaining = likes_remaining {
+            profileUpdates["likes_remaining"] = likes_remaining
+        }
+        
+        if let recommendations = recommendations {
+            profileUpdates["recommendations"] = recommendations
+        }
+        
+        if let matches = matches {
+            profileUpdates["matches"] = matches
+        }
+        
+        if let likesYou = likesYou {
+            profileUpdates["likesYou"] = likesYou
+        }
+        
+        if let bookmarks = bookmarks {
+            profileUpdates["bookmarks"] = bookmarks
+        }
+        
+        if let soft_skills = soft_skills {
+            profileUpdates["soft_skills"] = soft_skills
+        }
+        
+        if let workEnvio = workEnvio {
+            profileUpdates["workEnvio"] = workEnvio
+        }
+        
         let profileRef = profileDocument(userId: userId)
         batch.updateData(profileUpdates, forDocument: profileRef)
+
+        // Add likes_sent subcollection
+        try await addProfileLikeSent(userId: userId, like: LikeSent(user_id: "", status: ""))
         
         // Commit the batch
         try await batch.commit()
@@ -100,48 +153,52 @@ final class ProfileUpdaterEmployer {
     }
     
     func updateTechnicalSkills(
-            userId: String,
-            technicalSkills: String,
-            certifications: String
-        ) async throws {
-            let updates: [String: Any] = [
-                "technicals": [technicalSkills, certifications]
-            ]
-            let profileRef = profileDocument(userId: userId)
-            try await profileRef.updateData(updates)
-        }
+        userId: String,
+        technicalSkills: String,
+        certifications: String
+    ) async throws {
+        let updates: [String: Any] = [
+            "technicals": [technicalSkills, certifications]
+        ]
+        let profileRef = profileDocument(userId: userId)
+        try await profileRef.updateData(updates)
+    }
     
     func updateWorkEnvironment(
-            userId: String,
-            answers: [String]
-        ) async throws {
-            let updates: [String: Any] = ["workEnvio": answers]
-            
-            let userRef = userDocument(userId: userId)
-            try await userRef.updateData(updates)
-        }
+        userId: String,
+        answers: [String]
+    ) async throws {
+        let updates: [String: Any] = ["workEnvio": answers]
+        
+        let profileRef = profileDocument(userId: userId)
+        try await profileRef.updateData(updates)
+    }
     
     func updateSoftSkills(
-            userId: String,
-            softSkills: [String]
-        ) async throws {
-            let updates: [String: Any] = ["soft_skills": softSkills]
-            
-            let userRef = userDocument(userId: userId)
-            try await userRef.updateData(updates)
-        }
+        userId: String,
+        softSkills: [String]
+    ) async throws {
+        let updates: [String: Any] = ["soft_skills": softSkills]
+        
+        let profileRef = profileDocument(userId: userId)
+        try await profileRef.updateData(updates)
+    }
     
     func updateHobbiesAndPhoto(
-           userId: String,
-           hobbies: String,
-           photoURL: String
-       ) async throws {
-           let updates: [String: Any] = [
-               "hobbies": hobbies,
-               "photo": photoURL
-           ]
-           
-           let userRef = userDocument(userId: userId)
-           try await userRef.updateData(updates)
-       }
+        userId: String,
+        hobbies: String,
+        photoURL: String
+    ) async throws {
+        let updates: [String: Any] = [
+            "hobbies": hobbies,
+            "photo": photoURL
+        ]
+        
+        let userRef = userDocument(userId: userId)
+        try await userRef.updateData(updates)
+    }
+
+    private func addProfileLikeSent(userId: String, like: LikeSent) async throws {
+        try profileLikesSentCollection(userId: userId).addDocument(from: like)
+    }
 }

@@ -13,5 +13,18 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSExceptionDomains</key>
+    <dict>
+        <key>159.65.221.122</key> <!-- Replace with your server's IP address or domain -->
+        <dict>
+            <key>NSExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+        </dict>
+    </dict>
+</dict>
 </dict>
 </plist>

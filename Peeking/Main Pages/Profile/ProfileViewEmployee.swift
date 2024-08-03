@@ -55,7 +55,7 @@ struct ProfileViewEmployee: View {
                 
                 // Avatar and position selector, should be pfp, can click to change
                 VStack(spacing: 20) {
-                    Image("profile60")
+                    Image("tgprofile")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 100, height: 100).colorInvert()

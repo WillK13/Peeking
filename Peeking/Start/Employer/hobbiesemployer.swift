@@ -203,36 +203,53 @@ struct hobbiesemployer: View {
     func saveHobbiesAndPhoto() async {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         guard let inputImage = inputImage else { return }
-        
-        do {
-            isSaving = true
-            
-            StorageManager.shared.uploadProfileImage(userId: userId, image: inputImage, folder: "photo") { result in
-                switch result {
-                case .success(let photoURL):
-                    Task {
-                        do {
-                            try await ProfileUpdaterEmployer.shared.updateHobbiesAndPhoto(
-                                userId: userId,
-                                hobbies: hobbies,
-                                photoURL: photoURL
-                            )
-                            navigateToNextView = true
-                        } catch {
-                            // Handle error
+
+        isSaving = true
+
+        StorageManager.shared.uploadProfileImage(userId: userId, image: inputImage, folder: "photo") { result in
+            switch result {
+            case .success(let photoURL):
+                Task {
+                    do {
+                        try await ProfileUpdaterEmployer.shared.updateHobbiesAndPhoto(
+                            userId: userId,
+                            hobbies: hobbies,
+                            photoURL: photoURL
+                        )
+
+                        // Perform analysis after updating hobbies
+                        APIClient.shared.performAnalysis(userId: userId, userType: 1) { result in
+                            switch result {
+                            case .success:
+                                DispatchQueue.main.async {
+                                    navigateToNextView = true
+                                }
+                            case .failure(let error):
+                                print("Error performing analysis: \(error.localizedDescription)")
+                                DispatchQueue.main.async {
+                                    isSaving = false
+                                }
+                            }
+                        }
+                    } catch {
+                        // Handle error
+                        print("Error updating hobbies: \(error.localizedDescription)")
+                        DispatchQueue.main.async {
+                            isSaving = false
                         }
                     }
-                case .failure(let error):
-                    // Handle error
-                    print("Failed to upload image: \(error)")
                 }
-                isSaving = false
+            case .failure(let error):
+                // Handle error
+                print("Failed to upload image: \(error)")
+                DispatchQueue.main.async {
+                    isSaving = false
+                }
             }
-        } catch {
-            isSaving = false
-            // Handle error
         }
     }
+
+
 }
 
 #Preview {

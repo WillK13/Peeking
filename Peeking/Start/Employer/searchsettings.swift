@@ -30,7 +30,47 @@ struct searchsettings: View {
     @State private var navigateToNextView: Bool = false
 
     // Options for all of the drop downs.
-    var fieldOptions = ["Consulting", "IT Consulting", "Management Consulting", "Medical Track", "Healthcare", "Startup", "Small Business", "Independent Client", "Corporate"]
+    var fieldOptions = [
+        "Architecture",
+        "Arts and Entertainment",
+        "Automotive",
+        "Beauty and Cosmetics",
+        "Construction",
+        "Consulting",
+        "Creative and Design",
+        "Cybersecurity",
+        "E-commerce",
+        "Education",
+        "Energy and Utilities",
+        "Engineering",
+        "Environmental and Agriculture",
+        "Event Planning and Management",
+        "Fashion",
+        "Finance",
+        "Food and Beverage",
+        "Government and Public Administration",
+        "Health and Wellness",
+        "Healthcare",
+        "Home Improvement",
+        "Hospitality and Tourism",
+        "Human Resources",
+        "IT Services and Consulting",
+        "Legal",
+        "Manufacturing and Production",
+        "Media and Communications",
+        "Non-Profit and Social Services",
+        "Operations and Logistics",
+        "Pharmaceuticals",
+        "Real Estate",
+        "Restaurant",
+        "Retail",
+        "Sales and Customer Service",
+        "Science and Research",
+        "Software and Development",
+        "Sports and Recreation",
+        "Telecommunications",
+        "Transportation"
+    ]
     var educationOptions = ["Currently enrolled in High School", "Highschool Graduate", "GED", "Currently enrolled in Master's Degree Program", "Currently enrolled in Associate's Degree Program", "Currently enrolled in Bachelor's Degree Program", "Currently enrolled in Doctorate Program", "Doctorate", "Associate's Degree", "Bachelor's Degree", "Master's Degree"]
 
     var body: some View {

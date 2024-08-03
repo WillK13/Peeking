@@ -20,11 +20,6 @@ struct Experience: Codable, Identifiable {
     var years: Int
 }
 
-struct Recommendation: Codable {
-    let user_id: String
-    let rank: String
-}
-
 struct Profile: Codable {
     let title: String
     let description: String
@@ -42,6 +37,13 @@ struct Profile: Codable {
     let chats: [String]
     let GPT_WorkEnvio: [String]
     let GPT_Technicals: [String]
+    let likes_remaining: Int
+    let recommendations: [String]
+    let matches: [String]
+    let likesYou: [String]
+    let bookmarks: [String]
+    let soft_skills: [String]
+    let workEnvio: [String]
 }
 
 struct DBUser: Codable {
@@ -52,10 +54,12 @@ struct DBUser: Codable {
     var likesYou: [String]?
     var bookmarks: [String]?
     var userType: Int?
+    var likes_remaining: Int?
     // New fields
     var name: String?
     var location: GeoPoint?
     var age: Int?
+    var recommendations: [String]?
     var birthday: Date?
     var languages: [String]?
     var education: [String]?
@@ -74,6 +78,7 @@ struct DBUser: Codable {
     var personality_photo: String?
     var GPT_WorkEnvio: [String]?
     var GPT_Technicals: [String]?
+    var GPT_SoftSkills: [String]?
     // Employer-specific fields
     var logo: String?
     var positions: [String]?
@@ -99,6 +104,7 @@ struct DBUser: Codable {
         likesYou: [String]? = nil,
         bookmarks: [String]? = nil,
         userType: Int? = nil,
+        recommendations: [String]? = nil,
         // New fields
         name: String? = nil,
         location: GeoPoint? = nil,
@@ -121,6 +127,8 @@ struct DBUser: Codable {
         personality_photo: String? = nil,
         GPT_WorkEnvio: [String]? = nil,
         GPT_Technicals: [String]? = nil,
+        GPT_SoftSkills: [String]? = nil,
+        likes_remaining: Int? = nil,
         // Employer-specific fields
         logo: String? = nil,
         positions: [String]? = nil,
@@ -138,11 +146,13 @@ struct DBUser: Codable {
         self.name = name
         self.location = location
         self.age = age
+        self.likes_remaining = likes_remaining
         self.birthday = birthday
         self.languages = languages
         self.education = education
         self.distance = distance
         self.fields = fields
+        self.recommendations = recommendations
         self.work_setting = work_setting
         self.status = status
         self.start = start
@@ -156,6 +166,7 @@ struct DBUser: Codable {
         self.personality_photo = personality_photo
         self.GPT_WorkEnvio = GPT_WorkEnvio
         self.GPT_Technicals = GPT_Technicals
+        self.GPT_SoftSkills = GPT_SoftSkills
         self.logo = logo
         self.positions = positions
         self.mission = mission
@@ -186,12 +197,15 @@ struct DBUser: Codable {
         case soft_skills = "soft_skills"
         case workEnvio
         case hobbies
+        case recommendations
         case chats
         case pfp
         case employer
         case personality_photo = "personality_photo"
         case GPT_WorkEnvio = "GPT_WorkEnvio"
         case GPT_Technicals = "GPT_Technicals"
+        case GPT_SoftSkills = "GPT_SoftSkills"
+        case likes_remaining = "likes_remaining"
         case logo
         case positions
         case mission
@@ -218,10 +232,6 @@ final class UserManager: ObservableObject {
         userDocument(userId: userId).collection("experience")
     }
 
-    private func recommendationsCollection(userId: String) -> CollectionReference {
-        userDocument(userId: userId).collection("recommendations")
-    }
-
     private func profileCollection(userId: String) -> CollectionReference {
         userDocument(userId: userId).collection("profile")
     }
@@ -232,10 +242,6 @@ final class UserManager: ObservableObject {
     
     private func profileLikesSentCollection(userId: String) -> CollectionReference {
         profileCollection(userId: userId).document("profile_data").collection("likes_sent")
-    }
-
-    private func profileRecommendationsCollection(userId: String) -> CollectionReference {
-        profileCollection(userId: userId).document("profile_data").collection("recommendations")
     }
 
     func createOrUpdateUser(user: DBUser) async throws {
@@ -268,19 +274,24 @@ final class UserManager: ObservableObject {
             // If the user type is already set, do nothing
             return
         }
-        try await userDocument(userId: userId).updateData(["user_type": userType])
-        
-        // Create subcollections based on user type
         if userType == 0 {
-            // Job-Seeker
-            try await addLikeSent(userId: userId, like: LikeSent(user_id: "", status: ""))
-            try await addExperience(userId: userId, experience: Experience(field: "", years: 0))
-            try await addRecommendation(userId: userId, recommendation: Recommendation(user_id: "", rank: ""))
+            try await userDocument(userId: userId).updateData([
+                "user_type": userType,
+                "likes_remaining": 3,
+                "recommendations": [],
+                "GPT_Technicals": [],
+                "GPT_SoftSkills": []
+            ])
         } else if userType == 1 {
-            // Employer
-            try await addProfile(userId: userId, profile: Profile(title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [], location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [], accepted_edu: [], technicals: [], chats: [], GPT_WorkEnvio: [], GPT_Technicals: []))
-            try await addProfileLikeSent(userId: userId, like: LikeSent(user_id: "", status: ""))
-            try await addProfileRecommendation(userId: userId, recommendation: Recommendation(user_id: "", rank: ""))
+            try await userDocument(userId: userId).updateData([
+                "user_type": userType
+            ])
+            try await addProfile(userId: userId, profile: Profile(
+                title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [],
+                location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [],
+                accepted_edu: [], technicals: [], chats: [], GPT_WorkEnvio: [], GPT_Technicals: [],
+                likes_remaining: 3, recommendations: [], matches: [], likesYou: [], bookmarks: [], soft_skills: [], workEnvio: []
+            ))
         }
     }
     
@@ -312,10 +323,6 @@ final class UserManager: ObservableObject {
         try experienceCollection(userId: userId).addDocument(from: experience)
     }
     
-    func addRecommendation(userId: String, recommendation: Recommendation) async throws {
-        try recommendationsCollection(userId: userId).addDocument(from: recommendation)
-    }
-
     func addProfile(userId: String, profile: Profile) async throws {
         try profileDocument(userId: userId).setData(from: profile)
     }
@@ -324,10 +331,6 @@ final class UserManager: ObservableObject {
         try profileLikesSentCollection(userId: userId).addDocument(from: like)
     }
 
-    func addProfileRecommendation(userId: String, recommendation: Recommendation) async throws {
-        try profileRecommendationsCollection(userId: userId).addDocument(from: recommendation)
-    }
-    
     func deleteSubcollections(userId: String) async throws {
         let likesSentDocs = try await likesSentCollection(userId: userId).getDocuments()
         for document in likesSentDocs.documents {
@@ -336,11 +339,6 @@ final class UserManager: ObservableObject {
         
         let experienceDocs = try await experienceCollection(userId: userId).getDocuments()
         for document in experienceDocs.documents {
-            try await document.reference.delete()
-        }
-        
-        let recommendationsDocs = try await recommendationsCollection(userId: userId).getDocuments()
-        for document in recommendationsDocs.documents {
             try await document.reference.delete()
         }
     }

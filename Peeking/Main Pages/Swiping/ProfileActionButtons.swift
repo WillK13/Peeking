@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct ProfileActionButtons: View {
+    @Binding var user_id: String
     var body: some View {
         VStack {
             HStack {
@@ -68,5 +67,5 @@ struct ProfileActionButtons: View {
 
 
 #Preview {
-    ProfileActionButtons()
+    ProfileActionButtons(user_id: .constant("example_user_id"))
 }

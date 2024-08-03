@@ -162,29 +162,29 @@ struct Hobbies: View {
                         
                         Spacer()
                         if !fromEditProfile {
-                        HStack {
-                            Spacer()
-                            // Next Button
-                            NavigationLink(destination: ProfileConfirmation(), isActive: $navigateToNextView) {
-                                Button(action: {
-                                    Task {
-                                        await saveHobbiesAndPhoto()
+                            HStack {
+                                Spacer()
+                                // Next Button
+                                NavigationLink(destination: ProfileConfirmation(), isActive: $navigateToNextView) {
+                                    Button(action: {
+                                        Task {
+                                            await saveHobbiesAndPhoto()
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.right")
+                                            .foregroundColor(.black)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(25)
+                                            .shadow(radius: 10)
+                                            .opacity(isFormComplete() ? 1.0 : 0.5)
                                     }
-                                }) {
-                                    Image(systemName: "arrow.right")
-                                        .foregroundColor(.black)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(25)
-                                        .shadow(radius: 10)
-                                        .opacity(isFormComplete() ? 1.0 : 0.5)
-                                }
-                                .disabled(!isFormComplete() || isSaving)
-                                .padding(.top, 30)
-                                .padding(.bottom, 50)
-                            }.disabled(!isFormComplete() || isSaving)
+                                    .disabled(!isFormComplete() || isSaving)
+                                    .padding(.top, 30)
+                                    .padding(.bottom, 50)
+                                }.disabled(!isFormComplete() || isSaving)
+                            }
                         }
-                    }
                     }
                     .padding()
                     
@@ -195,7 +195,8 @@ struct Hobbies: View {
 
             }
 
-        }                    .navigationBarBackButtonHidden(true)
+        }
+        .navigationBarBackButtonHidden(true)
 
     }
 
@@ -211,7 +212,6 @@ struct Hobbies: View {
 
     func saveHobbiesAndPhoto() async {
         guard let userId = Auth.auth().currentUser?.uid else { return }
-        
         guard let inputImage = inputImage else { return }
 
         isSaving = true
@@ -222,16 +222,36 @@ struct Hobbies: View {
                 Task {
                     do {
                         try await ProfileUpdater.shared.updateHobbies(userId: userId, hobbies: hobbies, photoURL: photoURL)
-                        navigateToNextView = true
+                        
+                        // Perform analysis after updating hobbies
+                        APIClient.shared.performAnalysis(userId: userId, userType: 0) { result in
+                            switch result {
+                            case .success:
+                                DispatchQueue.main.async {
+                                    print("Navigation to next view")
+                                    navigateToNextView = true
+                                }
+                            case .failure(let error):
+                                print("Error performing analysis: \(error.localizedDescription)")
+                                DispatchQueue.main.async {
+                                    isSaving = false
+                                }
+                            }
+                        }
                     } catch {
                         // Handle error
+                        print("Error updating hobbies: \(error.localizedDescription)")
+                        DispatchQueue.main.async {
+                            isSaving = false
+                        }
                     }
-                    isSaving = false
                 }
             case .failure(let error):
                 // Handle error
                 print("Failed to upload image: \(error)")
-                isSaving = false
+                DispatchQueue.main.async {
+                    isSaving = false
+                }
             }
         }
     }

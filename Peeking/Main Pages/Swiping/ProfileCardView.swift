@@ -15,6 +15,7 @@ struct ProfileCardView: View {
     @State private var user: DBUser? = nil
     @State private var experiences: [Experience] = []
     @State private var personalityPhotoURL: String? = nil
+    @State private var userId: String = ""
 
     var body: some View {
         ZStack {
@@ -78,7 +79,7 @@ struct ProfileCardView: View {
             VStack {
                 HStack {
                     Spacer()
-                    ProfileActionButtons()
+                    ProfileActionButtons(user_id: $userId)
                 }
                 .padding(.trailing, 20)
                 .padding(.bottom, 50)
@@ -263,7 +264,7 @@ struct TechnicalSkillsView: View {
                 Spacer()
             }
             
-            if let technicalSkills = user.technicals?[0].split(separator: ",").map(String.init) {
+            if let technicalSkills = user.GPT_Technicals?[0].split(separator: "?").map(String.init) {
                 VStack(alignment: .leading) {
                     ForEach(technicalSkills, id: \.self) { skill in
                         HStack {
@@ -297,7 +298,7 @@ struct TechnicalSkillsView: View {
                 )
                 .padding([.leading, .trailing])
             
-            if let certifications = user.technicals?[1].split(separator: ",").map(String.init) {
+            if let certifications = user.GPT_Technicals?[1].split(separator: "?").map(String.init) {
                 VStack(alignment: .leading) {
                     ForEach(certifications, id: \.self) { certification in
                         HStack {
@@ -346,7 +347,7 @@ struct SoftSkillsView: View {
                 Spacer()
             }
             
-            if let topQualities = user.soft_skills?[0].split(separator: ",").map(String.init) {
+            if let topQualities = user.GPT_SoftSkills?[0].split(separator: "?").map(String.init) {
                 VStack(alignment: .leading) {
                     ForEach(topQualities, id: \.self) { quality in
                         HStack {
@@ -380,7 +381,7 @@ struct SoftSkillsView: View {
                 )
                 .padding([.leading, .trailing])
             
-            if let softSkills = user.soft_skills?[1].split(separator: ",").map(String.init) {
+            if let softSkills = user.GPT_SoftSkills?[1].split(separator: "?").map(String.init) {
                 VStack(alignment: .leading) {
                     ForEach(softSkills, id: \.self) { skill in
                         HStack {
@@ -414,7 +415,7 @@ struct SoftSkillsView: View {
                 )
                 .padding([.leading, .trailing])
             
-            if let teamworkSkills = user.soft_skills?[2].split(separator: ",").map(String.init) {
+            if let teamworkSkills = user.GPT_SoftSkills?[2].split(separator: "?").map(String.init) {
                 VStack(alignment: .leading) {
                     ForEach(teamworkSkills, id: \.self) { skill in
                         HStack {
@@ -463,7 +464,7 @@ struct HandleChallengesView: View {
             }
             .padding(.trailing, 15.0)
             
-            if let challenges = user.soft_skills?[3].split(separator: ",").map(String.init) {
+            if let challenges = user.GPT_SoftSkills?[3].split(separator: "?").map(String.init) {
                 VStack(alignment: .leading) {
                     ForEach(challenges, id: \.self) { challenge in
                         HStack {
@@ -500,7 +501,7 @@ struct HandleChallengesView: View {
                 Spacer()
             }
             
-            if let relationships = user.soft_skills?[4].split(separator: ",").map(String.init) {
+            if let relationships = user.GPT_SoftSkills?[4].split(separator: "?").map(String.init) {
                 VStack(alignment: .leading) {
                     ForEach(relationships, id: \.self) { relationship in
                         HStack {

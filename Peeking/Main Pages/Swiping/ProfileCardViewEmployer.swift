@@ -17,6 +17,7 @@ struct ProfileCardViewEmployer: View {
     @State private var photoURL: String? = nil
     @State private var logoURL: String? = nil
     @EnvironmentObject var appViewModel: AppViewModel
+    @State private var userId: String = ""
 
     var body: some View {
         ZStack {
@@ -78,7 +79,7 @@ struct ProfileCardViewEmployer: View {
             VStack {
                 HStack {
                     Spacer()
-                    ProfileActionButtons()
+                    ProfileActionButtons(user_id: $userId)
                 }
                 .padding(.trailing, 20)
                 .padding(.bottom, 50)
@@ -404,7 +405,7 @@ struct EmployerWorkEnvironmentView: View {
                     Spacer()
                 }
                 HStack {
-                    if let generalWorkEnvironment = user.workEnvio?[0].split(separator: ",").map(String.init) {
+                    if let generalWorkEnvironment = user.GPT_WorkEnvio?[0].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(generalWorkEnvironment, id: \.self) { item in
                                 HStack {
@@ -446,7 +447,7 @@ struct EmployerWorkEnvironmentView: View {
                     Spacer()
                 }
                 HStack {
-                    if let teamDynamics = user.workEnvio?[1].split(separator: ",").map(String.init) {
+                    if let teamDynamics = user.GPT_WorkEnvio?[1].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(teamDynamics, id: \.self) { item in
                                 HStack {
@@ -488,7 +489,7 @@ struct EmployerWorkEnvironmentView: View {
                     Spacer()
                 }
                 HStack {
-                    if let workHourFlexibility = user.workEnvio?[2].split(separator: ",").map(String.init) {
+                    if let workHourFlexibility = user.GPT_WorkEnvio?[2].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(workHourFlexibility, id: \.self) { item in
                                 HStack {
@@ -536,7 +537,7 @@ struct EmployerTechnicalCertificationsView: View {
                     )
                     .padding([.leading, .trailing, .top])
                 
-                if let technicals = profile.technicals.first?.split(separator: ",").map(String.init) {
+                if let technicals = profile.GPT_Technicals.first?.split(separator: "?").map(String.init) {
                     VStack(alignment: .leading) {
                         ForEach(technicals, id: \.self) { technical in
                             HStack {
@@ -573,7 +574,7 @@ struct EmployerTechnicalCertificationsView: View {
                     )
                     .padding([.leading, .trailing, .top])
                 
-                if let certifications = profile.technicals.dropFirst().first?.split(separator: ",").map(String.init) {
+                if let certifications = profile.GPT_Technicals.dropFirst().first?.split(separator: "?").map(String.init) {
                     VStack(alignment: .leading) {
                         ForEach(certifications, id: \.self) { certification in
                             HStack {
@@ -622,7 +623,7 @@ struct EmployerSupportManagementView: View {
                     Spacer()
                 }
                 HStack {
-                    if let employeeSupport = user.workEnvio?[3].split(separator: ",").map(String.init) {
+                    if let employeeSupport = user.GPT_WorkEnvio?[3].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(employeeSupport, id: \.self) { item in
                                 HStack {
@@ -664,7 +665,7 @@ struct EmployerSupportManagementView: View {
                     Spacer()
                 }
                 HStack {
-                    if let managementApproach = user.workEnvio?[4].split(separator: ",").map(String.init) {
+                    if let managementApproach = user.GPT_WorkEnvio?[4].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(managementApproach, id: \.self) { item in
                                 HStack {

@@ -72,6 +72,7 @@
 		BEE502782C3B2C8400B6175B /* SignInWithPhoneHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502772C3B2C8400B6175B /* SignInWithPhoneHelper.swift */; };
 		BEE5027A2C3B34A500B6175B /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502792C3B34A500B6175B /* AuthenticationViewModel.swift */; };
 		BEE5027C2C3B380500B6175B /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE5027B2C3B380500B6175B /* UserManager.swift */; };
+		BEE51D8E2C5AF03D0054ED64 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE51D8D2C5AF03D0054ED64 /* APIClient.swift */; };
 		BEFCA0272C432F0900A6C120 /* ProfileUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFCA0262C432F0900A6C120 /* ProfileUpdater.swift */; };
 		BEFCA0292C485DCF00A6C120 /* ProfileUpdaterEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFCA0282C485DCF00A6C120 /* ProfileUpdaterEmployer.swift */; };
 /* End PBXBuildFile section */
@@ -158,6 +159,7 @@
 		BEE502772C3B2C8400B6175B /* SignInWithPhoneHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithPhoneHelper.swift; sourceTree = "<group>"; };
 		BEE502792C3B34A500B6175B /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		BEE5027B2C3B380500B6175B /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		BEE51D8D2C5AF03D0054ED64 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		BEFCA0262C432F0900A6C120 /* ProfileUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUpdater.swift; sourceTree = "<group>"; };
 		BEFCA0282C485DCF00A6C120 /* ProfileUpdaterEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUpdaterEmployer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -295,6 +297,7 @@
 				BEE502702C3B291500B6175B /* Authentication */,
 				BEE502632C39A2BF00B6175B /* FireStore */,
 				BE8AF5822C4DC12E00C1D59B /* Storage */,
+				BEE51D8C2C5AF0280054ED64 /* Server */,
 				BE6029932C13603C00B3C080 /* Assets.xcassets */,
 				BE6029952C13603C00B3C080 /* Preview Content */,
 				BEE5026E2C39D59300B6175B /* LoadingView.swift */,
@@ -413,6 +416,14 @@
 				BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		BEE51D8C2C5AF0280054ED64 /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				BEE51D8D2C5AF03D0054ED64 /* APIClient.swift */,
+			);
+			path = Server;
 			sourceTree = "<group>";
 		};
 		BEFCA02A2C49873C00A6C120 /* Swiping */ = {
@@ -610,6 +621,7 @@
 				BEFCA0292C485DCF00A6C120 /* ProfileUpdaterEmployer.swift in Sources */,
 				BEE502722C3B293E00B6175B /* AuhenticationManager.swift in Sources */,
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,
+				BEE51D8E2C5AF03D0054ED64 /* APIClient.swift in Sources */,
 				BE6029E12C13974900B3C080 /* EmployerTiersView.swift in Sources */,
 				BE5E50102C26094F00D36578 /* hobbiesemployer.swift in Sources */,
 				BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */,

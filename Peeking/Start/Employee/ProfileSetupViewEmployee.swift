@@ -28,9 +28,109 @@ struct ProfileSetupViewEmployee: View {
     @State private var isSaving: Bool = false
     @State private var navigateToNextView: Bool = false
 
-    var languageOptions = ["English", "Spanish", "French", "German"]
-    var experienceOptions = ["Software and Development", "Cybersecurity", "IT Consulting"]
-    var educationOptions = ["Highschool Graduate", "Currently enrolled in Bachelor's Degree", "Currently enrolled in Master's Degree"]
+    var languageOptions = [
+        "Arabic",
+        "Bengali",
+        "Bulgarian",
+        "Cambodian (Khmer)",
+        "Chinese",
+        "Croatian",
+        "Czech",
+        "Danish",
+        "Dutch",
+        "English",
+        "Estonian",
+        "Farsi (Persian)",
+        "Finnish",
+        "French",
+        "German",
+        "Greek",
+        "Haitian Creole",
+        "Hebrew",
+        "Hindi",
+        "Hungarian",
+        "Icelandic",
+        "Indonesian",
+        "Italian",
+        "Japanese",
+        "Kazakh",
+        "Korean",
+        "Kurdish",
+        "Kyrgyz",
+        "Lao",
+        "Latvian",
+        "Lithuanian",
+        "Macedonian",
+        "Malay",
+        "Mongolian",
+        "Nepali",
+        "Norwegian",
+        "Pashto",
+        "Polish",
+        "Portuguese",
+        "Punjabi",
+        "Romanian",
+        "Russian",
+        "Serbian",
+        "Slovak",
+        "Slovenian",
+        "Somali",
+        "Spanish",
+        "Swahili",
+        "Swedish",
+        "Tagalog",
+        "Tamil",
+        "Telugu",
+        "Thai",
+        "Turkish",
+        "Ukrainian",
+        "Urdu",
+        "Uzbek",
+        "Vietnamese",
+        "Yoruba"
+    ]
+    var experienceOptions = [
+        "Architecture",
+        "Arts and Entertainment",
+        "Automotive",
+        "Beauty and Cosmetics",
+        "Construction",
+        "Consulting",
+        "Creative and Design",
+        "Cybersecurity",
+        "E-commerce",
+        "Education",
+        "Energy and Utilities",
+        "Engineering",
+        "Environmental and Agriculture",
+        "Event Planning and Management",
+        "Fashion",
+        "Finance",
+        "Food and Beverage",
+        "Government and Public Administration",
+        "Health and Wellness",
+        "Healthcare",
+        "Home Improvement",
+        "Hospitality and Tourism",
+        "Human Resources",
+        "IT Services and Consulting",
+        "Legal",
+        "Manufacturing and Production",
+        "Media and Communications",
+        "Non-Profit and Social Services",
+        "Operations and Logistics",
+        "Pharmaceuticals",
+        "Real Estate",
+        "Restaurant",
+        "Retail",
+        "Sales and Customer Service",
+        "Science and Research",
+        "Software and Development",
+        "Sports and Recreation",
+        "Telecommunications",
+        "Transportation"
+    ]
+    var educationOptions = ["Currently enrolled in High School", "Highschool Graduate", "GED", "Currently enrolled in Master's Degree Program", "Currently enrolled in Associate's Degree Program", "Currently enrolled in Bachelor's Degree Program", "Currently enrolled in Doctorate Program", "Doctorate", "Associate's Degree", "Bachelor's Degree", "Master's Degree"]
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     var days = Array(1...31).map { String($0) }
     var years = Array(1924...2008).map { String($0) }
@@ -322,16 +422,16 @@ struct SearchBar: View {
                     HStack {
                         Text(option)
                             .foregroundColor(Color.black)
-                            .padding(5)
+                            .padding(10)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(Color.white)
-                            .cornerRadius(20)
+                            .cornerRadius(10)
                         Spacer()
                         Image(systemName: "plus").foregroundColor(.black)
                     }
                     .padding(5)
                     .background(Color.white)
-                    .cornerRadius(20)
+                    .cornerRadius(10)
                 }
                 .padding(.horizontal)
             }
@@ -367,6 +467,8 @@ struct ExperienceSearchBar: View {
     var options: [String]
     @Binding var selectedOptions: [ProfileSetupViewEmployee.Experience]
     var experienceYears: [String]
+    
+    var maxSelection: Int = 5
 
     var body: some View {
         VStack {
@@ -386,7 +488,7 @@ struct ExperienceSearchBar: View {
             
             ForEach(options.filter { $0.lowercased().contains(text.lowercased()) }, id: \.self) { option in
                 Button(action: {
-                    if !selectedOptions.contains(where: { $0.field == option }) {
+                    if selectedOptions.count < maxSelection && !selectedOptions.contains(where: { $0.field == option }) {
                         selectedOptions.append(ProfileSetupViewEmployee.Experience(field: option, years: ""))
                     }
                     text = ""
@@ -395,10 +497,14 @@ struct ExperienceSearchBar: View {
                         Text(option)
                             .foregroundColor(Color.black)
                         Spacer()
-                        Image(systemName: "plus").foregroundColor(.black)
+                        if selectedOptions.count < maxSelection {
+                            Image(systemName: "plus").foregroundColor(.black)
+                        } else {
+                            Image(systemName: "exclamationmark.triangle").foregroundColor(.red)
+                        }
                     }
                     .padding()
-                    .background(Color.gray.opacity(0.4))
+                    .background(Color.white)
                     .cornerRadius(10)
                 }
                 .padding(.horizontal)

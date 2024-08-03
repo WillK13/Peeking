@@ -40,7 +40,47 @@ struct ProfileSearchSettings: View {
     
     @State private var navigateToNextView: Bool = false
 
-    var fieldOptions = ["Consulting", "IT Consulting", "Management Consulting"]
+    var fieldOptions = [
+        "Architecture",
+        "Arts and Entertainment",
+        "Automotive",
+        "Beauty and Cosmetics",
+        "Construction",
+        "Consulting",
+        "Creative and Design",
+        "Cybersecurity",
+        "E-commerce",
+        "Education",
+        "Energy and Utilities",
+        "Engineering",
+        "Environmental and Agriculture",
+        "Event Planning and Management",
+        "Fashion",
+        "Finance",
+        "Food and Beverage",
+        "Government and Public Administration",
+        "Health and Wellness",
+        "Healthcare",
+        "Home Improvement",
+        "Hospitality and Tourism",
+        "Human Resources",
+        "IT Services and Consulting",
+        "Legal",
+        "Manufacturing and Production",
+        "Media and Communications",
+        "Non-Profit and Social Services",
+        "Operations and Logistics",
+        "Pharmaceuticals",
+        "Real Estate",
+        "Restaurant",
+        "Retail",
+        "Sales and Customer Service",
+        "Science and Research",
+        "Software and Development",
+        "Sports and Recreation",
+        "Telecommunications",
+        "Transportation"
+    ]
     var employerOptions = ["Startup", "Small Business", "Independent Client", "Corporate"]
     var workSettingOptions = ["Remote", "In-Person", "Hybrid"]
     var employmentStatusOptions = ["Part-time", "Full-Time", "Temporary", "Internship"]

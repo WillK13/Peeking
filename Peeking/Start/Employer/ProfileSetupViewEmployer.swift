@@ -34,12 +34,113 @@ struct ProfileSetupViewEmployer: View {
     @State private var isSaving: Bool = false
     @State private var navigateToNextView: Bool = false
 
-    let startTimeOptions = ["Morning", "Afternoon", "Evening", "Night"]
-    let relevantFieldsOptions = ["Hospitality and Tourism", "Sales and Customer Service", "Telecommunications"]
-    let workplaceLanguagesOptions = ["English", "Spanish", "French", "German"]
-    let employerTypeOptions = ["Startup", "Small Business", "Corporate"]
+    let startTimeOptions = ["Fall", "Winter", "Spring", "Summer", "Any"]
+    let relevantFieldsOptions = [
+        "Architecture",
+        "Arts and Entertainment",
+        "Automotive",
+        "Beauty and Cosmetics",
+        "Construction",
+        "Consulting",
+        "Creative and Design",
+        "Cybersecurity",
+        "E-commerce",
+        "Education",
+        "Energy and Utilities",
+        "Engineering",
+        "Environmental and Agriculture",
+        "Event Planning and Management",
+        "Fashion",
+        "Finance",
+        "Food and Beverage",
+        "Government and Public Administration",
+        "Health and Wellness",
+        "Healthcare",
+        "Home Improvement",
+        "Hospitality and Tourism",
+        "Human Resources",
+        "IT Services and Consulting",
+        "Legal",
+        "Manufacturing and Production",
+        "Media and Communications",
+        "Non-Profit and Social Services",
+        "Operations and Logistics",
+        "Pharmaceuticals",
+        "Real Estate",
+        "Restaurant",
+        "Retail",
+        "Sales and Customer Service",
+        "Science and Research",
+        "Software and Development",
+        "Sports and Recreation",
+        "Telecommunications",
+        "Transportation"
+    ]
+    let workplaceLanguagesOptions = [
+        "Arabic",
+        "Bengali",
+        "Bulgarian",
+        "Cambodian (Khmer)",
+        "Chinese",
+        "Croatian",
+        "Czech",
+        "Danish",
+        "Dutch",
+        "English",
+        "Estonian",
+        "Farsi (Persian)",
+        "Finnish",
+        "French",
+        "German",
+        "Greek",
+        "Haitian Creole",
+        "Hebrew",
+        "Hindi",
+        "Hungarian",
+        "Icelandic",
+        "Indonesian",
+        "Italian",
+        "Japanese",
+        "Kazakh",
+        "Korean",
+        "Kurdish",
+        "Kyrgyz",
+        "Lao",
+        "Latvian",
+        "Lithuanian",
+        "Macedonian",
+        "Malay",
+        "Mongolian",
+        "Nepali",
+        "Norwegian",
+        "Pashto",
+        "Polish",
+        "Portuguese",
+        "Punjabi",
+        "Romanian",
+        "Russian",
+        "Serbian",
+        "Slovak",
+        "Slovenian",
+        "Somali",
+        "Spanish",
+        "Swahili",
+        "Swedish",
+        "Tagalog",
+        "Tamil",
+        "Telugu",
+        "Thai",
+        "Turkish",
+        "Ukrainian",
+        "Urdu",
+        "Uzbek",
+        "Vietnamese",
+        "Yoruba"
+    ]
+
+    let employerTypeOptions = ["Startup", "Small Business", "Corporate", "Independent Client"]
     let workSettingOptions = ["Remote", "In-Person", "Hybrid"]
-    let employmentTypeOptions = ["Part-time", "Full-time", "Internship"]
+    let employmentTypeOptions = ["Part-time", "Full-time", "Internship", "Temporary"]
 
     var body: some View {
         
@@ -309,15 +410,15 @@ struct SingleSelectSearchBar: View {
                         HStack {
                             Text(option)
                                 .foregroundColor(Color.black)
-                                .padding(5)
+                                .padding(10)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(Color.white)
-                                .cornerRadius(20)
+                                .cornerRadius(10)
                             Spacer()
                             Image(systemName: "plus").foregroundColor(.black)
                         }.padding(5)
                             .background(Color.white)
-                            .cornerRadius(20)
+                            .cornerRadius(10)
                         .onTapGesture {
                             selectedOption = option
                             text = ""
