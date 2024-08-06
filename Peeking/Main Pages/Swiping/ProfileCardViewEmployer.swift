@@ -396,31 +396,30 @@ struct EmployerWorkEnvironmentView: View {
                         .padding([.leading, .trailing, .top])
                     Spacer()
                 }
-                HStack {
-                    if let generalWorkEnvironment = profile.GPT_WorkEnvio[0].split(separator: "?").map(String.init) {
-                        VStack(alignment: .leading) {
-                            ForEach(generalWorkEnvironment, id: \.self) { item in
-                                HStack {
-                                    Text("• \(item)")
-                                        .padding(.leading)
-                                    Spacer()
+                
+                if profile.GPT_WorkEnvio.count > 0 {
+                                    let generalWorkEnvironment = profile.GPT_WorkEnvio[0].split(separator: "?").map(String.init)
+                                    VStack(alignment: .leading) {
+                                        ForEach(generalWorkEnvironment, id: \.self) { item in
+                                            HStack {
+                                                Text("• \(item)")
+                                                    .padding(.leading)
+                                                Spacer()
+                                            }
+                                            .padding(.vertical, 5)
+                                        }
+                                    }
+                                    .padding([.leading, .trailing])
+                                    .padding(.bottom, 20)
+                                    .padding(.top, 10)
+                                } else {
+                                    Text("No general work environment listed")
+                                        .padding([.leading, .trailing])
+                                        .padding(.bottom, 20)
+                                        .padding(.top, 10)
                                 }
-                                .padding(.vertical, 5)
+                                Spacer()
                             }
-                        }
-                        .padding([.leading, .trailing])
-                        .padding(.bottom, 20)
-                        .padding(.top, 10)
-                    } else {
-                        Text("No general work environment listed")
-                            .padding([.leading, .trailing])
-                            .padding(.bottom, 20)
-                            .padding(.top, 10)
-                    }
-                    Spacer()
-                }
-                Spacer()
-            }
 
             VStack(alignment: .leading) {
                 HStack {
@@ -438,31 +437,29 @@ struct EmployerWorkEnvironmentView: View {
                         .padding([.leading, .trailing, .top])
                     Spacer()
                 }
-                HStack {
-                    if let teamDynamics = profile.GPT_WorkEnvio[1].split(separator: "?").map(String.init) {
-                        VStack(alignment: .leading) {
-                            ForEach(teamDynamics, id: \.self) { item in
-                                HStack {
-                                    Text("• \(item)")
-                                        .padding(.leading)
-                                    Spacer()
+                if profile.GPT_WorkEnvio.count > 1 {
+                                    let teamDynamics = profile.GPT_WorkEnvio[1].split(separator: "?").map(String.init)
+                                    VStack(alignment: .leading) {
+                                        ForEach(teamDynamics, id: \.self) { item in
+                                            HStack {
+                                                Text("• \(item)")
+                                                    .padding(.leading)
+                                                Spacer()
+                                            }
+                                            .padding(.vertical, 5)
+                                        }
+                                    }
+                                    .padding([.leading, .trailing])
+                                    .padding(.bottom, 20)
+                                    .padding(.top, 10)
+                                } else {
+                                    Text("No team dynamics listed")
+                                        .padding([.leading, .trailing])
+                                        .padding(.bottom, 20)
+                                        .padding(.top, 10)
                                 }
-                                .padding(.vertical, 5)
+                                Spacer()
                             }
-                        }
-                        .padding([.leading, .trailing])
-                        .padding(.bottom, 20)
-                        .padding(.top, 10)
-                    } else {
-                        Text("No team dynamics listed")
-                            .padding([.leading, .trailing])
-                            .padding(.bottom, 20)
-                            .padding(.top, 10)
-                    }
-                    Spacer()
-                }
-                Spacer()
-            }
 
             VStack(alignment: .leading) {
                 HStack {
@@ -480,30 +477,28 @@ struct EmployerWorkEnvironmentView: View {
                         .padding([.leading, .trailing, .top])
                     Spacer()
                 }
-                HStack {
-                    if let workHourFlexibility = profile.GPT_WorkEnvio[2].split(separator: "?").map(String.init) {
-                        VStack(alignment: .leading) {
-                            ForEach(workHourFlexibility, id: \.self) { item in
-                                HStack {
-                                    Text("• \(item)")
-                                        .padding(.leading)
-                                    Spacer()
+                if profile.GPT_WorkEnvio.count > 2 {
+                                    let workHourFlexibility = profile.GPT_WorkEnvio[2].split(separator: "?").map(String.init)
+                                    VStack(alignment: .leading) {
+                                        ForEach(workHourFlexibility, id: \.self) { item in
+                                            HStack {
+                                                Text("• \(item)")
+                                                    .padding(.leading)
+                                                Spacer()
+                                            }
+                                            .padding(.vertical, 5)
+                                        }
+                                    }
+                                    .padding([.leading, .trailing])
+                                    .padding(.bottom, 20)
+                                    .padding(.top, 10)
+                                } else {
+                                    Text("No work hour flexibility listed")
+                                        .padding([.leading, .trailing])
+                                        .padding(.bottom, 20)
+                                        .padding(.top, 10)
                                 }
-                                .padding(.vertical, 5)
-                            }
-                        }
-                        .padding([.leading, .trailing])
-                        .padding(.bottom, 20)
-                        .padding(.top, 10)
-                    } else {
-                        Text("No work hour flexibility listed")
-                            .padding([.leading, .trailing])
-                            .padding(.bottom, 20)
-                            .padding(.top, 10)
-                    }
-                    Spacer()
-                }
-                Spacer()
+                                Spacer()
             }
         }
         .padding([.leading, .trailing], 5.0)
@@ -597,7 +592,6 @@ struct EmployerSupportManagementView: View {
     let user: DBUser
     let profile: Profile
 
-
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading) {
@@ -616,29 +610,26 @@ struct EmployerSupportManagementView: View {
                         .padding([.leading, .trailing, .top])
                     Spacer()
                 }
-                HStack {
-                    if let employeeSupport = profile.GPT_WorkEnvio[3].split(separator: "?").map(String.init) {
-                        VStack(alignment: .leading) 
-                        {
-                            ForEach(employeeSupport, id: \.self) { item in
-                                HStack {
-                                    Text("• \(item)")
-                                        .padding(.leading)
-                                    Spacer()
-                                }
-                                .padding(.vertical, 5)
+                if profile.GPT_WorkEnvio.count > 3 {
+                    let employeeSupport = profile.GPT_WorkEnvio[3].split(separator: "?").map(String.init)
+                    VStack(alignment: .leading) {
+                        ForEach(employeeSupport, id: \.self) { item in
+                            HStack {
+                                Text("• \(item)")
+                                    .padding(.leading)
+                                Spacer()
                             }
+                            .padding(.vertical, 5)
                         }
+                    }
+                    .padding([.leading, .trailing])
+                    .padding(.bottom, 20)
+                    .padding(.top, 10)
+                } else {
+                    Text("No employee support listed")
                         .padding([.leading, .trailing])
                         .padding(.bottom, 20)
                         .padding(.top, 10)
-                    } else {
-                        Text("No employee support listed")
-                            .padding([.leading, .trailing])
-                            .padding(.bottom, 20)
-                            .padding(.top, 10)
-                    }
-                    Spacer()
                 }
                 Spacer()
             }
@@ -659,28 +650,26 @@ struct EmployerSupportManagementView: View {
                         .padding([.leading, .trailing, .top])
                     Spacer()
                 }
-                HStack {
-                    if let managementApproach = profile.GPT_WorkEnvio[4].split(separator: "?").map(String.init) {
-                        VStack(alignment: .leading) {
-                            ForEach(managementApproach, id: \.self) { item in
-                                HStack {
-                                    Text("• \(item)")
-                                        .padding(.leading)
-                                    Spacer()
-                                }
-                                .padding(.vertical, 5)
+                if profile.GPT_WorkEnvio.count > 4 {
+                    let managementApproach = profile.GPT_WorkEnvio[4].split(separator: "?").map(String.init)
+                    VStack(alignment: .leading) {
+                        ForEach(managementApproach, id: \.self) { item in
+                            HStack {
+                                Text("• \(item)")
+                                    .padding(.leading)
+                                Spacer()
                             }
+                            .padding(.vertical, 5)
                         }
+                    }
+                    .padding([.leading, .trailing])
+                    .padding(.bottom, 20)
+                    .padding(.top, 10)
+                } else {
+                    Text("No management approach listed")
                         .padding([.leading, .trailing])
                         .padding(.bottom, 20)
                         .padding(.top, 10)
-                    } else {
-                        Text("No management approach listed")
-                            .padding([.leading, .trailing])
-                            .padding(.bottom, 20)
-                            .padding(.top, 10)
-                    }
-                    Spacer()
                 }
                 Spacer()
             }
@@ -688,6 +677,7 @@ struct EmployerSupportManagementView: View {
         .padding([.leading, .trailing], 5.0)
     }
 }
+
 
 struct HobbiesViewEmployer: View {
     let user: DBUser
