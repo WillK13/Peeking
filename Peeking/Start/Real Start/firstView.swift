@@ -85,7 +85,7 @@ struct firstView: View {
                         VStack(alignment: .leading) {
                             Text("Phone Number")
                                 .font(.title3)
-                                .fontWeight(.semibold)
+                                .fontWeight(.medium)
                                 .foregroundColor(Color.black)
                         }
                         .frame(width: 320.0, height: 50)

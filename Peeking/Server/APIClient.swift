@@ -11,7 +11,7 @@ class APIClient {
     static let shared = APIClient()
 
     func performAnalysis(userId: String, userType: Int, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let url = URL(string: "http://159.65.221.122/api/perform-analysis") else {  // Replace with your DigitalOcean server IP
+        guard let url = URL(string: "http://159.65.221.122:5000/api/perform-analysis") else {  // Replace with your DigitalOcean server IP
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
         }

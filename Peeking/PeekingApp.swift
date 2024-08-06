@@ -14,6 +14,8 @@ import UserNotifications
 struct PeekingApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var appViewModel = AppViewModel()
+    
+    private var f = false
 
     var body: some Scene {
         WindowGroup {
@@ -32,7 +34,9 @@ struct PeekingApp: App {
 //                            .environmentObject(appViewModel)
 //                    }
                     // Commenting out ProfileConfirmationEmployer
-                     firstView()
+//                     hobbiesemployer(fromEditProfile: f)
+//                        .environmentObject(appViewModel)
+                    ProfileConfirmationEmployer()
                         .environmentObject(appViewModel)
                 }
             }

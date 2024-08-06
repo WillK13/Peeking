@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProfileActionButtons: View {
     @Binding var user_id: String
+    @Binding var currentStep: Int // Add binding for currentStep
+
     var body: some View {
         VStack {
             HStack {
@@ -22,11 +24,12 @@ struct ProfileActionButtons: View {
                         .foregroundColor(.black)
                 }
                 .padding(.top)
+                .padding(.trailing, 10)
             }
             HStack {
                 Spacer()
                 Button(action: {
-                    //Open the pop up
+                    // Open the pop-up
                 }, label: {
                     Text("View")
                         .font(.caption2)
@@ -34,7 +37,7 @@ struct ProfileActionButtons: View {
                         .foregroundColor(Color.black)
                         .padding(5)
                 }).background(Color.white).cornerRadius(5)
-            }
+            }.padding(.trailing, 10)
                 
             Spacer()
             HStack {
@@ -48,24 +51,38 @@ struct ProfileActionButtons: View {
                         .foregroundColor(.black)
                 }
                 .padding(.bottom, 25)
-            }
+            }.padding(.trailing, 10)
             HStack {
                 Spacer()
-            Button(action: {
-                // Ellipsis action
-            }) {
-                Image(systemName: "ellipsis")
-                    .resizable()
-                    .frame(width: 40, height: 9)
-                    .foregroundColor(.black)
+                Button(action: {
+                    // Ellipsis action
+                }) {
+                    Image(systemName: "ellipsis")
+                        .resizable()
+                        .frame(width: 40, height: 9)
+                        .foregroundColor(.black)
+                }
+                .padding(.bottom, 30)
+            }.padding(.trailing, 10)
+            // Add slider buttons here
+            HStack {
+                Spacer()
+                ForEach(0..<5) { index in
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(index == currentStep ? Color("SelectColor") : Color("NotSelectedColor"))
+                        .frame(width: 65, height: 15)
+                        .onTapGesture {
+                            currentStep = index
+                        }
+                    Spacer()
+                }
+                Spacer()
             }
-            .padding(.bottom, 30)
-        }
+            .padding(.top, 20)
         }
     }
 }
 
-
 #Preview {
-    ProfileActionButtons(user_id: .constant("example_user_id"))
+    ProfileActionButtons(user_id: .constant("example_user_id"), currentStep: .constant(0))
 }

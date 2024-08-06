@@ -43,7 +43,7 @@ struct Profile: Codable {
     let likesYou: [String]
     let bookmarks: [String]
     let soft_skills: [String]
-    let workEnvio: [String]
+    let work_envio: [String]
 }
 
 struct DBUser: Codable {
@@ -55,6 +55,7 @@ struct DBUser: Codable {
     var bookmarks: [String]?
     var userType: Int?
     var likes_remaining: Int?
+    var report_count: Int?
     // New fields
     var name: String?
     var location: GeoPoint?
@@ -90,9 +91,6 @@ struct DBUser: Codable {
         self.userId = auth.userId
         self.isProfileSetupComplete = auth.isProfileSetupComplete
         self.lastLogIn = auth.lastLogIn
-        self.matches = auth.matches
-        self.likesYou = auth.likesYou
-        self.bookmarks = auth.bookmarks
         self.userType = auth.userType
     }
     
@@ -129,6 +127,7 @@ struct DBUser: Codable {
         GPT_Technicals: [String]? = nil,
         GPT_SoftSkills: [String]? = nil,
         likes_remaining: Int? = nil,
+        report_count: Int? = nil,
         // Employer-specific fields
         logo: String? = nil,
         positions: [String]? = nil,
@@ -147,6 +146,7 @@ struct DBUser: Codable {
         self.location = location
         self.age = age
         self.likes_remaining = likes_remaining
+        self.report_count = report_count
         self.birthday = birthday
         self.languages = languages
         self.education = education
@@ -206,6 +206,7 @@ struct DBUser: Codable {
         case GPT_Technicals = "GPT_Technicals"
         case GPT_SoftSkills = "GPT_SoftSkills"
         case likes_remaining = "likes_remaining"
+        case report_count = "report_count"
         case logo
         case positions
         case mission
@@ -278,6 +279,7 @@ final class UserManager: ObservableObject {
             try await userDocument(userId: userId).updateData([
                 "user_type": userType,
                 "likes_remaining": 3,
+                "report_count": 0,
                 "recommendations": [],
                 "GPT_Technicals": [],
                 "GPT_SoftSkills": []
@@ -290,7 +292,7 @@ final class UserManager: ObservableObject {
                 title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [],
                 location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [],
                 accepted_edu: [], technicals: [], chats: [], GPT_WorkEnvio: [], GPT_Technicals: [],
-                likes_remaining: 3, recommendations: [], matches: [], likesYou: [], bookmarks: [], soft_skills: [], workEnvio: []
+                likes_remaining: 3, recommendations: [], matches: [], likesYou: [], bookmarks: [], soft_skills: [], work_envio: []
             ))
         }
     }

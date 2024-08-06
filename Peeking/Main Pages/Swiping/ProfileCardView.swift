@@ -64,25 +64,14 @@ struct ProfileCardView: View {
                     Spacer()
                 }
 
-                HStack {
-                    ForEach(0..<5) { index in
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(index == currentStep ? Color("SelectColor") : Color("NotSelectedColor"))
-                            .frame(width: 65, height: 15)
-                        Spacer()
-                    }
-                }
-                .padding(.top, 20)
+                Spacer() // Added to push the action buttons to the bottom
             }
             .frame(width: 350, height: 500)
             
             VStack {
-                HStack {
-                    Spacer()
-                    ProfileActionButtons(user_id: $userId)
-                }
-                .padding(.trailing, 20)
-                .padding(.bottom, 50)
+                Spacer()
+                ProfileActionButtons(user_id: $userId, currentStep: $currentStep) // Pass the currentStep binding
+                    .padding(.bottom, 15)
             }
         }
         .contentShape(Rectangle())

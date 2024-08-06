@@ -51,9 +51,9 @@ struct ProfileCardViewEmployer: View {
                         case 1:
                             EmployerTechnicalCertificationsView(profile: profile)
                         case 2:
-                            EmployerWorkEnvironmentView(user: user)
+                            EmployerWorkEnvironmentView(user: user, profile: profile)
                         case 3:
-                            EmployerSupportManagementView(user: user)
+                            EmployerSupportManagementView(user: user, profile: profile)
                         default:
                             HobbiesViewEmployer(user: user)
                         }
@@ -64,25 +64,14 @@ struct ProfileCardViewEmployer: View {
                     Spacer()
                 }
 
-                HStack {
-                    ForEach(0..<5) { index in
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(index == currentStep ? Color("SelectColor") : Color("NotSelectedColor"))
-                            .frame(width: 65, height: 15)
-                        Spacer()
-                    }
-                }
-                .padding(.top, 20)
+                Spacer() // Added to push the action buttons to the bottom
             }
             .frame(width: 350, height: 500)
 
             VStack {
-                HStack {
-                    Spacer()
-                    ProfileActionButtons(user_id: $userId)
-                }
-                .padding(.trailing, 20)
-                .padding(.bottom, 50)
+                Spacer()
+                ProfileActionButtons(user_id: $userId, currentStep: $currentStep) // Pass the currentStep binding
+                    .padding(.bottom, 15)
             }
         }
         .contentShape(Rectangle())
@@ -201,6 +190,7 @@ struct ProfileCardViewEmployer: View {
         }
     }
 }
+
 
 struct EmployerProfileView: View {
     let user: DBUser
@@ -385,6 +375,8 @@ struct EmployerProfileView: View {
 
 struct EmployerWorkEnvironmentView: View {
     let user: DBUser
+    let profile: Profile
+
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -405,7 +397,7 @@ struct EmployerWorkEnvironmentView: View {
                     Spacer()
                 }
                 HStack {
-                    if let generalWorkEnvironment = user.GPT_WorkEnvio?[0].split(separator: "?").map(String.init) {
+                    if let generalWorkEnvironment = profile.GPT_WorkEnvio[0].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(generalWorkEnvironment, id: \.self) { item in
                                 HStack {
@@ -447,7 +439,7 @@ struct EmployerWorkEnvironmentView: View {
                     Spacer()
                 }
                 HStack {
-                    if let teamDynamics = user.GPT_WorkEnvio?[1].split(separator: "?").map(String.init) {
+                    if let teamDynamics = profile.GPT_WorkEnvio[1].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(teamDynamics, id: \.self) { item in
                                 HStack {
@@ -489,7 +481,7 @@ struct EmployerWorkEnvironmentView: View {
                     Spacer()
                 }
                 HStack {
-                    if let workHourFlexibility = user.GPT_WorkEnvio?[2].split(separator: "?").map(String.init) {
+                    if let workHourFlexibility = profile.GPT_WorkEnvio[2].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(workHourFlexibility, id: \.self) { item in
                                 HStack {
@@ -603,6 +595,8 @@ struct EmployerTechnicalCertificationsView: View {
 
 struct EmployerSupportManagementView: View {
     let user: DBUser
+    let profile: Profile
+
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -623,8 +617,9 @@ struct EmployerSupportManagementView: View {
                     Spacer()
                 }
                 HStack {
-                    if let employeeSupport = user.GPT_WorkEnvio?[3].split(separator: "?").map(String.init) {
-                        VStack(alignment: .leading) {
+                    if let employeeSupport = profile.GPT_WorkEnvio[3].split(separator: "?").map(String.init) {
+                        VStack(alignment: .leading) 
+                        {
                             ForEach(employeeSupport, id: \.self) { item in
                                 HStack {
                                     Text("• \(item)")
@@ -665,7 +660,7 @@ struct EmployerSupportManagementView: View {
                     Spacer()
                 }
                 HStack {
-                    if let managementApproach = user.GPT_WorkEnvio?[4].split(separator: "?").map(String.init) {
+                    if let managementApproach = profile.GPT_WorkEnvio[4].split(separator: "?").map(String.init) {
                         VStack(alignment: .leading) {
                             ForEach(managementApproach, id: \.self) { item in
                                 HStack {

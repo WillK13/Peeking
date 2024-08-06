@@ -40,7 +40,8 @@ final class ProfileUpdater {
         photoURL: String? = nil,
         GPT_Technicals: [String]? = nil,
         GPT_SoftSkills: [String]? = nil,
-        likes_remaining: Int? = nil
+        likes_remaining: Int? = nil,
+        report_count: Int? = nil
     ) async throws {
         var updates: [String: Any] = [:]
         
@@ -78,6 +79,9 @@ final class ProfileUpdater {
 
         if let likes_remaining = likes_remaining {
             updates["likes_remaining"] = likes_remaining
+        }
+        if let report_count = report_count {
+            updates["report_count"] = report_count
         }
         
         // Batch update for user profile

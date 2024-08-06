@@ -53,12 +53,13 @@ final class ProfileUpdaterEmployer {
         GPT_Technicals: [String]? = nil,
         GPT_WorkEnvio: [String]? = nil,
         likes_remaining: Int? = nil,
+        report_count: Int? = nil,
         recommendations: [String]? = nil,
         matches: [String]? = nil,
         likesYou: [String]? = nil,
         bookmarks: [String]? = nil,
         soft_skills: [String]? = nil,
-        workEnvio: [String]? = nil
+        work_envio: [String]? = nil
     ) async throws {
         var updates: [String: Any] = [:]
         
@@ -100,6 +101,10 @@ final class ProfileUpdaterEmployer {
             profileUpdates["likes_remaining"] = likes_remaining
         }
         
+        if let report_count = report_count {
+            profileUpdates["report_count"] = report_count
+        }
+        
         if let recommendations = recommendations {
             profileUpdates["recommendations"] = recommendations
         }
@@ -120,8 +125,8 @@ final class ProfileUpdaterEmployer {
             profileUpdates["soft_skills"] = soft_skills
         }
         
-        if let workEnvio = workEnvio {
-            profileUpdates["workEnvio"] = workEnvio
+        if let work_envio = work_envio {
+            profileUpdates["work_envio"] = work_envio
         }
         
         let profileRef = profileDocument(userId: userId)
@@ -168,7 +173,7 @@ final class ProfileUpdaterEmployer {
         userId: String,
         answers: [String]
     ) async throws {
-        let updates: [String: Any] = ["workEnvio": answers]
+        let updates: [String: Any] = ["work_envio": answers]
         
         let profileRef = profileDocument(userId: userId)
         try await profileRef.updateData(updates)

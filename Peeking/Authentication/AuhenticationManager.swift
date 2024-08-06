@@ -14,20 +14,15 @@ struct AuthDataResultModel {
     let lastLogIn: Date
     let isProfileSetupComplete: Bool
     let userType: Int
-    var matches: [String]
-    var likesYou: [String]
-    var bookmarks: [String]
     
     init(user: FirebaseAuth.User) {
         self.userId = user.uid
         self.lastLogIn = Date()
         self.isProfileSetupComplete = false
         self.userType = -1
-        self.matches = []
-        self.likesYou = []
-        self.bookmarks = []
     }
 }
+
 
 enum AuthProviderOption: String {
     case apple = "apple.com"

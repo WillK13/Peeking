@@ -118,8 +118,6 @@ struct Welcome: View {
                                             "languages": [],
                                             "type": [],
                                             "mission": "",
-                                            "workEnvio": "",
-                                            "soft_skills": [],
                                             "hobbies": "",
                                             "photo": ""
                                         ]
