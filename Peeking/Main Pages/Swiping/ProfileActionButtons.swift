@@ -10,6 +10,9 @@ import SwiftUI
 struct ProfileActionButtons: View {
     @Binding var user_id: String
     @Binding var currentStep: Int // Add binding for currentStep
+    @State private var isHeartClicked = false
+    @State private var heartAnimationAmount: CGFloat = 1.0
+    @State private var heartOffset: CGSize = .zero
 
     var body: some View {
         VStack {
@@ -31,24 +34,34 @@ struct ProfileActionButtons: View {
                 Button(action: {
                     // Open the pop-up
                 }, label: {
-                    Text("View")
-                        .font(.caption2)
-                        .fontWeight(.regular)
-                        .foregroundColor(Color.black)
+                    Image("eyebookmark")
                         .padding(5)
-                }).background(Color.white).cornerRadius(5)
+                })
             }.padding(.trailing, 10)
                 
             Spacer()
             HStack {
                 Spacer()
                 Button(action: {
-                    // Heart action
+                    if !isHeartClicked {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            heartAnimationAmount = 1.3
+                            isHeartClicked = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            withAnimation(.easeInOut(duration: 1.0)) {
+                                heartOffset = CGSize(width: 0, height: -1000)
+                                heartAnimationAmount = 2.0
+                            }
+                        }
+                    }
                 }) {
-                    Image(systemName: "heart")
+                    Image(systemName: isHeartClicked ? "heart.fill" : "heart")
                         .resizable()
                         .frame(width: 45, height: 35)
-                        .foregroundColor(.black)
+                        .foregroundColor(isHeartClicked ? .red : .black)
+                        .scaleEffect(heartAnimationAmount)
+                        .offset(heartOffset)
                 }
                 .padding(.bottom, 25)
             }.padding(.trailing, 10)

@@ -67,12 +67,28 @@ struct ProfileConfirmation: View {
                                     do {
                                         if let userId = Auth.auth().currentUser?.uid {
                                             try await UserManager.shared.updateProfileSetupComplete(userId: userId, isComplete: true)
-                                            navigateToMainView = true
+                                            APIClient.shared.performAnalysis(userId: userId, userType: 0) { result in
+                                                switch result {
+                                                case .success:
+                                                    APIClient.shared.match(userId: userId, userType: 0) { matchResult in
+                                                        showLoadingIndicator = false
+                                                        switch matchResult {
+                                                        case .success:
+                                                            navigateToMainView = true
+                                                        case .failure(let error):
+                                                            print("Failed to perform match: \(error.localizedDescription)")
+                                                        }
+                                                    }
+                                                case .failure(let error):
+                                                    showLoadingIndicator = false
+                                                    print("Failed to perform analysis: \(error.localizedDescription)")
+                                                }
+                                            }
                                         }
                                     } catch {
                                         print("Failed to update profile.")
+                                        showLoadingIndicator = false
                                     }
-                                    showLoadingIndicator = false
                                 }
                             }) {
                                 Text("Make my profile")

@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
+import CoreLocation
 
 struct ProfileCardViewEmployer: View {
     @Binding var currentStep: Int
@@ -197,18 +198,26 @@ struct EmployerProfileView: View {
     let profile: Profile
     @Binding var showMission: Bool
     let logoURL: String?
+    
+    @State private var address: String = "Fetching address..."
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(user.name ?? "Name not available")
-                    .font(.title)
-                    .foregroundColor(.black)
-                    .padding(.leading)
-                    .onTapGesture {
-                        showMission = true
-                    }
-
+                VStack(alignment: .leading) {
+                    Text(address)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .padding(.leading)
+                    
+                    Text(user.name ?? "Name not available")
+                        .font(.title)
+                        .foregroundColor(.black)
+                        .padding(.leading)
+                        .onTapGesture {
+                            showMission = true
+                        }
+                }
                 if let logoURL = logoURL {
                     AsyncImage(url: URL(string: logoURL)) { image in
                         image
@@ -267,11 +276,18 @@ struct EmployerProfileView: View {
             VStack(alignment: .leading) {
                 HStack {
                     ForEach(profile.employment_type + (user.type ?? []), id: \.self) { type in
-                        Text(type)
-                            .font(.footnote)
-                            .padding(.vertical, 5)
-                            .padding(.horizontal, 28)
-                            .background(Color.yellow)
+                        HStack {
+                           
+                            Text(type)
+                                .font(.footnote)
+                                .padding(.vertical, 5)
+                                .padding(.leading, 10)
+                            Image(getImageName(for: type))
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .padding(.trailing, 10)
+                                .padding(.vertical, 5)
+                        }.background(Color.yellow)
                             .cornerRadius(50)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 50)
@@ -285,11 +301,17 @@ struct EmployerProfileView: View {
 
                 HStack {
                     ForEach(profile.setting, id: \.self) { setting in
-                        Text(setting)
-                            .font(.footnote)
-                            .padding(.vertical, 5)
-                            .padding(.horizontal, 28)
-                            .background(Color.yellow)
+                        HStack {
+                            Text(setting)
+                                .font(.footnote)
+                                .padding(.vertical, 5)
+                                .padding(.leading, 10)
+                            Image(getImageName(for: setting))
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .padding(.trailing, 10)
+                                .padding(.vertical, 5)
+                        }.background(Color.yellow)
                             .cornerRadius(50)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 50)
@@ -303,11 +325,18 @@ struct EmployerProfileView: View {
 
                 HStack {
                     ForEach(profile.time, id: \.self) { time in
-                        Text(time)
-                            .font(.footnote)
-                            .padding(.vertical, 5)
-                            .padding(.horizontal, 28)
-                            .background(Color.yellow)
+                        HStack {
+                            
+                            Text(time)
+                                .font(.footnote)
+                                .padding(.vertical, 5)
+                                .padding(.leading, 10)
+                            Image(getImageName(for: time))
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .padding(.trailing, 10)
+                                .padding(.vertical, 5)
+                        }.background(Color.yellow)
                             .cornerRadius(50)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 50)
@@ -370,8 +399,76 @@ struct EmployerProfileView: View {
 
             Spacer()
         }
+        .onAppear {
+            fetchAddress()
+        }
+    }
+
+    // Function to fetch address from latitude and longitude
+    private func fetchAddress() {
+        guard let location = user.location else { return }
+
+        let geocoder = CLGeocoder()
+        let geoLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
+
+        geocoder.reverseGeocodeLocation(geoLocation) { placemarks, error in
+            if let error = error {
+                print("Error in reverse geocoding: \(error)")
+                self.address = "Location not available"
+                return
+            }
+
+            if let placemark = placemarks?.first {
+                let town = placemark.locality ?? "Unknown Town"
+                let state = placemark.administrativeArea ?? "Unknown State"
+                self.address = "\(town), \(state)"
+            } else {
+                self.address = "Location not available"
+            }
+        }
+    }
+
+    // Function to get image name based on value
+    private func getImageName(for value: String) -> String {
+        switch value {
+        case "Fall":
+            return "time2"
+        case "Winter":
+            return "time3"
+        case "Summer":
+            return "time5"
+        case "Spring":
+            return "time4"
+        case "Any":
+            return "time1"
+        case "Startup":
+            return "type1"
+        case "Small Business":
+            return "type2"
+        case "Corporate":
+            return "type3"
+        case "Independent Client":
+            return "type4"
+        case "Remote":
+            return "setting1"
+        case "In-Person":
+            return "setting3"
+        case "Hybrid":
+            return "setting2"
+        case "Part-time":
+            return "status2"
+        case "Full-time":
+            return "status3"
+        case "Internship":
+            return "status1"
+        case "Temporary":
+            return "status4"
+        default:
+            return "questionmark"
+        }
     }
 }
+
 
 struct EmployerWorkEnvironmentView: View {
     let user: DBUser
