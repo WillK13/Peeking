@@ -51,7 +51,7 @@ struct MainView: View {
 
                         Spacer()
 
-                        Image("Duck_Head").resizable().aspectRatio(contentMode: .fit).frame(width: 120).padding(.top, 10.0)
+                        Image("Duck_Head").resizable().aspectRatio(contentMode: .fit).frame(width: 120).padding(.top, 15.0)
                         // Stack with the tiers and toggle buttons
                         VStack {
                             // Needs to be dynamic for employees or employers
@@ -67,7 +67,7 @@ struct MainView: View {
                                 Image("adjust")
                             }
                         }
-                    }.padding(.trailing, 20.0)
+                    }.padding(.trailing, 20.0).padding(.top, 30)
 
                     // Main Area
                     ZStack {
@@ -89,13 +89,14 @@ struct MainView: View {
                                 .foregroundColor(.gray)
                                 .font(.headline)
                         }
-                    }.padding([.top, .leading, .trailing]).padding(.bottom, 5)
+                    }.padding([.horizontal]).padding(.bottom, 5).padding(.top, -10)
 
                     // Next Profile
                     TopCornersRounded(radius: 10)
                         .fill(Color.white)
                         .frame(height: 20)
-                        .padding([.leading, .trailing])
+                        .blur(radius: 3)
+                        .padding([.leading, .trailing]).padding(.bottom, 20)
 
                     Spacer()
                     Spacer()
