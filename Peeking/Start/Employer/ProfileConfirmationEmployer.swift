@@ -14,6 +14,7 @@ struct ProfileConfirmationEmployer: View {
     @State private var currentStep = 0
     @State private var navigateToMainView = false
     @State private var showLoadingIndicator = false
+    @State private var userId: String = Auth.auth().currentUser?.uid ?? ""
 
     var body: some View {
         NavigationStack {
@@ -50,7 +51,7 @@ struct ProfileConfirmationEmployer: View {
                     }
                     .padding(.bottom, 20)
                     
-                    ProfileCardViewEmployer(currentStep: $currentStep)
+                    ProfileCardViewEmployer(currentStep: $currentStep, userId: $userId)
 
                     Text("Tap through to continue")
                         .font(.callout)

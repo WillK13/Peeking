@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
+import FirebaseAuth
 
 // Custom shape for the next profile. It is a rectangle with only the top two corners rounded.
 struct TopCornersRounded: Shape {
@@ -21,13 +23,14 @@ struct TopCornersRounded: Shape {
 // Main view
 struct MainView: View {
     @EnvironmentObject var appViewModel: AppViewModel
-    
+
     // Variables to show the pricing/toggle and filling icons
     @State private var showTierView = false
     @State private var showSearchSettings = false
-    @State private var isBookmarkFilled = false
-    @State private var isHeartFilled = false
     @State private var showOverlay = false
+    @State private var likesRemaining = 0
+    @State private var step = 0
+    @State private var recommendationUserId: String = ""
 
     var body: some View {
         NavigationView {
@@ -39,16 +42,15 @@ struct MainView: View {
                     // Top Area
                     HStack {
                         // HStack with the number of likes remaining
-                        HStack() {
+                        HStack {
                             Image(systemName: "heart.fill").foregroundColor(.red).padding(.all, 5.0).font(.system(size: 25))
-                            // This needs to change to become dynamic per user
-                            Text("3").font(.title).padding(.trailing, 5.0)
+                            Text("\(likesRemaining)").font(.title).padding(.trailing, 5.0)
                         }
                         .background(RoundedRectangle(cornerRadius: 8).foregroundColor(.white))
                         .padding(.leading, 27.0).padding(.top, 70)
-                        
+
                         Spacer()
-                        
+
                         Image("Duck_Head").resizable().aspectRatio(contentMode: .fit).frame(width: 120).padding(.top, 10.0)
                         // Stack with the tiers and toggle buttons
                         VStack {
@@ -58,7 +60,7 @@ struct MainView: View {
                             }) {
                                 Image(systemName: "bag").foregroundColor(Color.white).font(.system(size: 45)).padding(.horizontal, 27.0).padding(.bottom, 10.0)
                             }
-                            
+
                             Button(action: {
                                 showSearchSettings.toggle()
                             }) {
@@ -66,84 +68,39 @@ struct MainView: View {
                             }
                         }
                     }.padding(.trailing, 20.0)
-                    
+
                     // Main Area
                     ZStack {
                         // Background white
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 395, height: 545)
-                            .cornerRadius(10).padding(.top, -20)
+//                        Rectangle()
+//                            .fill(Color.white)
+//                            .frame(width: 395, height: 545)
+//                            .cornerRadius(10).padding(.top, -20)
 
-                        // Stack with the key elements
-                        VStack(alignment: .trailing) {
-                            Button(action: {
-                                isBookmarkFilled.toggle()
-                            }) {
-                                Image(systemName: isBookmarkFilled ? "bookmark.fill" : "bookmark")
-                                    .resizable()
-                                    .frame(width: 40, height: 50)
-                                    .foregroundColor(.black)
+                        // Display profile card based on user type and recommendation
+                        if !recommendationUserId.isEmpty {
+                            if appViewModel.userType == 0 {
+                                ProfileCardViewEmployer(currentStep: $step, userId: $recommendationUserId)
+                            } else {
+                                ProfileCardView(currentStep: $step, userId: $recommendationUserId)
                             }
-                            
-                            Spacer()
-                            
-                            Button(action: {
-                                isHeartFilled.toggle()
-                            }) {
-                                Image(systemName: isHeartFilled ? "heart.fill" : "heart")
-                                    .resizable()
-                                    .frame(width: 40, height: 40)
-                                    .padding([.bottom, .trailing], 10)
-                                    .foregroundColor(.red)
-                            }
-                            
-                            Button(action: {
-                                showOverlay.toggle()
-                            }) {
-                                Image(systemName: "ellipsis")
-                                    .resizable()
-                                    .frame(width: 40, height: 9)
-                                    .padding([.bottom, .trailing], 10)
-                                    .foregroundColor(.black)
-                            }
-                            
-                            // The pages on the bottom, needs to change on click
-                            HStack {
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color("SelectColor"))
-                                    .frame(width: 83, height: 20).overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.black, lineWidth: 2)
-                                    )
-                                Spacer()
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color("NotSelectedColor"))
-                                    .frame(width: 83, height: 20)
-                                Spacer()
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color("NotSelectedColor"))
-                                    .frame(width: 83, height: 20)
-                                Spacer()
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color("NotSelectedColor"))
-                                    .frame(width: 83, height: 20)
-                                Spacer()
-                            }
+                        } else {
+                            Text("No recommendations available")
+                                .foregroundColor(.gray)
+                                .font(.headline)
                         }
-                        .frame(width: 350, height: 500)
                     }.padding([.top, .leading, .trailing]).padding(.bottom, 5)
-                    
+
                     // Next Profile
                     TopCornersRounded(radius: 10)
                         .fill(Color.white)
                         .frame(height: 20)
                         .padding([.leading, .trailing])
-                    
+
                     Spacer()
                     Spacer()
                 }
-                
+
                 // Overlay and Report button
                 if showOverlay {
                     Color.black.opacity(0.6)
@@ -194,6 +151,25 @@ struct MainView: View {
                 } else {
                     ToggleView()
                 }
+            }
+            .onAppear {
+                fetchUserDetails()
+            }
+        }
+    }
+
+    private func fetchUserDetails() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(userId)
+
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                let data = document.data()
+                self.likesRemaining = data?["likes_remaining"] as? Int ?? 0
+                self.recommendationUserId = (data?["recommendations"] as? [String])?.first ?? ""
+            } else {
+                print("Document does not exist")
             }
         }
     }

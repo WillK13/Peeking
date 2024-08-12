@@ -27,15 +27,17 @@ struct PeekingApp: App {
 //                        firstView()
 //                            .environmentObject(appViewModel)
 //                    } else if appViewModel.shouldShowContentView {
-//                        ContentView()
-//                            .environmentObject(appViewModel)
+                        ContentView()
+                            .environmentObject(appViewModel)
 //                    } else {
 //                        Welcome()
 //                            .environmentObject(appViewModel)
 //                    }
                     // Commenting out ProfileConfirmationEmployer
-                     ProfileConfirmationEmployer()
-                        .environmentObject(appViewModel)
+//                     ProfileConfirmationEmployer()
+//                        .environmentObject(appViewModel)
+//                    firstView()
+//                        .environmentObject(appViewModel)
 
                 }
             }

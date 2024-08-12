@@ -12,13 +12,13 @@ import CoreLocation
 
 struct ProfileCardViewEmployer: View {
     @Binding var currentStep: Int
+    @Binding var userId: String
     @State private var user: DBUser? = nil
     @State private var profile: Profile? = nil
     @State private var showMission: Bool = false
     @State private var photoURL: String? = nil
     @State private var logoURL: String? = nil
     @EnvironmentObject var appViewModel: AppViewModel
-    @State private var userId: String = ""
 
     var body: some View {
         ZStack {
@@ -133,8 +133,6 @@ struct ProfileCardViewEmployer: View {
     }
 
     private func loadEmployerData() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-
         let docRef = Firestore.firestore().collection("users").document(userId)
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
@@ -191,6 +189,7 @@ struct ProfileCardViewEmployer: View {
         }
     }
 }
+
 
 
 struct EmployerProfileView: View {
@@ -823,6 +822,6 @@ struct HobbiesViewEmployer: View {
 
 struct ProfileCardViewEmployer_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileCardViewEmployer(currentStep: .constant(0))
+        ProfileCardViewEmployer(currentStep: .constant(0), userId: .constant("0"))
     }
 }

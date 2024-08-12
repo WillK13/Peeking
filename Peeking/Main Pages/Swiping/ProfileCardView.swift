@@ -12,10 +12,10 @@ import FirebaseAuth
 
 struct ProfileCardView: View {
     @Binding var currentStep: Int
+    @Binding var userId: String
     @State private var user: DBUser? = nil
     @State private var experiences: [Experience] = []
     @State private var personalityPhotoURL: String? = nil
-    @State private var userId: String = ""
 
     var body: some View {
         ZStack {
@@ -93,8 +93,6 @@ struct ProfileCardView: View {
     }
 
     private func loadUserData() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-
         let docRef = Firestore.firestore().collection("users").document(userId)
         docRef.getDocument { (document, error) in
             if let document = document, document.exists {
@@ -564,6 +562,6 @@ struct HobbiesView: View {
 
 struct ProfileCardView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileCardView(currentStep: .constant(0))
+        ProfileCardView(currentStep: .constant(0), userId: .constant("0"))
     }
 }
