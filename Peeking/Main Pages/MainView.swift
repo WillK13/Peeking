@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
+import SwiftUIPager
 
 // Custom shape for the next profile. It is a rectangle with only the top two corners rounded.
 struct TopCornersRounded: Shape {
@@ -30,35 +31,48 @@ struct MainView: View {
     @State private var showOverlay = false
     @State private var likesRemaining = 0
     @State private var step = 0
-    @State private var recommendationUserId: String = ""
+    @State private var recommendationUserIds: [String] = []
+    @State private var currentIndex = 0
+
+    @State private var page: Page = .first()
 
     var body: some View {
         NavigationView {
-            // ZStack with Background
             ZStack {
                 BackgroundView()
-                // VStack with the rest of the page content
                 VStack {
                     // Top Area
                     HStack {
-                        // HStack with the number of likes remaining
                         HStack {
-                            Image(systemName: "heart.fill").foregroundColor(.red).padding(.all, 5.0).font(.system(size: 25))
-                            Text("\(likesRemaining)").font(.title).padding(.trailing, 5.0)
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.red)
+                                .padding(.all, 5.0)
+                                .font(.system(size: 25))
+                            Text("\(likesRemaining)")
+                                .font(.title)
+                                .padding(.trailing, 5.0)
                         }
                         .background(RoundedRectangle(cornerRadius: 8).foregroundColor(.white))
-                        .padding(.leading, 27.0).padding(.top, 70)
+                        .padding(.leading, 27.0)
+                        .padding(.top, 70)
 
                         Spacer()
 
-                        Image("Duck_Head").resizable().aspectRatio(contentMode: .fit).frame(width: 120).padding(.top, 15.0)
-                        // Stack with the tiers and toggle buttons
+                        Image("Duck_Head")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 120)
+                            .padding(.top, 15.0)
+                        
                         VStack {
-                            // Needs to be dynamic for employees or employers
                             Button(action: {
                                 showTierView.toggle()
                             }) {
-                                Image(systemName: "bag").foregroundColor(Color.white).font(.system(size: 45)).padding(.horizontal, 27.0).padding(.bottom, 10.0)
+                                Image(systemName: "bag")
+                                    .foregroundColor(Color.white)
+                                    .font(.system(size: 45))
+                                    .padding(.horizontal, 27.0)
+                                    .padding(.bottom, 10.0)
                             }
 
                             Button(action: {
@@ -67,42 +81,46 @@ struct MainView: View {
                                 Image("adjust")
                             }
                         }
-                    }.padding(.trailing, 20.0).padding(.top, 30)
+                    }
+                    .padding(.trailing, 20.0)
+//                    .padding(.top, 30)
 
                     // Main Area
-                    ZStack {
-                        // Background white
-//                        Rectangle()
-//                            .fill(Color.white)
-//                            .frame(width: 395, height: 545)
-//                            .cornerRadius(10).padding(.top, -20)
-
-                        // Display profile card based on user type and recommendation
-                        if !recommendationUserId.isEmpty {
+                    Pager(page: page, data: recommendationUserIds.indices, id: \.self) { index in
+                        VStack {
                             if appViewModel.userType == 0 {
-                                ProfileCardViewEmployer(currentStep: $step, userId: $recommendationUserId)
+                                ProfileCardViewEmployer(currentStep: $step, userId: .constant(recommendationUserIds[index]))
                             } else {
-                                ProfileCardView(currentStep: $step, userId: $recommendationUserId)
+                                ProfileCardView(currentStep: $step, userId: .constant(recommendationUserIds[index]))
                             }
-                        } else {
-                            Text("No recommendations available")
-                                .foregroundColor(.gray)
-                                .font(.headline)
                         }
-                    }.padding([.horizontal]).padding(.bottom, 5).padding(.top, -10)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.white)
+                        .cornerRadius(10)
+//                        .shadow(radius: 10)
+                        /*.padding(.vertical, 10)*/ // Add padding to separate the cards
+                    }
+                    .vertical()
+                    .onPageChanged { newIndex in
+                        if newIndex == recommendationUserIds.count - 1 {
+                            fetchMoreRecommendations()
+                        }
+                    }
+//                    .padding(.top, -10)
+//                    .padding(.horizontal)
 
                     // Next Profile
                     TopCornersRounded(radius: 10)
-                        .fill(Color.white)
+                        .fill(Color.gray)
                         .frame(height: 20)
                         .blur(radius: 3)
-                        .padding([.leading, .trailing]).padding(.bottom, 20)
+                        .padding(.top, -5)
+//                        .padding([.leading, .trailing])
+//                        .padding(.bottom, 20)
 
-                    Spacer()
                     Spacer()
                 }
 
-                // Overlay and Report button
                 if showOverlay {
                     Color.black.opacity(0.6)
                         .edgesIgnoringSafeArea(.all)
@@ -112,28 +130,21 @@ struct MainView: View {
 
                     VStack {
                         Spacer()
-                        Spacer()
-                        Spacer()
-                        Spacer()
-                        Spacer()
-                        HStack {
-                            Spacer()
-                            Button(action: {
-                                // Handle report action
-                            }) {
-                                HStack {
-                                    Image(systemName: "exclamationmark.circle")
-                                        .foregroundColor(.red)
-                                    Text("Report")
-                                        .foregroundColor(.red)
-                                }
-                                .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .shadow(radius: 10)
+                        Button(action: {
+                            // Handle report action
+                        }) {
+                            HStack {
+                                Image(systemName: "exclamationmark.circle")
+                                    .foregroundColor(.red)
+                                Text("Report")
+                                    .foregroundColor(.red)
                             }
                             .padding()
-                        }.padding(.trailing, 10)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 10)
+                        }
+                        .padding()
                         Spacer()
                     }
                 }
@@ -168,9 +179,25 @@ struct MainView: View {
             if let document = document, document.exists {
                 let data = document.data()
                 self.likesRemaining = data?["likes_remaining"] as? Int ?? 0
-                self.recommendationUserId = (data?["recommendations"] as? [String])?.first ?? ""
+                self.recommendationUserIds = data?["recommendations"] as? [String] ?? []
+                self.currentIndex = 0
             } else {
                 print("Document does not exist")
+            }
+        }
+    }
+
+    private func fetchMoreRecommendations() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        APIClient.shared.match(userId: userId, userType: appViewModel.userType ?? 0) { result in
+            switch result {
+            case .success(let newRecommendations):
+//                if !newRecommendations.isEmpty {
+//                    self.recommendationUserIds.append(contentsOf: newRecommendations)
+//                }
+                print("Hi")
+            case .failure(let error):
+                print("Failed to fetch more recommendations: \(error.localizedDescription)")
             }
         }
     }
