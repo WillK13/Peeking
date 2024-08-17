@@ -61,6 +61,7 @@
 		BE8AF5812C4D919800C1D59B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = BE8AF5802C4D919800C1D59B /* FirebaseStorage */; };
 		BE8AF5842C4DC14000C1D59B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8AF5832C4DC14000C1D59B /* StorageManager.swift */; };
 		BEAC5C732C6AD54700C1FE31 /* SwiftUIPager in Frameworks */ = {isa = PBXBuildFile; productRef = BEAC5C722C6AD54700C1FE31 /* SwiftUIPager */; };
+		BEAC5C752C71572F00C1FE31 /* LikeHistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C742C71572F00C1FE31 /* LikeHistoryItemView.swift */; };
 		BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */; };
 		BEE0CE692C3C864E00542876 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE682C3C864E00542876 /* AppViewModel.swift */; };
 		BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502512C33394B00B6175B /* PhoneAuthView.swift */; };
@@ -150,6 +151,7 @@
 		BE77FAD02C4B077900D7F3D0 /* ProfileActionButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionButtons.swift; sourceTree = "<group>"; };
 		BE77FAD42C4C6A7000D7F3D0 /* ProfileCardViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCardViewEmployer.swift; sourceTree = "<group>"; };
 		BE8AF5832C4DC14000C1D59B /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		BEAC5C742C71572F00C1FE31 /* LikeHistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeHistoryItemView.swift; sourceTree = "<group>"; };
 		BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReauthenticationView.swift; sourceTree = "<group>"; };
 		BEE0CE682C3C864E00542876 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		BEE502512C33394B00B6175B /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 			children = (
 				BE6029D62C1396C500B3C080 /* HistoryView.swift */,
 				BE6029D82C1396D800B3C080 /* CustomAlertView.swift */,
+				BEAC5C742C71572F00C1FE31 /* LikeHistoryItemView.swift */,
 			);
 			path = LikedHistory;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 				BE5E50062C2608FD00D36578 /* DesiredTechnicals.swift in Sources */,
 				BE5E500C2C26093D00D36578 /* enviornmentemployer.swift in Sources */,
 				BE5E4FF02C1CC8B100D36578 /* ProfileSearchSettings.swift in Sources */,
+				BEAC5C752C71572F00C1FE31 /* LikeHistoryItemView.swift in Sources */,
 				BEFCA0292C485DCF00A6C120 /* ProfileUpdaterEmployer.swift in Sources */,
 				BEE502722C3B293E00B6175B /* AuhenticationManager.swift in Sources */,
 				BE6029E32C13975C00B3C080 /* EmployeeTierView.swift in Sources */,

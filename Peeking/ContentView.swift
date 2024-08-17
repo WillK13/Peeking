@@ -21,6 +21,7 @@ struct ContentView: View {
                     Image("tgeye").renderingMode(.template)
                 }
             HistoryView()
+                .environmentObject(appViewModel)
                 .tabItem {
                     Image("tgheart").renderingMode(.template)
                 }

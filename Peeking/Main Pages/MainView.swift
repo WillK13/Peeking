@@ -90,8 +90,10 @@ struct MainView: View {
                         VStack {
                             if appViewModel.userType == 0 {
                                 ProfileCardViewEmployer(currentStep: $step, userId: .constant(recommendationUserIds[index]))
+                                    .environmentObject(appViewModel)
                             } else {
                                 ProfileCardView(currentStep: $step, userId: .constant(recommendationUserIds[index]))
+                                    .environmentObject(appViewModel)
                             }
                         }
                         .frame(maxWidth: .infinity)

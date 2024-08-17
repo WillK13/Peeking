@@ -9,9 +9,10 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct LikeSent: Codable {
+struct likes_sent: Codable {
+    @DocumentID var id: String?
     let user_id: String
-    let status: String
+    let status: Int
 }
 
 struct Experience: Codable, Identifiable {
@@ -40,7 +41,7 @@ struct Profile: Codable {
     let likes_remaining: Int
     let recommendations: [String]
     let matches: [String]
-    let likesYou: [String]
+    let likes_you: [String]
     let bookmarks: [String]
     let soft_skills: [String]
     let work_envio: [String]
@@ -51,7 +52,7 @@ struct DBUser: Codable {
     var isProfileSetupComplete: Bool?
     let lastLogIn: Date?
     var matches: [String]?
-    var likesYou: [String]?
+    var likes_you: [String]?
     var bookmarks: [String]?
     var userType: Int?
     var likes_remaining: Int?
@@ -99,7 +100,7 @@ struct DBUser: Codable {
         isProfileSetupComplete: Bool? = false,
         lastLogIn: Date? = nil,
         matches: [String]? = nil,
-        likesYou: [String]? = nil,
+        likes_you: [String]? = nil,
         bookmarks: [String]? = nil,
         userType: Int? = nil,
         recommendations: [String]? = nil,
@@ -139,7 +140,7 @@ struct DBUser: Codable {
         self.isProfileSetupComplete = isProfileSetupComplete
         self.lastLogIn = lastLogIn
         self.matches = matches
-        self.likesYou = likesYou
+        self.likes_you = likes_you
         self.bookmarks = bookmarks
         self.userType = userType
         self.name = name
@@ -179,7 +180,7 @@ struct DBUser: Codable {
         case isProfileSetupComplete = "is_profile_setup_complete"
         case lastLogIn = "last_log_in"
         case matches = "matches"
-        case likesYou = "likes_you"
+        case likes_you = "likes_you"
         case bookmarks = "bookmarks"
         case userType = "user_type"
         case name
@@ -282,7 +283,8 @@ final class UserManager: ObservableObject {
                 "report_count": 0,
                 "recommendations": [],
                 "GPT_Technicals": [],
-                "GPT_SoftSkills": []
+                "GPT_SoftSkills": [],
+                "likes_you": []
             ])
         } else if userType == 1 {
             try await userDocument(userId: userId).updateData([
@@ -292,7 +294,7 @@ final class UserManager: ObservableObject {
                 title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [],
                 location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [],
                 accepted_edu: [], technicals: [], chats: [], GPT_WorkEnvio: [], GPT_Technicals: [],
-                likes_remaining: 3, recommendations: [], matches: [], likesYou: [], bookmarks: [], soft_skills: [], work_envio: []
+                likes_remaining: 3, recommendations: [], matches: [], likes_you: [], bookmarks: [], soft_skills: [], work_envio: []
             ))
         }
     }
@@ -317,7 +319,7 @@ final class UserManager: ObservableObject {
         try await userDocument(userId: userId).updateData(additionalData)
     }
 
-    func addLikeSent(userId: String, like: LikeSent) async throws {
+    func addLikeSent(userId: String, like: likes_sent) async throws {
         try likesSentCollection(userId: userId).addDocument(from: like)
     }
     
@@ -329,7 +331,7 @@ final class UserManager: ObservableObject {
         try profileDocument(userId: userId).setData(from: profile)
     }
 
-    func addProfileLikeSent(userId: String, like: LikeSent) async throws {
+    func addProfileLikeSent(userId: String, like: likes_sent) async throws {
         try profileLikesSentCollection(userId: userId).addDocument(from: like)
     }
 

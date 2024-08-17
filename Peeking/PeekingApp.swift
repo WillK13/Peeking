@@ -23,18 +23,18 @@ struct PeekingApp: App {
                 if appViewModel.isLoading {
                     LoadingView()
                 } else {
-//                    if Auth.auth().currentUser == nil {
-//                        firstView()
-//                            .environmentObject(appViewModel)
-//                    } else if appViewModel.shouldShowContentView {
+                    if Auth.auth().currentUser == nil {
+                        firstView()
+                            .environmentObject(appViewModel)
+                    } else if appViewModel.shouldShowContentView {
                         ContentView()
                             .environmentObject(appViewModel)
-//                    } else {
-//                        Welcome()
-//                            .environmentObject(appViewModel)
-//                    }
-                    // Commenting out ProfileConfirmationEmployer
-//                     ProfileConfirmationEmployer()
+                    } else {
+                        Welcome()
+                            .environmentObject(appViewModel)
+                    }
+//                     Commenting out ProfileConfirmationEmployer
+//                     ProfileConfirmation()
 //                        .environmentObject(appViewModel)
 //                    firstView()
 //                        .environmentObject(appViewModel)

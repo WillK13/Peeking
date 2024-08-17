@@ -114,7 +114,7 @@ final class ProfileUpdaterEmployer {
         }
         
         if let likesYou = likesYou {
-            profileUpdates["likesYou"] = likesYou
+            profileUpdates["likes_you"] = likesYou
         }
         
         if let bookmarks = bookmarks {
@@ -133,7 +133,7 @@ final class ProfileUpdaterEmployer {
         batch.updateData(profileUpdates, forDocument: profileRef)
 
         // Add likes_sent subcollection
-        try await addProfileLikeSent(userId: userId, like: LikeSent(user_id: "", status: ""))
+        try await addProfileLikeSent(userId: userId, like: likes_sent(user_id: "", status: -1))
         
         // Commit the batch
         try await batch.commit()
@@ -203,7 +203,7 @@ final class ProfileUpdaterEmployer {
         try await userRef.updateData(updates)
     }
 
-    private func addProfileLikeSent(userId: String, like: LikeSent) async throws {
+    private func addProfileLikeSent(userId: String, like: likes_sent) async throws {
         try profileLikesSentCollection(userId: userId).addDocument(from: like)
     }
 }

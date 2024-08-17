@@ -21,7 +21,7 @@ final class AuthenticationViewModel: ObservableObject {
             user.isProfileSetupComplete = existingUser.isProfileSetupComplete
             user.userType = existingUser.userType
             user.matches = existingUser.matches
-            user.likesYou = existingUser.likesYou
+            user.likes_you = existingUser.likes_you
             user.bookmarks = existingUser.bookmarks
             try await UserManager.shared.createOrUpdateUser(user: user)
         } else {
@@ -43,7 +43,7 @@ final class AuthenticationViewModel: ObservableObject {
             user.isProfileSetupComplete = existingUser.isProfileSetupComplete
             user.userType = existingUser.userType
             user.matches = existingUser.matches
-            user.likesYou = existingUser.likesYou
+            user.likes_you = existingUser.likes_you
             user.bookmarks = existingUser.bookmarks
             try await UserManager.shared.createOrUpdateUser(user: user)
         } else {
