@@ -30,7 +30,7 @@ struct HistoryView: View {
             VStack(alignment: .center) {
                 headerView
 
-                Text("Like History")
+                Text("Likes Sent")
                     .font(.largeTitle)
                     .padding(.bottom, 10.0)
 
@@ -52,35 +52,41 @@ struct HistoryView: View {
     private var headerView: some View {
         HStack {
             Spacer()
-            Image(systemName: "heart.fill")
+            Image("tgheartmain")
                 .resizable()
-                .frame(width: 120, height: 110)
+                .aspectRatio(contentMode: .fit)
+                .padding(.leading, 45)
+                .frame(width: 150)
                 .foregroundColor(.white)
-                .padding(.bottom, 5.0)
-                .padding(.top, 30.0)
             Spacer()
             Button(action: {
                 showAlert = true
             }) {
                 Image(systemName: "questionmark.circle.fill")
                     .resizable()
-                    .frame(width: 60, height: 60)
+                    .frame(width: 30, height: 30)
                     .foregroundColor(.white)
-                    .padding([.top, .trailing], 30)
+                    .padding(.trailing, 20)
             }
-        }
+        }.padding(.top, 10).padding(.bottom, 20)
     }
 
     private var historyList: some View {
-        ScrollView {
-            ForEach(likesSent, id: \.user_id) { like in
-                if let photoURL = profiles[like.user_id] {
-                    LikeHistoryItemView(photoURL: photoURL, status: like.status)
-                        .padding(.bottom, 15)
+        let columns = [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]
+        
+        return ScrollView {
+            LazyVGrid(columns: columns, spacing: 15) {
+                ForEach(likesSent, id: \.user_id) { like in
+                    if let photoURL = profiles[like.user_id] {
+                        LikeHistoryItemView(photoURL: photoURL, status: like.status)
+                    }
                 }
             }
+            .padding(.horizontal, 15)
         }
-        .padding(.top, 15)
     }
 
     private var alertView: some View {
@@ -137,8 +143,6 @@ struct HistoryView: View {
             fetchUserPhotos(userIds: userIds)
         }
     }
-
-
 
     private func fetchUserPhotos(userIds: [String]) {
         let db = Firestore.firestore()

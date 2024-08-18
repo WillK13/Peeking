@@ -18,11 +18,11 @@ struct LikeHistoryItemView: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 150, height: 200)
+                    .frame(width: 140, height: 180)  // Adjusted size for 2-column layout
                     .cornerRadius(10)
             } placeholder: {
                 Color.gray
-                    .frame(width: 150, height: 200)
+                    .frame(width: 140, height: 180)  // Adjusted size for 2-column layout
                     .cornerRadius(10)
             }
 
@@ -63,7 +63,6 @@ struct LikeHistoryItemView: View {
         }
     }
 }
-
 
 #Preview {
     LikeHistoryItemView(photoURL: "Hi", status: 0)
