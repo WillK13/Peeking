@@ -18,46 +18,44 @@ struct Welcome: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                BackgroundView()
                 VStack {
                     Spacer()
                     
-                    Text("Welcome")
-                        .font(.largeTitle)
-                        .padding(.top, 40)
                     
-                    Spacer()
-                    
-                    Text("Choose your route:")
+                    Text("Choose Your Route")
                         .italic()
                         .font(.title)
                         .padding(.vertical, 20)
-                    
+                    Spacer()
                     VStack(spacing: 20) {
                         NavigationLink(destination: ProfileSetupViewEmployee(fromEditProfile: false)) {
                             HStack {
-                                Image("Duck_Head")
+                                Image("welcomeduck")
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 50, height: 50)
                                     .padding(.trailing, 10)
                                 VStack(alignment: .leading) {
                                     Text("New Profile")
-                                        .font(.headline)
+                                        .font(.body)
                                         .foregroundColor(.black)
+                                        .italic()
                                     Text("Job-Seeker")
-                                        .font(.title3)
+                                        .font(.title2)
                                         .foregroundColor(.black)
                                 }
                             }
                             .padding(30)
-                            .background(gradientBackground)
+                            .background(Color.white)
                             .cornerRadius(15)
-                        }
+                        }.padding(.bottom, 50)
                         .simultaneousGesture(TapGesture().onEnded {
                             Task {
                                 do {
                                     if let userId = Auth.auth().currentUser?.uid {
                                         try await UserManager.shared.updateUserProfileType(userId: userId, userType: 0)
+                                        let shareID = try await UserManager.shared.generateUniqueShareID()
                                         let additionalData: [String: Any] = [
                                             "name": "",
                                             "location": GeoPoint(latitude: 0, longitude: 0),
@@ -76,7 +74,8 @@ struct Welcome: View {
                                             "hobbies": "",
                                             "chats": [],
                                             "pfp": "",
-                                            "personality_photo": ""
+                                            "personality_photo": "",
+                                            "share_id": shareID
                                         ]
                                         try await UserManager.shared.updateUserProfileForEmployee(userId: userId, additionalData: additionalData)
                                     }
@@ -85,25 +84,28 @@ struct Welcome: View {
                                 }
                             }
                         })
+
                         
                         NavigationLink(destination: newposition()) {
                             HStack {
-                                Image("Duck_Head")
+                                Image("welcomeduck")
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 50, height: 50)
                                     .padding(.trailing, 10)
                                 VStack(alignment: .leading) {
                                     Text("New Profile")
-                                        .font(.headline)
+                                        .font(.body)
                                         .foregroundColor(.black)
+                                        .italic()
                                     Text("Employer")
-                                        .font(.title3)
+                                        .font(.title2)
                                         .foregroundColor(.black)
                                 }
                             }
                             .padding(30)
-                            .background(gradientBackground)
+                            .padding(.horizontal, 12)
+                            .background(Color.white)
                             .cornerRadius(15)
                         }
                         .simultaneousGesture(TapGesture().onEnded {
@@ -111,6 +113,7 @@ struct Welcome: View {
                                 do {
                                     if let userId = Auth.auth().currentUser?.uid {
                                         try await UserManager.shared.updateUserProfileType(userId: userId, userType: 1)
+                                        let shareID = try await UserManager.shared.generateUniqueShareID()
                                         let additionalData: [String: Any] = [
                                             "logo": "",
                                             "name": "",
@@ -119,7 +122,8 @@ struct Welcome: View {
                                             "type": [],
                                             "mission": "",
                                             "hobbies": "",
-                                            "photo": ""
+                                            "photo": "",
+                                            "share_id": shareID
                                         ]
                                         try await UserManager.shared.updateUserProfileForEmployer(userId: userId, additionalData: additionalData)
                                     }
@@ -128,22 +132,36 @@ struct Welcome: View {
                                 }
                             }
                         })
+
                     }
-                    
+                    HStack {
+                        Spacer()
                     Button(action: {
                         // Action for invite code
                     }) {
                         Text("I have an invite code")
                             .font(.subheadline)
                             .foregroundColor(.black)
-                            .padding()
-                            .background(gradientBackground)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 50)
+                            .background(Color.white)
                             .cornerRadius(15)
                     }
                     .padding(.top, 15)
-                    .padding(.leading, 50)
-                    
+                        Spacer()
+                }
                     Spacer()
+                    Text("Guest?")
+                        .italic()
+                        .font(.title)
+                        .padding(.vertical, 20)
+                    Text("Search Peeking Tag")
+                        .font(.subheadline)
+                        .foregroundColor(.black)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 50)
+                        .background(Color.white)
+                        .cornerRadius(15)
                     Spacer()
                 }
                 .padding()

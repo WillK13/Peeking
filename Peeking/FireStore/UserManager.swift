@@ -45,6 +45,7 @@ struct Profile: Codable {
     let bookmarks: [String]
     let soft_skills: [String]
     let work_envio: [String]
+    let share_id: String
 }
 
 struct DBUser: Codable {
@@ -87,6 +88,7 @@ struct DBUser: Codable {
     var mission: String?
     var type: [String]?
     var photo: String?
+    var share_id: String?
     
     init(auth: AuthDataResultModel) {
         self.userId = auth.userId
@@ -123,6 +125,7 @@ struct DBUser: Codable {
         hobbies: String? = nil,
         chats: [String]? = nil,
         pfp: String? = nil,
+        share_id: String? = nil,
         personality_photo: String? = nil,
         GPT_WorkEnvio: [String]? = nil,
         GPT_Technicals: [String]? = nil,
@@ -153,6 +156,7 @@ struct DBUser: Codable {
         self.education = education
         self.distance = distance
         self.fields = fields
+        self.share_id = share_id
         self.recommendations = recommendations
         self.work_setting = work_setting
         self.status = status
@@ -187,6 +191,7 @@ struct DBUser: Codable {
         case location
         case age
         case birthday
+        case share_id
         case languages
         case education
         case distance
@@ -225,6 +230,19 @@ final class UserManager: ObservableObject {
     private func userDocument(userId: String) -> DocumentReference {
         userCollection.document(userId)
     }
+    
+    func generateUniqueShareID() async throws -> String {
+            var shareID = ""
+            var isUnique = false
+            
+            while !isUnique {
+                shareID = String((0..<6).map { _ in "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".randomElement()! })
+                let querySnapshot = try await userCollection.whereField("share_id", isEqualTo: shareID).getDocuments()
+                isUnique = querySnapshot.isEmpty
+            }
+            
+            return shareID
+        }
     
     private func likesSentCollection(userId: String) -> CollectionReference {
         userDocument(userId: userId).collection("likes_sent")
@@ -294,7 +312,7 @@ final class UserManager: ObservableObject {
                 title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [],
                 location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [],
                 accepted_edu: [], technicals: [], chats: [], GPT_WorkEnvio: [], GPT_Technicals: [],
-                likes_remaining: 3, recommendations: [], matches: [], likes_you: [], bookmarks: [], soft_skills: [], work_envio: []
+                likes_remaining: 3, recommendations: [], matches: [], likes_you: [], bookmarks: [], soft_skills: [], work_envio: [], share_id: ""
             ))
         }
     }

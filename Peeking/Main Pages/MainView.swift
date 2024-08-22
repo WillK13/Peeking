@@ -33,6 +33,7 @@ struct MainView: View {
     @State private var step = 0
     @State private var recommendationUserIds: [String] = []
     @State private var currentIndex = 0
+    @State private var buttons = true
 
     @State private var page: Page = .first()
 
@@ -43,56 +44,64 @@ struct MainView: View {
                 VStack {
                     // Top Area
                     HStack {
-                        HStack {
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.red)
-                                .padding(.all, 5.0)
-                                .font(.system(size: 25))
+//                        HStack {
+//                            Image(systemName: "heart.fill")
+//                                .foregroundColor(.red)
+//                                .padding(.all, 5.0)
+//                                .font(.system(size: 25))
+//                            Text("\(likesRemaining)")
+//                                .font(.title)
+//                                .padding(.trailing, 5.0)
+//                        }
+//                        .background(RoundedRectangle(cornerRadius: 8).foregroundColor(.white))
+//                        .padding(.leading, 27.0)
+//                        .padding(.top, 70)
+                        Image("share").shadow(radius: 2)
+                        ZStack {
+                            Image(systemName: "heart.fill").shadow(radius: 2)
+                                .foregroundColor(.white)
+                                .font(.system(size: 50))
                             Text("\(likesRemaining)")
                                 .font(.title)
-                                .padding(.trailing, 5.0)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color("TopOrange"))
                         }
-                        .background(RoundedRectangle(cornerRadius: 8).foregroundColor(.white))
-                        .padding(.leading, 27.0)
-                        .padding(.top, 70)
 
                         Spacer()
 
                         Image("Duck_Head")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 120)
-                            .padding(.top, 15.0)
+                            .frame(width: 80).shadow(radius: 2)
+                            Spacer()
                         
-                        VStack {
+                        Button(action: {
+                            showSearchSettings.toggle()
+                        }) {
+                            Image("toggle")
+                        }.shadow(radius: 2)
+                        
                             Button(action: {
                                 showTierView.toggle()
                             }) {
                                 Image(systemName: "bag")
                                     .foregroundColor(Color.white)
                                     .font(.system(size: 45))
-                                    .padding(.horizontal, 27.0)
-                                    .padding(.bottom, 10.0)
-                            }
+                            }.shadow(radius: 2)
 
-                            Button(action: {
-                                showSearchSettings.toggle()
-                            }) {
-                                Image("adjust")
-                            }
-                        }
+                            
                     }
-                    .padding(.trailing, 20.0)
+                    .padding(.horizontal, 20.0)
 //                    .padding(.top, 30)
 
                     // Main Area
                     Pager(page: page, data: recommendationUserIds.indices, id: \.self) { index in
                         VStack {
                             if appViewModel.userType == 0 {
-                                ProfileCardViewEmployer(currentStep: $step, userId: .constant(recommendationUserIds[index]))
+                                ProfileCardViewEmployer(currentStep: $step, userId: .constant(recommendationUserIds[index]), needsButtons: $buttons)
                                     .environmentObject(appViewModel)
                             } else {
-                                ProfileCardView(currentStep: $step, userId: .constant(recommendationUserIds[index]))
+                                ProfileCardView(currentStep: $step, userId: .constant(recommendationUserIds[index]), needsButtons: $buttons)
                                     .environmentObject(appViewModel)
                             }
                         }
@@ -112,11 +121,11 @@ struct MainView: View {
 //                    .padding(.horizontal)
 
                     // Next Profile
-                    TopCornersRounded(radius: 10)
-                        .fill(Color.gray)
-                        .frame(height: 20)
-                        .blur(radius: 3)
-                        .padding(.top, -5)
+//                    TopCornersRounded(radius: 10)
+//                        .fill(Color.gray)
+//                        .frame(height: 20)
+//                        .blur(radius: 3)
+//                        .padding(.top, -5)
 //                        .padding([.leading, .trailing])
 //                        .padding(.bottom, 20)
 

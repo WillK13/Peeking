@@ -90,11 +90,6 @@ struct HistoryView: View {
     }
 
     private var alertView: some View {
-        Color.black.opacity(0.4)
-            .edgesIgnoringSafeArea(.all)
-            .onTapGesture {
-                showAlert = false
-            }
         return CustomAlertView(showAlert: $showAlert)
             .transition(.scale)
     }
@@ -149,17 +144,33 @@ struct HistoryView: View {
 
         for userId in userIds {
             db.collection("users").document(userId).getDocument { snapshot, error in
-                if let data = snapshot?.data(), let photoURL = data["photo"] as? String {
-                    DispatchQueue.main.async {
-                        self.profiles[userId] = photoURL
-                        print("Fetched photoURL: \(photoURL) for user: \(userId)")  // Debug print
+                if let data = snapshot?.data() {
+                    let userType = data["user_type"] as? Int
+                    let photoURL: String?
+
+                    if userType == 0 {
+                        // Employee, use personality_photo
+                        photoURL = data["personality_photo"] as? String
+                    } else {
+                        // Employer, use photo
+                        photoURL = data["photo"] as? String
+                    }
+
+                    if let photoURL = photoURL {
+                        DispatchQueue.main.async {
+                            self.profiles[userId] = photoURL
+                            print("Fetched photoURL: \(photoURL) for user: \(userId)")  // Debug print
+                        }
+                    } else {
+                        print("No photoURL found for user: \(userId)")
                     }
                 } else {
-                    print("Error fetching photo for user: \(userId)")
+                    print("Error fetching user document for user: \(userId)")
                 }
             }
         }
     }
+
 }
 
 #Preview {

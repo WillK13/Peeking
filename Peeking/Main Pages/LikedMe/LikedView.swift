@@ -6,141 +6,171 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
+import FirebaseAuth
 
 struct LikedView: View {
-    //Variable for the popup, make dynamic so I don't need unlocked?
-    @State private var showPopup = false
-    
+    @State private var likedYou: [String] = []  // List of user IDs who liked you
+    @State private var profiles: [String: String] = [:] // [userId: photoURL]
+    @EnvironmentObject var appViewModel: AppViewModel
+
     var body: some View {
-        //Background
         ZStack {
             BackgroundView()
-            //Content
+
             VStack(alignment: .center) {
-                Image(systemName: "eye.slash")
-                    .resizable()
-                    .frame(width: 120, height: 100)
-                    .foregroundColor(.white)
-                    .padding(.vertical, 30)
+                headerView
                 
-                VStack(spacing: 20) {
-                    //Heart icon and text
-                    HStack {
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(.red)
-                            .font(.largeTitle)
-                        Text("54")
-                            .font(.title)
-                        Text("Liked You")
-                            .font(.title)
-                    }
-                    
-                    //Grid of rectangles, need to make profiles, blurred.
-                    VStack(spacing: 20) {
-                        HStack(spacing: 20) {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.white)
-                                .frame(width: 150, height: 200)
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.white)
-                                .frame(width: 150, height: 200)
-                        }
-                        HStack(spacing: 20) {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.white)
-                                .frame(width: 150, height: 200)
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.white)
-                                .frame(width: 150, height: 200)
-                        }
-                    }
-                    .padding(.bottom, 15)
-                    //Cut out rectangles, need to have a profile too.
-                    HStack(spacing: 20) {
-                        //First cut-off rectangle
-                        ZStack(alignment: .bottom) {
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color.white)
-                                .frame(width: 150, height: 50)
-                                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                            
-                            Rectangle()
-                                .fill(Color.orange)
-                                .frame(width: 150, height: 2)
-                                .offset(y: 1)
-                            
-                            Rectangle()
-                                .fill(Color.black)
-                                .frame(width: 150, height: 2)
-                                .offset(y: 1)
-                        }
-                        
-                        //Second cut-off rectangle
-                        ZStack(alignment: .bottom) {
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color.white)
-                                .frame(width: 150, height: 50)
-                                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                            
-                            Rectangle()
-                                .fill(Color.orange)
-                                .frame(width: 150, height: 2)
-                                .offset(y: 1)
-                            
-                            Rectangle()
-                                .fill(Color.black)
-                                .frame(width: 150, height: 2)
-                                .offset(y: 1)
-                        }
-                    }
+                Text("Liked You")
+                    .font(.largeTitle)
                     .padding(.bottom, 10.0)
-                    
-                    Spacer()
-                }
-                
+                    .foregroundColor(.white)
+
+                likedList
+
                 Spacer()
             }
-            //Popup, need to make dynamic with payment?
-            if showPopup {
-                Color.black.opacity(0.15)
-                    .edgesIgnoringSafeArea(.top).padding(.bottom, 45.0)
+        }
+        .onAppear {
+            fetchLikedYou()
+        }
+    }
+
+    private var headerView: some View {
+        HStack {
+            Spacer()
+            Image(systemName: "eye.slash")
+                .resizable()
+                .frame(width: 120, height: 100)
+                .foregroundColor(.white)
+                .padding(.top, 30)
+            Spacer()
+        }
+    }
+
+    private var likedList: some View {
+        let columns = [
+            GridItem(.flexible()),
+            GridItem(.flexible())
+        ]
+        
+        return ScrollView {
+            LazyVGrid(columns: columns, spacing: 15) {
+                ForEach(likedYou, id: \.self) { userId in
+                    if let photoURL = profiles[userId] {
+                        ProfileImageView(photoURL: photoURL)
+                    }
+                }
+            }
+            .padding(.horizontal, 15)
+        }
+    }
+
+    private func fetchLikedYou() {
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        let userDocument = db.collection("users").document(currentUserId)
+
+        userDocument.getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching liked_you: \(error.localizedDescription)")
+                return
+            }
+            
+            if let data = snapshot?.data() {
+                print("Document data: \(data)")  // Debug print to see entire document data
                 
-                VStack {
-                    Spacer()
-                    
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.white)
-                            .frame(width: 250, height: 250)
-                        
-                        VStack {
-                            Text("Upgrade Tier to Unlock")
-                                .font(.title2)
-                                .padding(.bottom, 20)
-                            
-                            Image(systemName: "bag")
-                                .resizable()
-                                .frame(width: 100, height: 100)
-                                .foregroundColor(.black)
+                if let userType = data["user_type"] as? Int {
+                    if userType == 1 {
+                        // Employer, fetch likes_you from the profile subcollection
+                        fetchLikedYouFromProfileSubcollection(userDocument: userDocument)
+                    } else {
+                        // Employee, fetch likes_you from the main document
+                        if let likedYouArray = data["likes_you"] as? [String] {
+                            self.likedYou = likedYouArray
+                            fetchUserPhotos(userIds: likedYouArray)
+                        } else {
+                            print("likes_you array is either empty or not found")
                         }
                     }
-                    
-                    Spacer()
-                    
-                   
+                } else {
+                    print("User type is not found in the document")
                 }
-//                .onTapGesture {
-//                    showPopup = false
-//                }
+            } else {
+                print("Document does not exist or no data found")
             }
         }
-        //.onTapGesture {
-         //   if showPopup {
-        //        showPopup = false
-        //    }
-       // }
-        .onAppear {
-            showPopup = true
+    }
+
+    private func fetchLikedYouFromProfileSubcollection(userDocument: DocumentReference) {
+        let profileDocument = userDocument.collection("profile").document("profile_data")
+        
+        profileDocument.getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching liked_you from profile subcollection: \(error.localizedDescription)")
+                return
+            }
+            
+            if let data = snapshot?.data(), let likedYouArray = data["likes_you"] as? [String] {
+                self.likedYou = likedYouArray
+                fetchUserPhotos(userIds: likedYouArray)
+            } else {
+                print("No likes_you data found in the profile subcollection")
+            }
+        }
+    }
+
+    private func fetchUserPhotos(userIds: [String]) {
+        let db = Firestore.firestore()
+
+        for userId in userIds {
+            db.collection("users").document(userId).getDocument { snapshot, error in
+                if let data = snapshot?.data() {
+                    let userType = data["user_type"] as? Int
+                    let photoURL: String?
+
+                    if userType == 0 {
+                        // If the user is an employee (type 0), use personality_photo
+                        photoURL = data["personality_photo"] as? String
+                    } else {
+                        // If the user is an employer (type 1), use photo
+                        photoURL = data["photo"] as? String
+                    }
+
+                    if let photoURL = photoURL {
+                        DispatchQueue.main.async {
+                            self.profiles[userId] = photoURL
+                            print("Fetched photoURL: \(photoURL) for user: \(userId)")  // Debug print
+                        }
+                    } else {
+                        print("No photoURL found for user: \(userId)")
+                    }
+                } else {
+                    print("Error fetching user document for user: \(userId)")
+                }
+            }
+        }
+    }
+
+}
+
+struct ProfileImageView: View {
+    var photoURL: String
+
+    var body: some View {
+        VStack(spacing: 10) {
+            // Image Box
+            AsyncImage(url: URL(string: photoURL)) { image in
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 140, height: 180)  // Adjusted size for 2-column layout
+                    .cornerRadius(10)
+            } placeholder: {
+                Color.gray
+                    .frame(width: 140, height: 180)  // Adjusted size for 2-column layout
+                    .cornerRadius(10)
+            }
         }
     }
 }

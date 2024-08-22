@@ -13,6 +13,7 @@ import FirebaseAuth
 struct ProfileCardView: View {
     @Binding var currentStep: Int
     @Binding var userId: String
+    @Binding var needsButtons: Bool
     @State private var user: DBUser? = nil
     @State private var experiences: [Experience] = []
     @State private var personalityPhotoURL: String? = nil
@@ -70,8 +71,10 @@ struct ProfileCardView: View {
             
             VStack {
                 Spacer()
-                ProfileActionButtons(user_id: $userId, currentStep: $currentStep) // Pass the currentStep binding
-                    .padding(.bottom, 15)
+                if (needsButtons) {
+                    ProfileActionButtons(user_id: $userId, currentStep: $currentStep) // Pass the currentStep binding
+                        .padding(.bottom, 15)
+                }
             }
         }
         .contentShape(Rectangle())
@@ -562,6 +565,6 @@ struct HobbiesView: View {
 
 struct ProfileCardView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileCardView(currentStep: .constant(0), userId: .constant("0"))
+        ProfileCardView(currentStep: .constant(0), userId: .constant("0"), needsButtons: .constant(true))
     }
 }

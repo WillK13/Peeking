@@ -15,6 +15,7 @@ struct ProfileConfirmation: View {
     @State private var navigateToMainView = false
     @State private var showLoadingIndicator = false
     @State private var userId: String = Auth.auth().currentUser?.uid ?? ""
+    @State private var buttons = true
 
     var body: some View {
         NavigationStack {
@@ -51,7 +52,7 @@ struct ProfileConfirmation: View {
                     }
                     .padding(.bottom, 20)
                     
-                    ProfileCardView(currentStep: $currentStep, userId: $userId)
+                    ProfileCardView(currentStep: $currentStep, userId: $userId, needsButtons: $buttons)
 
                     Text("Tap through to continue")
                         .font(.callout)

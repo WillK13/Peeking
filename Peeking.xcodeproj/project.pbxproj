@@ -43,7 +43,6 @@
 		BE6029C42C136B6A00B3C080 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029C32C136B6A00B3C080 /* BackgroundView.swift */; };
 		BE6029CF2C13963400B3C080 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029CE2C13963400B3C080 /* MainView.swift */; };
 		BE6029D22C13966D00B3C080 /* LikedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029D12C13966D00B3C080 /* LikedView.swift */; };
-		BE6029D42C13969000B3C080 /* UnlockedLikedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029D32C13969000B3C080 /* UnlockedLikedView.swift */; };
 		BE6029D72C1396C500B3C080 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029D62C1396C500B3C080 /* HistoryView.swift */; };
 		BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029D82C1396D800B3C080 /* CustomAlertView.swift */; };
 		BE6029DB2C1396F300B3C080 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029DA2C1396F300B3C080 /* MessagesView.swift */; };
@@ -62,6 +61,8 @@
 		BE8AF5842C4DC14000C1D59B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8AF5832C4DC14000C1D59B /* StorageManager.swift */; };
 		BEAC5C732C6AD54700C1FE31 /* SwiftUIPager in Frameworks */ = {isa = PBXBuildFile; productRef = BEAC5C722C6AD54700C1FE31 /* SwiftUIPager */; };
 		BEAC5C752C71572F00C1FE31 /* LikeHistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C742C71572F00C1FE31 /* LikeHistoryItemView.swift */; };
+		BEAC5C772C74147C00C1FE31 /* testfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C762C74147C00C1FE31 /* testfile.swift */; };
+		BEAC5C792C77EB7A00C1FE31 /* ProfileShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C782C77EB7A00C1FE31 /* ProfileShare.swift */; };
 		BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */; };
 		BEE0CE692C3C864E00542876 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE682C3C864E00542876 /* AppViewModel.swift */; };
 		BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502512C33394B00B6175B /* PhoneAuthView.swift */; };
@@ -135,7 +136,6 @@
 		BE6029C32C136B6A00B3C080 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		BE6029CE2C13963400B3C080 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		BE6029D12C13966D00B3C080 /* LikedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedView.swift; sourceTree = "<group>"; };
-		BE6029D32C13969000B3C080 /* UnlockedLikedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockedLikedView.swift; sourceTree = "<group>"; };
 		BE6029D62C1396C500B3C080 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		BE6029D82C1396D800B3C080 /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
 		BE6029DA2C1396F300B3C080 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
@@ -152,6 +152,8 @@
 		BE77FAD42C4C6A7000D7F3D0 /* ProfileCardViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCardViewEmployer.swift; sourceTree = "<group>"; };
 		BE8AF5832C4DC14000C1D59B /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		BEAC5C742C71572F00C1FE31 /* LikeHistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeHistoryItemView.swift; sourceTree = "<group>"; };
+		BEAC5C762C74147C00C1FE31 /* testfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testfile.swift; sourceTree = "<group>"; };
+		BEAC5C782C77EB7A00C1FE31 /* ProfileShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileShare.swift; sourceTree = "<group>"; };
 		BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReauthenticationView.swift; sourceTree = "<group>"; };
 		BEE0CE682C3C864E00542876 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		BEE502512C33394B00B6175B /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
@@ -306,6 +308,8 @@
 				BE6029952C13603C00B3C080 /* Preview Content */,
 				BEE5026E2C39D59300B6175B /* LoadingView.swift */,
 				BEE502752C3B2A8F00B6175B /* Utilities.swift */,
+				BEAC5C762C74147C00C1FE31 /* testfile.swift */,
+				BEAC5C782C77EB7A00C1FE31 /* ProfileShare.swift */,
 			);
 			path = Peeking;
 			sourceTree = "<group>";
@@ -355,7 +359,6 @@
 			isa = PBXGroup;
 			children = (
 				BE6029D12C13966D00B3C080 /* LikedView.swift */,
-				BE6029D32C13969000B3C080 /* UnlockedLikedView.swift */,
 			);
 			path = LikedMe;
 			sourceTree = "<group>";
@@ -599,10 +602,10 @@
 				BE5E50002C24D17000D36578 /* newposition.swift in Sources */,
 				BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */,
 				BE5E4FFC2C24A41600D36578 /* Hobbies.swift in Sources */,
-				BE6029D42C13969000B3C080 /* UnlockedLikedView.swift in Sources */,
 				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
 				BE5E50042C26071100D36578 /* searchsettings.swift in Sources */,
 				BE0A08952C51B6E800D5D102 /* LocationView.swift in Sources */,
+				BEAC5C792C77EB7A00C1FE31 /* ProfileShare.swift in Sources */,
 				BE5E4FF22C1E371800D36578 /* TechnicalsEmployee.swift in Sources */,
 				BE6029D22C13966D00B3C080 /* LikedView.swift in Sources */,
 				BE5E500E2C26094500D36578 /* softskillsemployer.swift in Sources */,
@@ -622,6 +625,7 @@
 				BE6029C42C136B6A00B3C080 /* BackgroundView.swift in Sources */,
 				BE77FAD52C4C6A7000D7F3D0 /* ProfileCardViewEmployer.swift in Sources */,
 				BE5E4FE12C1B769600D36578 /* ToggleViewEmployer.swift in Sources */,
+				BEAC5C772C74147C00C1FE31 /* testfile.swift in Sources */,
 				BE5E50062C2608FD00D36578 /* DesiredTechnicals.swift in Sources */,
 				BE5E500C2C26093D00D36578 /* enviornmentemployer.swift in Sources */,
 				BE5E4FF02C1CC8B100D36578 /* ProfileSearchSettings.swift in Sources */,

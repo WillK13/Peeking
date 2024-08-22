@@ -13,6 +13,7 @@ import CoreLocation
 struct ProfileCardViewEmployer: View {
     @Binding var currentStep: Int
     @Binding var userId: String
+    @Binding var needsButtons: Bool
     @State private var user: DBUser? = nil
     @State private var profile: Profile? = nil
     @State private var showMission: Bool = false
@@ -22,10 +23,10 @@ struct ProfileCardViewEmployer: View {
 
     var body: some View {
         ZStack {
-            Rectangle()
-                .fill(Color.white)
-                .frame(width: 395, height: 545)
-                .cornerRadius(10)
+//            Rectangle()
+//                .fill(Color.white)
+//                .frame(width: 395, height: 545)
+//                .cornerRadius(10)
 
             if let photoURL = photoURL {
                 AsyncImage(url: URL(string: photoURL)) { image in
@@ -71,8 +72,10 @@ struct ProfileCardViewEmployer: View {
 
             VStack {
                 Spacer()
-                ProfileActionButtons(user_id: $userId, currentStep: $currentStep) // Pass the currentStep binding
-                    .padding(.bottom, 15)
+                if (needsButtons) {
+                    ProfileActionButtons(user_id: $userId, currentStep: $currentStep) // Pass the currentStep binding
+                        .padding(.bottom, 15)
+                }
             }
         }
         .contentShape(Rectangle())
@@ -822,6 +825,6 @@ struct HobbiesViewEmployer: View {
 
 struct ProfileCardViewEmployer_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileCardViewEmployer(currentStep: .constant(0), userId: .constant("0"))
+        ProfileCardViewEmployer(currentStep: .constant(0), userId: .constant("0"), needsButtons: .constant(true))
     }
 }

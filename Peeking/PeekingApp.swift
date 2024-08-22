@@ -16,6 +16,7 @@ struct PeekingApp: App {
     @StateObject private var appViewModel = AppViewModel()
     
 //    private var f = false
+    @State private var usersi = "JxLbyqyg3wOwZPEvOpBOlWYosy33"
 
     var body: some Scene {
         WindowGroup {
@@ -23,16 +24,18 @@ struct PeekingApp: App {
                 if appViewModel.isLoading {
                     LoadingView()
                 } else {
-                    if Auth.auth().currentUser == nil {
-                        firstView()
+//                    if Auth.auth().currentUser == nil {
+//                        firstView()
+//                            .environmentObject(appViewModel)
+//                    } else if appViewModel.shouldShowContentView {
+//                        ContentView()
+//                            .environmentObject(appViewModel)
+//                    } else {
+//                        Welcome()
+//                            .environmentObject(appViewModel)
+//                    }
+                    ProfileShare(userId: $usersi, needsButtons: .constant(false))
                             .environmentObject(appViewModel)
-                    } else if appViewModel.shouldShowContentView {
-                        ContentView()
-                            .environmentObject(appViewModel)
-                    } else {
-                        Welcome()
-                            .environmentObject(appViewModel)
-                    }
 //                     Commenting out ProfileConfirmationEmployer
 //                     ProfileConfirmation()
 //                        .environmentObject(appViewModel)
