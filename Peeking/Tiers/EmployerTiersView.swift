@@ -13,7 +13,7 @@ struct EmployerTiersView: View {
     @State private var selectedPage = 0
     @State private var selectedPlan = "with Floater"
     @State private var showPicker = false
-    @State private var timer: Timer? = nil
+//    @State private var timer: Timer? = nil
     //Possible plans
     private let plans = ["with Floater", "with Glider", "with Diver"]
     //All of the content for each page.
@@ -246,29 +246,29 @@ struct EmployerTiersView: View {
             }
         }
         .navigationBarBackButtonHidden(true) //Hide the default back button
-        .onAppear {
-            startTimer()
-        }
-        .onDisappear {
-            stopTimer()
-        }
+//        .onAppear {
+//            startTimer()
+//        }
+//        .onDisappear {
+//            stopTimer()
+//        }
         .onChange(of: selectedPlan) { newPlan, _ in
             selectedPage = 0 //Reset to first page when plan changes
         }
     }
     //Get timer working
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
-            withAnimation {
-                selectedPage = (selectedPage + 1) % getCurrentPages().count
-            }
-        }
-    }
-    //Stop the timer
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
+//    private func startTimer() {
+//        timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { _ in
+//            withAnimation {
+//                selectedPage = (selectedPage + 1) % getCurrentPages().count
+//            }
+//        }
+//    }
+//    //Stop the timer
+//    private func stopTimer() {
+//        timer?.invalidate()
+//        timer = nil
+//    }
     //Get current page based on plan
     private func getCurrentPages() -> [PlanPage] {
         switch selectedPlan {

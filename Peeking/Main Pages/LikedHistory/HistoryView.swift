@@ -14,6 +14,8 @@ struct HistoryView: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @State private var likesSent: [likes_sent] = []  // Correct initialization of the likesSent array
     @State private var profiles: [String: String] = [:] // [userId: photoURL]
+    @State private var selectedUserId: String? = nil // State to hold the selected user ID
+    @State private var needsButtons = false // Set this as needed
 
     var body: some View {
         ZStack {
@@ -46,6 +48,10 @@ struct HistoryView: View {
         .animation(.easeInOut, value: showAlert)
         .onAppear {
             fetchLikeHistory()
+        }
+        .fullScreenCover(item: $selectedUserId) { userId in
+            ProfileShare(userId: .constant(userId), needsButtons: $needsButtons)
+                .environmentObject(appViewModel)
         }
     }
 
@@ -81,7 +87,11 @@ struct HistoryView: View {
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(likesSent, id: \.user_id) { like in
                     if let photoURL = profiles[like.user_id] {
-                        LikeHistoryItemView(photoURL: photoURL, status: like.status)
+                        Button(action: {
+                            selectedUserId = like.user_id // Set the selected user ID when an image is clicked
+                        }) {
+                            LikeHistoryItemView(photoURL: photoURL, status: like.status)
+                        }
                     }
                 }
             }
@@ -170,9 +180,9 @@ struct HistoryView: View {
             }
         }
     }
-
 }
 
 #Preview {
     HistoryView()
+        .environmentObject(AppViewModel()) // Ensure the appViewModel is available for preview
 }

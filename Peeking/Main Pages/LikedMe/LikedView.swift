@@ -9,10 +9,17 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
 
+// Make String conform to Identifiable
+extension String: Identifiable {
+    public var id: String { self }
+}
+
 struct LikedView: View {
     @State private var likedYou: [String] = []  // List of user IDs who liked you
     @State private var profiles: [String: String] = [:] // [userId: photoURL]
     @EnvironmentObject var appViewModel: AppViewModel
+    @State private var selectedUserId: String? = nil // State to hold the selected user ID
+    @State private var needsButtons = false // Set this as needed
 
     var body: some View {
         ZStack {
@@ -33,6 +40,10 @@ struct LikedView: View {
         }
         .onAppear {
             fetchLikedYou()
+        }
+        .fullScreenCover(item: $selectedUserId) { userId in
+            ProfileShare(userId: .constant(userId), needsButtons: $needsButtons)
+                .environmentObject(appViewModel)
         }
     }
 
@@ -58,7 +69,11 @@ struct LikedView: View {
             LazyVGrid(columns: columns, spacing: 15) {
                 ForEach(likedYou, id: \.self) { userId in
                     if let photoURL = profiles[userId] {
-                        ProfileImageView(photoURL: photoURL)
+                        Button(action: {
+                            selectedUserId = userId // Set the selected user ID when an image is clicked
+                        }) {
+                            ProfileImageView(photoURL: photoURL)
+                        }
                     }
                 }
             }
@@ -151,7 +166,6 @@ struct LikedView: View {
             }
         }
     }
-
 }
 
 struct ProfileImageView: View {
@@ -177,4 +191,5 @@ struct ProfileImageView: View {
 
 #Preview {
     LikedView()
+        .environmentObject(AppViewModel()) // Ensure the appViewModel is available for preview
 }

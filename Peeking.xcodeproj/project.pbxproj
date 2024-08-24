@@ -63,6 +63,9 @@
 		BEAC5C752C71572F00C1FE31 /* LikeHistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C742C71572F00C1FE31 /* LikeHistoryItemView.swift */; };
 		BEAC5C772C74147C00C1FE31 /* testfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C762C74147C00C1FE31 /* testfile.swift */; };
 		BEAC5C792C77EB7A00C1FE31 /* ProfileShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C782C77EB7A00C1FE31 /* ProfileShare.swift */; };
+		BEAC5C7C2C795DE000C1FE31 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = BEAC5C7B2C795DE000C1FE31 /* RevenueCat */; };
+		BEAC5C7E2C795DE000C1FE31 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = BEAC5C7D2C795DE000C1FE31 /* RevenueCatUI */; };
+		BEAC5C802C795E0600C1FE31 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAC5C7F2C795E0600C1FE31 /* StoreKit.framework */; };
 		BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */; };
 		BEE0CE692C3C864E00542876 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE682C3C864E00542876 /* AppViewModel.swift */; };
 		BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502512C33394B00B6175B /* PhoneAuthView.swift */; };
@@ -154,6 +157,7 @@
 		BEAC5C742C71572F00C1FE31 /* LikeHistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeHistoryItemView.swift; sourceTree = "<group>"; };
 		BEAC5C762C74147C00C1FE31 /* testfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testfile.swift; sourceTree = "<group>"; };
 		BEAC5C782C77EB7A00C1FE31 /* ProfileShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileShare.swift; sourceTree = "<group>"; };
+		BEAC5C7F2C795E0600C1FE31 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReauthenticationView.swift; sourceTree = "<group>"; };
 		BEE0CE682C3C864E00542876 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		BEE502512C33394B00B6175B /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
@@ -178,7 +182,10 @@
 				BE5E50222C2E213400D36578 /* FirebaseAnalyticsSwift in Frameworks */,
 				BEE5025A2C3872F300B6175B /* FirebaseFirestore in Frameworks */,
 				BEAC5C732C6AD54700C1FE31 /* SwiftUIPager in Frameworks */,
+				BEAC5C7C2C795DE000C1FE31 /* RevenueCat in Frameworks */,
+				BEAC5C7E2C795DE000C1FE31 /* RevenueCatUI in Frameworks */,
 				BE5E50252C3319AB00D36578 /* FirebaseAuth in Frameworks */,
+				BEAC5C802C795E0600C1FE31 /* StoreKit.framework in Frameworks */,
 				BE5E50202C2E213400D36578 /* FirebaseAnalytics in Frameworks */,
 				BE8AF5812C4D919800C1D59B /* FirebaseStorage in Frameworks */,
 			);
@@ -263,6 +270,7 @@
 		BE5E50232C3319AB00D36578 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BEAC5C7F2C795E0600C1FE31 /* StoreKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -468,6 +476,8 @@
 				BEE5025B2C3872F300B6175B /* FirebaseFirestoreSwift */,
 				BE8AF5802C4D919800C1D59B /* FirebaseStorage */,
 				BEAC5C722C6AD54700C1FE31 /* SwiftUIPager */,
+				BEAC5C7B2C795DE000C1FE31 /* RevenueCat */,
+				BEAC5C7D2C795DE000C1FE31 /* RevenueCatUI */,
 			);
 			productName = Peeking;
 			productReference = BE60298C2C13603B00B3C080 /* Peeking.app */;
@@ -544,6 +554,7 @@
 			packageReferences = (
 				BE5E501E2C2E213400D36578 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				BEAC5C712C6AD50D00C1FE31 /* XCRemoteSwiftPackageReference "SwiftUIPager" */,
+				BEAC5C7A2C795DE000C1FE31 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			productRefGroup = BE60298D2C13603B00B3C080 /* Products */;
 			projectDirPath = "";
@@ -997,6 +1008,14 @@
 				minimumVersion = 2.5.0;
 			};
 		};
+		BEAC5C7A2C795DE000C1FE31 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1024,6 +1043,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BEAC5C712C6AD50D00C1FE31 /* XCRemoteSwiftPackageReference "SwiftUIPager" */;
 			productName = SwiftUIPager;
+		};
+		BEAC5C7B2C795DE000C1FE31 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BEAC5C7A2C795DE000C1FE31 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		BEAC5C7D2C795DE000C1FE31 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BEAC5C7A2C795DE000C1FE31 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
 		};
 		BEE502592C3872F300B6175B /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;

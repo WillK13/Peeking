@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 import UserNotifications
+import RevenueCat
 
 @main
 struct PeekingApp: App {
@@ -16,7 +17,7 @@ struct PeekingApp: App {
     @StateObject private var appViewModel = AppViewModel()
     
 //    private var f = false
-    @State private var usersi = "JxLbyqyg3wOwZPEvOpBOlWYosy33"
+//    @State private var usersi = "JxLbyqyg3wOwZPEvOpBOlWYosy33"
 
     var body: some Scene {
         WindowGroup {
@@ -24,18 +25,18 @@ struct PeekingApp: App {
                 if appViewModel.isLoading {
                     LoadingView()
                 } else {
-//                    if Auth.auth().currentUser == nil {
-//                        firstView()
-//                            .environmentObject(appViewModel)
-//                    } else if appViewModel.shouldShowContentView {
-//                        ContentView()
-//                            .environmentObject(appViewModel)
-//                    } else {
-//                        Welcome()
-//                            .environmentObject(appViewModel)
-//                    }
-                    ProfileShare(userId: $usersi, needsButtons: .constant(false))
+                    if Auth.auth().currentUser == nil {
+                        firstView()
                             .environmentObject(appViewModel)
+                    } else if appViewModel.shouldShowContentView {
+                        ContentView()
+                            .environmentObject(appViewModel)
+                    } else {
+                        Welcome()
+                            .environmentObject(appViewModel)
+                    }
+//                    ProfileShare(userId: $usersi, needsButtons: .constant(false))
+//                            .environmentObject(appViewModel)
 //                     Commenting out ProfileConfirmationEmployer
 //                     ProfileConfirmation()
 //                        .environmentObject(appViewModel)
@@ -48,6 +49,15 @@ struct PeekingApp: App {
                 appViewModel.checkUserProfile()
             }
         }
+    }
+    init() {
+        if let firebaseUserId = Auth.auth().currentUser?.uid {
+                Purchases.configure(withAPIKey: "appl_EePRhZXbbVCmTtRVCaBozxePmke", appUserID: firebaseUserId)
+        }
+        else {
+                Purchases.configure(withAPIKey: "appl_EePRhZXbbVCmTtRVCaBozxePmke", appUserID: nil)
+        }
+                Purchases.logLevel = .debug
     }
 }
 
