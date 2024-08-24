@@ -25,7 +25,6 @@ struct TopCornersRounded: Shape {
 struct MainView: View {
     @EnvironmentObject var appViewModel: AppViewModel
 
-    // Variables to show the pricing/toggle and filling icons
     @State private var showTierView = false
     @State private var showSearchSettings = false
     @State private var showOverlay = false
@@ -36,6 +35,7 @@ struct MainView: View {
     @State private var buttons = true
 
     @State private var page: Page = .first()
+    @State private var showNoMatchesMessage = false
 
     var body: some View {
         NavigationView {
@@ -44,18 +44,6 @@ struct MainView: View {
                 VStack {
                     // Top Area
                     HStack {
-//                        HStack {
-//                            Image(systemName: "heart.fill")
-//                                .foregroundColor(.red)
-//                                .padding(.all, 5.0)
-//                                .font(.system(size: 25))
-//                            Text("\(likesRemaining)")
-//                                .font(.title)
-//                                .padding(.trailing, 5.0)
-//                        }
-//                        .background(RoundedRectangle(cornerRadius: 8).foregroundColor(.white))
-//                        .padding(.leading, 27.0)
-//                        .padding(.top, 70)
                         Image("share").shadow(radius: 2)
                         ZStack {
                             Image(systemName: "heart.fill").shadow(radius: 2)
@@ -73,61 +61,55 @@ struct MainView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 80).shadow(radius: 2)
-                            Spacer()
-                        
+                        Spacer()
+
                         Button(action: {
                             showSearchSettings.toggle()
                         }) {
                             Image("toggle")
                         }.shadow(radius: 2)
-                        
-                            Button(action: {
-                                showTierView.toggle()
-                            }) {
-                                Image(systemName: "bag")
-                                    .foregroundColor(Color.white)
-                                    .font(.system(size: 45))
-                            }.shadow(radius: 2)
 
-                            
+                        Button(action: {
+                            showTierView.toggle()
+                        }) {
+                            Image(systemName: "bag")
+                                .foregroundColor(Color.white)
+                                .font(.system(size: 45))
+                        }.shadow(radius: 2)
                     }
                     .padding(.horizontal, 20.0)
-//                    .padding(.top, 30)
 
                     // Main Area
-                    Pager(page: page, data: recommendationUserIds.indices, id: \.self) { index in
-                        VStack {
-                            if appViewModel.userType == 0 {
-                                ProfileCardViewEmployer(currentStep: $step, userId: .constant(recommendationUserIds[index]), needsButtons: $buttons)
-                                    .environmentObject(appViewModel)
-                            } else {
-                                ProfileCardView(currentStep: $step, userId: .constant(recommendationUserIds[index]), needsButtons: $buttons)
-                                    .environmentObject(appViewModel)
+                    if showNoMatchesMessage {
+                        Text("No potential matches, come back later")
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .padding()
+                    } else {
+                        Pager(page: page, data: recommendationUserIds.indices, id: \.self) { index in
+                            VStack {
+                                if appViewModel.userType == 0 {
+                                    ProfileCardViewEmployer(currentStep: $step, userId: .constant(recommendationUserIds[index]), needsButtons: $buttons)
+                                        .environmentObject(appViewModel)
+                                } else {
+                                    ProfileCardView(currentStep: $step, userId: .constant(recommendationUserIds[index]), needsButtons: $buttons)
+                                        .environmentObject(appViewModel)
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                        }
+                        .vertical()
+                        .onPageChanged { newIndex in
+                            let swipedUserId = recommendationUserIds[newIndex]
+                            addToSeenProfiles(userId: swipedUserId)
+                            
+                            if newIndex == recommendationUserIds.count - 1 {
+                                fetchMoreRecommendations()
                             }
                         }
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white)
-                        .cornerRadius(10)
-//                        .shadow(radius: 10)
-                        /*.padding(.vertical, 10)*/ // Add padding to separate the cards
                     }
-                    .vertical()
-                    .onPageChanged { newIndex in
-                        if newIndex == recommendationUserIds.count - 1 {
-                            fetchMoreRecommendations()
-                        }
-                    }
-//                    .padding(.top, -10)
-//                    .padding(.horizontal)
-
-                    // Next Profile
-//                    TopCornersRounded(radius: 10)
-//                        .fill(Color.gray)
-//                        .frame(height: 20)
-//                        .blur(radius: 3)
-//                        .padding(.top, -5)
-//                        .padding([.leading, .trailing])
-//                        .padding(.bottom, 20)
 
                     Spacer()
                 }
@@ -200,15 +182,76 @@ struct MainView: View {
 
     private func fetchMoreRecommendations() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        // Call the match API
         APIClient.shared.match(userId: userId, userType: appViewModel.userType ?? 0) { result in
             switch result {
-            case .success(let newRecommendations):
-//                if !newRecommendations.isEmpty {
-//                    self.recommendationUserIds.append(contentsOf: newRecommendations)
-//                }
-                print("Hi")
+            case .success:
+                // If the API call was successful, fetch the updated recommendations from Firestore
+                self.fetchUpdatedRecommendations(for: userId)
             case .failure(let error):
                 print("Failed to fetch more recommendations: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func fetchUpdatedRecommendations(for userId: String) {
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(userId)
+
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                if let data = document.data() {
+                    let newRecommendations = data["recommendations"] as? [String] ?? []
+                    if newRecommendations.isEmpty {
+                        self.showNoMatchesMessage = true
+                    } else {
+                        self.recommendationUserIds.append(contentsOf: newRecommendations)
+                        self.showNoMatchesMessage = false
+                    }
+                }
+            } else {
+                print("Document does not exist")
+                self.showNoMatchesMessage = true
+            }
+        }
+    }
+
+
+
+    private func addToSeenProfiles(userId: String) {
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+
+        if appViewModel.userType == 0 {
+            // Employee, update seen_profiles in the main user document
+            let userRef = db.collection("users").document(currentUserId)
+            userRef.getDocument { document, error in
+                if let document = document, document.exists {
+                    var seenProfiles = document.data()?["seen_profiles"] as? [String] ?? []
+
+                    if seenProfiles.count >= 50 {
+                        seenProfiles.removeFirst()
+                    }
+
+                    seenProfiles.append(userId)
+                    userRef.updateData(["seen_profiles": seenProfiles])
+                }
+            }
+        } else {
+            // Employer, update seen_profiles in the profile subcollection
+            let profileRef = db.collection("users").document(currentUserId).collection("profile").document("profile_data")
+            profileRef.getDocument { document, error in
+                if let document = document, document.exists {
+                    var seenProfiles = document.data()?["seen_profiles"] as? [String] ?? []
+
+                    if seenProfiles.count >= 50 {
+                        seenProfiles.removeFirst()
+                    }
+
+                    seenProfiles.append(userId)
+                    profileRef.updateData(["seen_profiles": seenProfiles])
+                }
             }
         }
     }

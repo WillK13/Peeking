@@ -75,7 +75,8 @@ struct Welcome: View {
                                             "chats": [],
                                             "pfp": "",
                                             "personality_photo": "",
-                                            "share_id": shareID
+                                            "share_id": shareID,
+                                            "seen_profiles": []
                                         ]
                                         try await UserManager.shared.updateUserProfileForEmployee(userId: userId, additionalData: additionalData)
                                     }

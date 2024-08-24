@@ -50,15 +50,15 @@ struct PeekingApp: App {
             }
         }
     }
-    init() {
-        if let firebaseUserId = Auth.auth().currentUser?.uid {
-                Purchases.configure(withAPIKey: "appl_EePRhZXbbVCmTtRVCaBozxePmke", appUserID: firebaseUserId)
-        }
-        else {
-                Purchases.configure(withAPIKey: "appl_EePRhZXbbVCmTtRVCaBozxePmke", appUserID: nil)
-        }
-                Purchases.logLevel = .debug
-    }
+//    init() {
+//        if let firebaseUserId = Auth.auth().currentUser?.uid {
+//                Purchases.configure(withAPIKey: "appl_EePRhZXbbVCmTtRVCaBozxePmke", appUserID: firebaseUserId)
+//        }
+//        else {
+//                Purchases.configure(withAPIKey: "appl_EePRhZXbbVCmTtRVCaBozxePmke", appUserID: nil)
+//        }
+//                Purchases.logLevel = .debug
+//    }
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {

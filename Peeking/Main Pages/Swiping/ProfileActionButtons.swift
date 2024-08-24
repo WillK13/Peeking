@@ -147,6 +147,7 @@ struct ProfileActionButtons: View {
                             print("Error updating likesYou in profile subcollection: \(error.localizedDescription)")
                         } else {
                             print("Successfully added to likesYou array in profile subcollection.")
+                            checkMutualLike(currentUserId: currentUserId, likedUserId: user_id)
                         }
                     }
                 } else {
@@ -157,6 +158,7 @@ struct ProfileActionButtons: View {
                             print("Error updating likesYou: \(error.localizedDescription)")
                         } else {
                             print("Successfully added to likesYou array.")
+                            checkMutualLike(currentUserId: currentUserId, likedUserId: user_id)
                         }
                     }
                 }
@@ -166,6 +168,42 @@ struct ProfileActionButtons: View {
         }
     }
 
+    private func checkMutualLike(currentUserId: String, likedUserId: String) {
+        let db = Firestore.firestore()
+        
+        // Check if the liked user has already liked the current user
+        db.collection("users").document(currentUserId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let likesYouArray = document.data()?["likes_you"] as? [String], likesYouArray.contains(likedUserId) {
+                    // Mutual like found, add to chats
+                    addToChats(currentUserId: currentUserId, likedUserId: likedUserId)
+                    
+                    // Change the heart color to green
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        heartAnimationAmount = 1.3
+                        isHeartClicked = true
+                        // Set the heart color to green
+                    }
+                }
+            } else if let error = error {
+                print("Error checking mutual like: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func addToChats(currentUserId: String, likedUserId: String) {
+        let db = Firestore.firestore()
+        
+        if let appViewModelUserType = appViewModel.userType, appViewModelUserType == 1 {
+            // Employer chat logic
+            let profileRef = db.collection("users").document(currentUserId).collection("profile").document("profile_data")
+            profileRef.updateData(["chats": FieldValue.arrayUnion([likedUserId])])
+        } else {
+            // Employee chat logic
+            let userRef = db.collection("users").document(currentUserId)
+            userRef.updateData(["chats": FieldValue.arrayUnion([likedUserId])])
+        }
+    }
 
 }
 

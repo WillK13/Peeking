@@ -24,6 +24,13 @@ struct LikedView: View {
     var body: some View {
         ZStack {
             BackgroundView()
+            LinearGradient(
+                gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.05)]),
+                startPoint: .center,
+                endPoint: .bottom
+            )
+            .edgesIgnoringSafeArea([.leading, .trailing])
+            .padding(.bottom)
 
             VStack(alignment: .center) {
                 headerView

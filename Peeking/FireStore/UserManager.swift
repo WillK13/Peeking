@@ -46,6 +46,7 @@ struct Profile: Codable {
     let soft_skills: [String]
     let work_envio: [String]
     let share_id: String
+    let seen_profiles: [String]
 }
 
 struct DBUser: Codable {
@@ -53,6 +54,7 @@ struct DBUser: Codable {
     var isProfileSetupComplete: Bool?
     let lastLogIn: Date?
     var matches: [String]?
+    var seen_profiles: [String]?
     var likes_you: [String]?
     var bookmarks: [String]?
     var userType: Int?
@@ -106,6 +108,7 @@ struct DBUser: Codable {
         bookmarks: [String]? = nil,
         userType: Int? = nil,
         recommendations: [String]? = nil,
+        seen_profiles: [String]? = nil,
         // New fields
         name: String? = nil,
         location: GeoPoint? = nil,
@@ -149,6 +152,7 @@ struct DBUser: Codable {
         self.name = name
         self.location = location
         self.age = age
+        self.seen_profiles = seen_profiles
         self.likes_remaining = likes_remaining
         self.report_count = report_count
         self.birthday = birthday
@@ -188,6 +192,7 @@ struct DBUser: Codable {
         case bookmarks = "bookmarks"
         case userType = "user_type"
         case name
+        case seen_profiles
         case location
         case age
         case birthday
@@ -312,7 +317,7 @@ final class UserManager: ObservableObject {
                 title: "", description: "", time: [], fields: [], setting: [], enroll: [], employment_type: [],
                 location: GeoPoint(latitude: 0, longitude: 0), distance: 0, age: 0, accepted_fields: [],
                 accepted_edu: [], technicals: [], chats: [], GPT_WorkEnvio: [], GPT_Technicals: [],
-                likes_remaining: 3, recommendations: [], matches: [], likes_you: [], bookmarks: [], soft_skills: [], work_envio: [], share_id: ""
+                likes_remaining: 3, recommendations: [], matches: [], likes_you: [], bookmarks: [], soft_skills: [], work_envio: [], share_id: "", seen_profiles: []
             ))
         }
     }
