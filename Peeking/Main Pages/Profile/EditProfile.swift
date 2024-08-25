@@ -47,23 +47,23 @@ struct EditProfile: View {
                         Text("Choose a category to edit").italic()
                         
                         NavigationLink(destination: ProfileSetupViewEmployee(fromEditProfile: true)) {
-                                SettingsButton(title: "Basics")
+                                SettingsButton1(title: "Basics")
                         }
                         
                         NavigationLink(destination: TechnicalsEmployee( fromEditProfile: true)) {
-                                SettingsButton(title: "Technicals")
+                                SettingsButton1(title: "Technicals")
                         }
                         
                         NavigationLink(destination: SoftSkills( fromEditProfile: true)) {
-                                SettingsButton(title: "Soft-Skills")
+                                SettingsButton1(title: "Soft-Skills")
                         }
                         
                         NavigationLink(destination: Hobbies( fromEditProfile: true)) {
-                                SettingsButton(title: "Hobbies and Photo")
+                                SettingsButton1(title: "Hobbies and Photo")
                         }
                         
                         NavigationLink(destination: WorkEnviornment( fromEditProfile: true)) {
-                                SettingsButton(title: "Desired Enviornment")
+                                SettingsButton1(title: "Desired Enviornment")
                         }
                         
                     }
@@ -82,6 +82,20 @@ struct EditProfile: View {
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
+    }
+}
+
+// View for pop ups
+struct SettingsButton1: View {
+    let title: String
+
+    var body: some View {
+            Text(title)
+                .foregroundColor(.black)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.white)
+                .cornerRadius(10)
     }
 }
 

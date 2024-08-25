@@ -19,7 +19,11 @@ struct ProfileViewEmployer: View {
     @State private var showDeleteConfirmation = false
     @State private var showEditProfile = false
     @State private var showFirstView = false
+    @State private var showProfileShare = false
     @State private var photoURL: String? = nil
+    @State private var logoURL: String? = nil
+    @State private var companyName: String = "Name"
+    @State private var shareId: String = "..."
 
     var body: some View {
         // Background
@@ -28,181 +32,177 @@ struct ProfileViewEmployer: View {
                 .edgesIgnoringSafeArea(.all)
             // Content
             VStack {
+                
                 // Top section with settings and tips buttons
                 HStack {
+                    VStack(alignment: .leading) {
+                      
+                            Text(companyName)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                       
+                        CustomMenu {
+                            ForEach(positions, id: \.id) { position in
+                                if position.title == "Locked position" {
+                                    Text(position.title)
+                                        .foregroundColor(.gray)
+                                        .padding()
+                                } else {
+                                    Button(action: {
+                                        selectedPosition = position.title
+                                    }) {
+                                        Text(position.title)
+                                    }
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Text(selectedPosition)
+                                    .foregroundColor(Color.black)
+                                Image(systemName: "chevron.down")
+                            }
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.black, lineWidth: 1)
+                            )
+                        }
+                        .onAppear {
+                            loadCompanyName()
+                            loadPositions()
+                            loadUserPhoto()
+                            loadShareId()
+                            loadLogo()
+                        }
+                    }.padding(.leading, 20)
+                    
+                    Spacer()
+                    Spacer()
                     Button(action: {
                         showSettings.toggle()
                     }) {
                         Image(systemName: "gearshape.fill")
                             .foregroundColor(Color.white)
-                            .font(.title)
+                            .font(.system(size: 40))
                     }
                     .padding(.leading)
-                    
-                    Spacer()
                     
                     Button(action: {
                         showTips.toggle()
                     }) {
-                        Text("Tips")
-                            .foregroundColor(Color.black)
-                            .padding(.all, 10.0)
-                            .background(Color.white)
-                            .cornerRadius(10)
-                    }
-                    .padding([.top, .trailing])
+                        Image("lightbulb")
+                            .padding(.horizontal, 10.0).padding(.trailing, 10)
+                        
+                    }.padding(.trailing, 10)
                 }
-                .padding(.top, 20)
+                .padding(.top, 40).padding(.trailing, 20)
                 
-                // Avatar and position selector
-                VStack(spacing: 20) {
-                    Image("tgprofile")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100).colorInvert()
-                    
-                    CustomMenu {
-                        ForEach(positions, id: \.id) { position in
-                            if position.title == "Locked position" {
-                                Text(position.title)
-                                    .foregroundColor(.gray)
-                                    .padding()
-                            } else {
-                                Button(action: {
-                                    selectedPosition = position.title
-                                }) {
-                                    Text(position.title)
-                                }
-                            }
+                // User's photo with logo overlay
+                ZStack {
+                    if let photoURL = photoURL {
+                        AsyncImage(url: URL(string: photoURL)) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 350, height: 500)
+                                .cornerRadius(10)
+                        } placeholder: {
+                            Color.gray.opacity(0.3)
+                                .frame(width: 350, height: 500)
+                                .cornerRadius(10)
                         }
-                    } label: {
-                        HStack {
-                            Text(selectedPosition)
-                                .foregroundColor(Color.black)
-                            Image(systemName: "chevron.down")
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.black, lineWidth: 1)
-                        )
-                    }
-                    .onAppear {
-                        loadPositions()
-                        loadUserPhoto()
-                    }
-                    
-                    Text("What job-seekers see")
-                        .font(.subheadline)
-                        .foregroundColor(.black)
-                        .italic()
-                }
-                .padding(.horizontal)
-                
-                // User's photo
-                if let photoURL = photoURL {
-                    AsyncImage(url: URL(string: photoURL)) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 250, height: 350)
-                            .cornerRadius(10)
-                    } placeholder: {
-                        Color.gray.opacity(0.3)
-                            .frame(width: 250, height: 350)
-                            .cornerRadius(10)
-                    }
-                    .onTapGesture {
-                        showProfileDetail.toggle()
-                    }
-                } else {
-                    Rectangle()
-                        .fill(Color.white)
-                        .frame(width: 250, height: 350)
-                        .cornerRadius(10)
-                        .padding(.horizontal, 50.0)
                         .onTapGesture {
-                            showProfileDetail.toggle()
+                            showProfileShare = true
                         }
+                    } else {
+                        Rectangle()
+                            .fill(Color.white)
+                            .frame(width: 350, height: 500)
+                            .cornerRadius(10)
+                            .padding(.horizontal, 50.0)
+                            .onTapGesture {
+                                showProfileDetail.toggle()
+                            }
+                    }
+                    VStack {
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            // Overlay the logo on top of the profile image
+                            if let logoURL = logoURL {
+                                AsyncImage(url: URL(string: logoURL)) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 40, height: 40)
+                                        .background(Color.white)
+                                        .clipShape(Circle())
+                                        .shadow(radius: 10)
+                                        .padding(10)
+                                } placeholder: {
+                                    Circle()
+                                        .fill(Color.gray.opacity(0.3))
+                                        .frame(width: 40, height: 40)
+                                        .padding(10)
+                                }
+                                //                        .offset(x: -500, y: -40) // Adjust the position of the logo as needed
+                            }
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                            Spacer()
+                        }
+                        Spacer()
+                    }
                 }
                 
                 Spacer()
                 
                 // Action buttons
                 HStack(spacing: 20) {
+                    Spacer()
+                    Text(shareId)
+                        .foregroundColor(Color.white)
+                    Spacer()
                     Button(action: {
-                        showDeleteConfirmation.toggle()
+                        //Nothing for now
                     }) {
-                        VStack {
-                            Image(systemName: "trash.fill")
-                                .font(.system(size: 20))
-                                .foregroundColor(.red)
-                            Text("Delete Profile")
-                                .font(.footnote)
-                                .foregroundColor(Color.black)
-                        }
-                        .padding(5.0)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .padding(.top, 20)
-                    }
-                    
-                    Button(action: {
-                        // Handle visibility action
-                    }) {
-                        VStack {
-                            Image(systemName: "eye")
-                                .font(.title)
-                                .foregroundColor(.black)
-                            Text("Visible")
-                                .font(.footnote)
-                                .foregroundColor(Color.black)
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
+                        Image("openeye")
+                            .shadow(radius: 2)
                     }
                     
                     Button(action: {
                         showEditProfile.toggle()
                     }) {
-                        VStack {
-                            Image(systemName: "pencil")
-                                .font(.title)
-                                .foregroundColor(.black)
-                            Text("Edit Profile")
-                                .font(.footnote)
-                                .foregroundColor(Color.black)
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
+                        Image("edit")
+                            .padding(.leading, 5)
+                            .shadow(radius: 2)
+                    }
+                    Button(action: {
+                        //Nothing yet
+                    }) {
+                        Image("share")
+                            .padding(.bottom, -10)
+                            .shadow(radius: 2)
                     }
                 }
-                .padding(.bottom, 70).padding(.top, 10)
-            }
-            // Logic for opening pop-ups
-            if showProfileDetail {
-                Color.black.opacity(0.7)
-                    .edgesIgnoringSafeArea(.all)
-                    .onTapGesture {
-                        showProfileDetail = false
-                    }
-                
-                ProfileDetailView(showProfileDetail: $showProfileDetail)
-                    .padding(.horizontal, 40)
-            }
-            
-            if showDeleteConfirmation {
-                Color.black.opacity(0.4)
-                    .edgesIgnoringSafeArea(.all)
-                    .onTapGesture {
-                        showDeleteConfirmation = false
-                    }
-                DeleteConfirmationViewProfile(showDeleteConfirmation: $showDeleteConfirmation, showFirstView: $showFirstView)
-                    .padding(.horizontal, 40)
+                .padding(.bottom, 90).padding(.top, 10).padding(.trailing, 60)
             }
         }
         .fullScreenCover(isPresented: $showSettings) {
@@ -216,6 +216,10 @@ struct ProfileViewEmployer: View {
         }
         .fullScreenCover(isPresented: $showFirstView) {
             newposition()
+        }
+        .fullScreenCover(isPresented: $showProfileShare) {
+            ProfileShare(userId: .constant(Auth.auth().currentUser?.uid ?? ""), needsButtons: .constant(false))
+                .environmentObject(AppViewModel())
         }
     }
     
@@ -265,6 +269,61 @@ struct ProfileViewEmployer: View {
             }
         }
     }
+
+    // Function to load the company name from Firestore
+    private func loadCompanyName() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists {
+                self.companyName = document.data()?["name"] as? String ?? "Company Name Not Found"
+            } else {
+                print("User document does not exist")
+            }
+        }
+    }
+    
+    // Function to load the share ID from the profile subcollection
+    private func loadShareId() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).collection("profile").document("profile_data").getDocument { document, error in
+            if let document = document, document.exists {
+                self.shareId = document.data()?["share_id"] as? String ?? "No Share ID"
+            } else {
+                print("Profile document does not exist")
+            }
+        }
+    }
+
+    // Function to load the employer's logo from Firestore
+    private func loadLogo() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let logo = document.data()?["logo"] as? String {
+                    fetchLogo(userId: userId, logo: logo)
+                } else {
+                    print("Logo not found in user document")
+                }
+            } else {
+                print("User document does not exist")
+            }
+        }
+    }
+
+    // Function to fetch the logo URL from Firebase Storage
+    private func fetchLogo(userId: String, logo: String) {
+        StorageManager.shared.getProfileImageURL(userId: userId, folder: "logo") { result in
+            switch result {
+            case .success(let url):
+                self.logoURL = url
+            case .failure(let error):
+                print("Failed to fetch logo URL: \(error)")
+            }
+        }
+    }
 }
 
 // Position struct to ensure unique IDs for each position
@@ -289,86 +348,6 @@ struct CustomMenu<Content: View, Label: View>: View {
         } label: {
             label
         }
-    }
-}
-
-// The pop-up to show the full profile, can be like main view, be its own file maybe
-struct ProfileDetailView: View {
-    @Binding var showProfileDetail: Bool
-
-    var body: some View {
-        VStack {
-            HStack {
-                // Close pop-up
-                Button(action: {
-                    showProfileDetail = false
-                }) {
-                    Text("X")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(.leading, 10)
-                        .cornerRadius(10)
-                }
-                Spacer()
-            }
-            
-            VStack(spacing: 20) {
-                Text("Profile Detail")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 300.0)
-                    .padding(.horizontal, 50)
-                
-                // Add the content of profile
-                
-                
-            }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(10)
-            .shadow(radius: 20)
-        }
-    }
-}
-
-// The pop-up to confirm deletion
-struct DeleteConfirmationViewProfile: View {
-    @Binding var showDeleteConfirmation: Bool
-    @Binding var showFirstView: Bool
-
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("Are you sure you want to delete your profile?")
-                .font(.title2)
-            // The buttons yes or no
-            HStack {
-                Button(action: {
-                    showDeleteConfirmation = false
-                }) {
-                    Text("No")
-                        .foregroundColor(.black)
-                        .padding()
-                        .background(Color.gray.opacity(0.5))
-                        .cornerRadius(10)
-                }
-                // Handle delete action and navigate to new position view
-                Button(action: {
-                    showDeleteConfirmation = false
-                    showFirstView = true
-                }) {
-                    Text("Yes")
-                        .foregroundColor(.black)
-                        .padding()
-                        .background(Color.red.opacity(0.5))
-                        .cornerRadius(10)
-                }
-            }
-        }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 20)
     }
 }
 

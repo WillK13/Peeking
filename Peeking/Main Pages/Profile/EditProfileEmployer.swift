@@ -48,23 +48,23 @@ struct EditProfileEmployer: View {
                         Text("Choose a category to edit").italic()
                         
                         NavigationLink(destination: ProfileSetupViewEmployer( fromEditProfile: true)) {
-                                SettingsButton(title: "Basics")
+                                SettingsButton1(title: "Basics")
                         }
                         
                         NavigationLink(destination: DesiredTechnicals( fromEditProfile: true)) {
-                                SettingsButton(title: "Desired Technicals")
+                                SettingsButton1(title: "Desired Technicals")
                         }
                         
                         NavigationLink(destination: enviornmentemployer( fromEditProfile: true)) {
-                                SettingsButton(title: "Work Environment")
+                                SettingsButton1(title: "Work Environment")
                         }
                         
                         NavigationLink(destination: hobbiesemployer( fromEditProfile: true)) {
-                                SettingsButton(title: "Hobbies and Photo")
+                                SettingsButton1(title: "Hobbies and Photo")
                         }
                         
                         NavigationLink(destination: softskillsemployer( fromEditProfile: true)) {
-                                SettingsButton(title: "Desired Soft-Skills")
+                                SettingsButton1(title: "Desired Soft-Skills")
                         }
                         
                     }

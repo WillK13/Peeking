@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 @MainActor
 final class SettingViewModel: ObservableObject {
@@ -31,6 +33,8 @@ struct SettingsView: View {
     @State private var showLogOutConfirmation = false
     @State private var showFirstView = false
     @State private var showReauthenticationView = false
+    @State private var showDeleteProfileConfirmation = false
+    @State private var userType: Int?
 
     var body: some View {
         NavigationView {
@@ -62,33 +66,39 @@ struct SettingsView: View {
                         Button(action: {
                             // Handle push notifications action
                         }) {
-                            SettingsButton(title: "Push Notifications")
+                            SettingsButton(im: "pushnoti", title: "Push Notifications")
                         }
 
                         Button(action: {
                             showReportProblem.toggle()
                         }) {
-                            SettingsButton(title: "Report a Problem")
+                            SettingsButton(im: "report", title: "Report a Problem")
+                        }
+                        
+                        Button(action: {
+                            // none
+                        }) {
+                            SettingsButton(im: "rocket", title: "Tips for Success")
                         }
 
                         Link(destination: URL(string: "https://www.example.com/how-does-it-work")!) {
-                            SettingsButton(title: "How Does it Work?")
+                            SettingsButton(im: "privacy", title: "Privacy Policy")
                         }
 
                         Link(destination: URL(string: "https://www.example.com/terms-of-use")!) {
-                            SettingsButton(title: "Terms of Use")
-                        }
-
-                        Button(action: {
-                            // Handle account details action
-                        }) {
-                            SettingsButton(title: "Account Details")
+                            SettingsButton(im: "terms", title: "Terms of Use")
                         }
 
                         Button(action: {
                             showSubscriptionSettings.toggle()
                         }) {
-                            SettingsButton(title: "Subscription Settings")
+                            SettingsButton(im: "tiers", title: "Subscription Settings")
+                        }
+
+                        Button(action: {
+                            // none
+                        }) {
+                            SettingsButton(im: "profilesetting", title: "Contact a Founder")
                         }
                     }
                     .padding(.horizontal, 20).padding(.top, -100)
@@ -96,36 +106,54 @@ struct SettingsView: View {
                     Spacer()
 
                     HStack {
-                        Button(action: {
-                            showLogOutConfirmation.toggle()
-                        }) {
-                            Text("Log Out")
-                                .foregroundColor(.red)
-                                .padding(10.0)
-                                .background(Color.white)
-                                .cornerRadius(10)
+                        VStack {
+                            HStack {
+                                Button(action: {
+                                    showLogOutConfirmation.toggle()
+                                }) {
+                                    Text("Log Out")
+                                        .foregroundColor(.red)
+                                        .padding(10.0)
+                                        .background(Color.white)
+                                        .cornerRadius(10)
+                                }
+                                .padding(.leading, 20)
+                                Spacer()
+                            }
+                            
+                            if userType == 1 {
+                                HStack {
+                                    Button(action: {
+                                        showDeleteProfileConfirmation.toggle()
+                                    }) {
+                                        Text("Delete Profile")
+                                            .foregroundColor(.red)
+                                            .padding(5.0)
+                                            .background(Color.white)
+                                            .cornerRadius(10)
+                                    }
+                                    .padding(.bottom, 30).padding(.leading, 20)
+                                    Spacer()
+                                }
+                            }
+                                
+                            HStack {
+                                Button(action: {
+                                    showReauthenticationView.toggle()
+                                }) {
+                                    Text("Delete Account")
+                                        .foregroundColor(.red)
+                                        .padding(5.0)
+                                        .background(Color.white)
+                                        .cornerRadius(10)
+                                }
+                                .padding(.bottom, 30).padding(.leading, 20)
+                                Spacer()
+                            }
+                            
                         }
-                        .padding(.leading, 20)
                         Spacer()
-                    }
-
-                    HStack {
-                        Button(action: {
-                            showReauthenticationView.toggle()
-                        }) {
-                            Text("Delete Account")
-                                .foregroundColor(.red)
-                                .padding(5.0)
-                                .background(Color.white)
-                                .cornerRadius(10)
-                        }
-                        .padding(.bottom, 30).padding(.leading, 20)
-                        Spacer()
-                    }
-
-                    HStack {
-                        Spacer()
-                        Image("Duck_Body").resizable().aspectRatio(contentMode: .fill).padding(.trailing, 140.0).frame(width: 10.0, height: 70.0)
+                        Image("Duck_Body").resizable().aspectRatio(contentMode: .fill).padding(.trailing, 140.0).frame(width: 10.0, height: 50.0)
                     }
 
                     Spacer()
@@ -172,26 +200,59 @@ struct SettingsView: View {
                     ReauthenticationView(showReauthenticationView: $showReauthenticationView, showFirstView: $showFirstView)
                         .padding(.horizontal, 40)
                 }
+                if showDeleteProfileConfirmation {
+                    Color.black.opacity(0.4)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            showDeleteProfileConfirmation = false
+                        }
+                    DeleteConfirmationViewProfile(showDeleteConfirmation: $showDeleteProfileConfirmation, showFirstView: $showFirstView)
+                        .padding(.horizontal, 40)
+                }
             }
+            
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .fullScreenCover(isPresented: $showFirstView) {
             firstView()
         }
+        .onAppear {
+                    fetchUserType()
+        }
     }
+    private func fetchUserType() {
+            guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+            let db = Firestore.firestore()
+            let docRef = db.collection("users").document(currentUserId)
+
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    self.userType = document.data()?["user_type"] as? Int
+                } else {
+                    print("Document does not exist")
+                }
+            }
+        }
 }
 
 // View for pop ups
 struct SettingsButton: View {
+    var im: String
     let title: String
 
     var body: some View {
-        Text(title)
-            .foregroundColor(.black)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.white)
-            .cornerRadius(10)
+        HStack {
+            Image(im)
+                .padding(.leading, 10)
+        Spacer()
+            Text(title)
+                .foregroundColor(.black)
+                .padding()
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .background(Color.white)
+        .cornerRadius(10)
     }
 }
 
@@ -410,6 +471,46 @@ struct LogOutConfirmationView: View {
                             print(error)
                         }
                     }
+                }) {
+                    Text("Yes")
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color.red.opacity(0.5))
+                        .cornerRadius(10)
+                }
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 20)
+    }
+}
+
+// The pop-up to confirm deletion
+struct DeleteConfirmationViewProfile: View {
+    @Binding var showDeleteConfirmation: Bool
+    @Binding var showFirstView: Bool
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Are you sure you want to delete your profile?")
+                .font(.title2)
+            // The buttons yes or no
+            HStack {
+                Button(action: {
+                    showDeleteConfirmation = false
+                }) {
+                    Text("No")
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color.gray.opacity(0.5))
+                        .cornerRadius(10)
+                }
+                // Handle delete action and navigate to new position view
+                Button(action: {
+                    showDeleteConfirmation = false
+                    showFirstView = true
                 }) {
                     Text("Yes")
                         .foregroundColor(.black)

@@ -19,7 +19,7 @@ struct LikedView: View {
     @State private var profiles: [String: String] = [:] // [userId: photoURL]
     @EnvironmentObject var appViewModel: AppViewModel
     @State private var selectedUserId: String? = nil // State to hold the selected user ID
-    @State private var needsButtons = false // Set this as needed
+    @State private var needsButtons = true // Set this as needed
 
     var body: some View {
         ZStack {

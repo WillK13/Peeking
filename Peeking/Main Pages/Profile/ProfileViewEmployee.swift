@@ -14,10 +14,13 @@ struct ProfileViewEmployee: View {
     @State private var showTips = false
     @State private var showProfileDetail = false
     @State private var showEditProfile = false
+    @State private var showProfileShare = false // To trigger navigation to ProfileShare
 
     // State variables for storing the user's data
     @State private var userName: String = "Loading..."
+    @State private var shareId: String = "..."
     @State private var personalityPhotoURL: String? = nil
+    @State private var profilePictureURL: String? = nil
     
     var body: some View {
         // Background
@@ -28,50 +31,53 @@ struct ProfileViewEmployee: View {
             VStack {
                 // Top section with settings and tips buttons
                 HStack {
+                    Spacer()
+                    
+                    // Profile picture and name
+                    if let profilePictureURL = profilePictureURL {
+                        AsyncImage(url: URL(string: profilePictureURL)) { image in
+                            image
+                                .resizable()
+                                .cornerRadius(10)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 60)
+                                .shadow(radius: 5)
+                        } placeholder: {
+                            Circle()
+                                .fill(Color.gray.opacity(0.3))
+                                .cornerRadius(10)
+                                .frame(width: 60)
+                                .shadow(radius: 5)
+                        }
+                    }
+                    
+                    Text(userName)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .onAppear {
+                            loadUserData()
+                        }
+                    Spacer()
                     Button(action: {
                         showSettings.toggle()
                     }) {
                         Image(systemName: "gearshape.fill")
                             .foregroundColor(Color.white)
-                            .font(.title)
+                            .font(.system(size: 40))
                     }
                     .padding(.leading)
-                    
-                    Spacer()
                     
                     Button(action: {
                         showTips.toggle()
                     }) {
-                        Text("Tips")
-                            .foregroundColor(Color.black)
-                            .padding(.all, 10.0)
-                            .background(Color.white)
-                            .cornerRadius(10)
+                        Image("lightbulb")
+                            .padding(.horizontal, 10.0)
                         
-                    }
-                    .padding([.top, .trailing])
+                    }.padding(.trailing, 10)
+                    Spacer()
                 }
-                .padding(.top, 20)
-                
-                // Avatar and position selector, should be pfp, can click to change
-                VStack(spacing: 20) {
-                    Image("tgprofile")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100).colorInvert()
-                    
-                    Text(userName)
-                        .font(.title)
-                        .onAppear {
-                            loadUserData()
-                        }
-                    
-                    Text("What employers see")
-                        .font(.subheadline)
-                        .foregroundColor(.black)
-                        .italic()
-                }
-                .padding(.horizontal)
+                .padding(.top, 40)
                 
                 // User's personality photo
                 if let personalityPhotoURL = personalityPhotoURL {
@@ -79,20 +85,20 @@ struct ProfileViewEmployee: View {
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 250, height: 350)
+                            .frame(width: 350, height: 500)
                             .cornerRadius(10)
                     } placeholder: {
                         Color.gray.opacity(0.3)
-                            .frame(width: 250, height: 350)
+                            .frame(width: 350, height: 500)
                             .cornerRadius(10)
                     }
                     .onTapGesture {
-                        showProfileDetail.toggle()
+                        showProfileShare = true
                     }
                 } else {
                     Rectangle()
                         .fill(Color.white)
-                        .frame(width: 250, height: 350)
+                        .frame(width: 350, height: 500)
                         .cornerRadius(10)
                         .padding(.horizontal, 50.0)
                         .onTapGesture {
@@ -105,51 +111,33 @@ struct ProfileViewEmployee: View {
                 // Action buttons
                 HStack(spacing: 20) {
                     Spacer()
-                    
+                    Text(shareId)
+                        .font(.title)
+                        .foregroundColor(Color.white)
+                    Spacer()
                     Button(action: {
-                        // Handle visibility action
+                        //Nothing for now
                     }) {
-                        VStack {
-                            Image(systemName: "eye")
-                                .font(.title)
-                                .foregroundColor(.black)
-                            Text("Visible")
-                                .font(.footnote)
-                                .foregroundColor(Color.black)
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
+                        Image("openeye")
+                            .shadow(radius: 2)
                     }
                     
                     Button(action: {
                         showEditProfile.toggle()
                     }) {
-                        VStack {
-                            Image(systemName: "pencil")
-                                .font(.title)
-                                .foregroundColor(.black)
-                            Text("Edit Profile")
-                                .font(.footnote)
-                                .foregroundColor(Color.black)
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
+                        Image("edit")
+                            .padding(.leading, 5)
+                            .shadow(radius: 2)
+                    }
+                    Button(action: {
+                        //Nothing yet
+                    }) {
+                        Image("share")
+                            .padding(.bottom, -10)
+                            .shadow(radius: 2)
                     }
                 }
-                .padding(.bottom, 70).padding(.top, 10).padding(.trailing, 100)
-            }
-            // Logic to open other views
-            if showProfileDetail {
-                Color.black.opacity(0.7)
-                    .edgesIgnoringSafeArea(.all)
-                    .onTapGesture {
-                        showProfileDetail = false
-                    }
-                
-                ProfileDetailView(showProfileDetail: $showProfileDetail)
-                    .padding(.horizontal, 40)
+                .padding(.bottom, 90).padding(.top, 10).padding(.trailing, 60)
             }
         }
         .fullScreenCover(isPresented: $showSettings) {
@@ -161,6 +149,10 @@ struct ProfileViewEmployee: View {
         .sheet(isPresented: $showTips) {
             TipsView()
         }
+        .fullScreenCover(isPresented: $showProfileShare) {
+            ProfileShare(userId: .constant(Auth.auth().currentUser?.uid ?? ""), needsButtons: .constant(false))
+                .environmentObject(AppViewModel())
+        }
     }
     
     // Function to load the user's data from Firestore
@@ -169,8 +161,11 @@ struct ProfileViewEmployee: View {
 
         Firestore.firestore().collection("users").document(userId).getDocument { document, error in
             if let document = document, document.exists {
-                self.userName = document.data()?["name"] as? String ?? "Name not found"
-                self.personalityPhotoURL = document.data()?["personality_photo"] as? String
+                let data = document.data()
+                self.userName = data?["name"] as? String ?? "Name not found"
+                self.personalityPhotoURL = data?["personality_photo"] as? String
+                self.shareId = data?["share_id"] as? String ?? "No Share ID"
+                self.profilePictureURL = data?["pfp"] as? String
             } else {
                 print("User document does not exist")
             }

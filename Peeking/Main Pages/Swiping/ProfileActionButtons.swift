@@ -117,6 +117,7 @@ struct ProfileActionButtons: View {
 
     // Function to add like
     func addLike() {
+        print("IN ADD LIKE FUNCY")
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
         
@@ -169,42 +170,120 @@ struct ProfileActionButtons: View {
     }
 
     private func checkMutualLike(currentUserId: String, likedUserId: String) {
+        print("IN THE MUTUAL FUNCY")
         let db = Firestore.firestore()
-        
-        // Check if the liked user has already liked the current user
-        db.collection("users").document(currentUserId).getDocument { document, error in
-            if let document = document, document.exists {
-                if let likesYouArray = document.data()?["likes_you"] as? [String], likesYouArray.contains(likedUserId) {
-                    // Mutual like found, add to chats
-                    addToChats(currentUserId: currentUserId, likedUserId: likedUserId)
+
+        // Fetch the liked user's document to determine their user type
+        db.collection("users").document(likedUserId).getDocument { likedUserDocument, likedUserError in
+            if let likedUserDocument = likedUserDocument, likedUserDocument.exists {
+                if let likedUserType = likedUserDocument.data()?["user_type"] as? Int {
+                    let checkLikesYouPath: DocumentReference
                     
-                    // Change the heart color to green
-                    withAnimation(.easeInOut(duration: 0.5)) {
-                        heartAnimationAmount = 1.3
-                        isHeartClicked = true
-                        // Set the heart color to green
+                    // Determine the correct path to check the likes_you array
+                    if likedUserType == 1 {
+                        // Employer: check in the profile subcollection
+                        checkLikesYouPath = db.collection("users").document(likedUserId).collection("profile").document("profile_data")
+                    } else {
+                        // Employee: check in the main user document
+                        checkLikesYouPath = db.collection("users").document(likedUserId)
                     }
+
+                    // Now fetch the likes_you array from the correct location
+                    checkLikesYouPath.getDocument { document, error in
+                        if let document = document, document.exists {
+                            print("doc exist")
+                            
+                            // Debugging: Print the contents of likes_you array
+                            if let likesYouArray = document.data()?["likes_you"] as? [String] {
+                                print("likes_you array:", likesYouArray)
+                                print("currentUserId:", currentUserId)
+                                
+                                if likesYouArray.contains(currentUserId) {
+                                    print("Calling createChat")
+                                    // Mutual like found, create chat
+                                    createChatBetweenUsers(currentUserId: currentUserId, likedUserId: likedUserId)
+                                    
+                                    // Change the heart color to green
+                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                        heartAnimationAmount = 1.3
+                                        isHeartClicked = true
+                                        // Set the heart color to green
+                                    }
+                                } else {
+                                    print("currentUserId not found in likes_you array.")
+                                }
+                            } else {
+                                print("likes_you array is nil or not an array of strings.")
+                            }
+                        } else if let error = error {
+                            print("Error checking mutual like: \(error.localizedDescription)")
+                        }
+                    }
+                } else if let error = likedUserError {
+                    print("Error fetching liked user's type: \(error.localizedDescription)")
                 }
-            } else if let error = error {
-                print("Error checking mutual like: \(error.localizedDescription)")
+            } else if let error = likedUserError {
+                print("Error fetching liked user's document: \(error.localizedDescription)")
             }
         }
     }
 
-    private func addToChats(currentUserId: String, likedUserId: String) {
-        let db = Firestore.firestore()
-        
-        if let appViewModelUserType = appViewModel.userType, appViewModelUserType == 1 {
-            // Employer chat logic
-            let profileRef = db.collection("users").document(currentUserId).collection("profile").document("profile_data")
-            profileRef.updateData(["chats": FieldValue.arrayUnion([likedUserId])])
-        } else {
-            // Employee chat logic
-            let userRef = db.collection("users").document(currentUserId)
-            userRef.updateData(["chats": FieldValue.arrayUnion([likedUserId])])
+
+
+    private func createChatBetweenUsers(currentUserId: String, likedUserId: String) {
+        print("Calling creatorfetchChat")
+        ChatManager.shared.createOrFetchChat(userIds: [currentUserId, likedUserId]) { result in
+            switch result {
+            case .success(let chatId):
+                print("Chat created with ID: \(chatId)")
+                addChatToUsers(chatId: chatId, currentUserId: currentUserId, likedUserId: likedUserId)
+            case .failure(let error):
+                print("Failed to create chat: \(error.localizedDescription)")
+            }
         }
     }
 
+    private func addChatToUsers(chatId: String, currentUserId: String, likedUserId: String) {
+        let db = Firestore.firestore()
+        
+        // Add chat ID to the current user's chat array
+        if let appViewModelUserType = appViewModel.userType, appViewModelUserType == 1 {
+            // Employer chat logic
+            let profileRef = db.collection("users").document(currentUserId).collection("profile").document("profile_data")
+            profileRef.updateData(["chats": FieldValue.arrayUnion([chatId])])
+        } else {
+            // Employee chat logic
+            let userRef = db.collection("users").document(currentUserId)
+            userRef.updateData(["chats": FieldValue.arrayUnion([chatId])])
+        }
+        
+        // Add chat ID to the liked user's chat array
+        db.collection("users").document(likedUserId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let likedUserType = document.data()?["user_type"] as? Int, likedUserType == 1 {
+                    let likedUserProfileRef = db.collection("users").document(likedUserId).collection("profile").document("profile_data")
+                    likedUserProfileRef.updateData(["chats": FieldValue.arrayUnion([chatId])]) { error in
+                        if let error = error {
+                            print("Error updating chats in profile subcollection: \(error.localizedDescription)")
+                        } else {
+                            print("Successfully added chat to liked user's profile subcollection.")
+                        }
+                    }
+                } else {
+                    let likedUserRef = db.collection("users").document(likedUserId)
+                    likedUserRef.updateData(["chats": FieldValue.arrayUnion([chatId])]) { error in
+                        if let error = error {
+                            print("Error updating chats: \(error.localizedDescription)")
+                        } else {
+                            print("Successfully added chat to liked user's main document.")
+                        }
+                    }
+                }
+            } else if let error = error {
+                print("Error fetching liked user's document: \(error.localizedDescription)")
+            }
+        }
+    }
 }
 
 #Preview {

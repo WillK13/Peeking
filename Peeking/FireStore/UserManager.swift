@@ -241,7 +241,7 @@ final class UserManager: ObservableObject {
             var isUnique = false
             
             while !isUnique {
-                shareID = String((0..<6).map { _ in "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".randomElement()! })
+                shareID = String((0..<6).map { _ in "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789".randomElement()! })
                 let querySnapshot = try await userCollection.whereField("share_id", isEqualTo: shareID).getDocuments()
                 isUnique = querySnapshot.isEmpty
             }

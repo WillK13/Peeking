@@ -66,6 +66,8 @@
 		BEAC5C7C2C795DE000C1FE31 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = BEAC5C7B2C795DE000C1FE31 /* RevenueCat */; };
 		BEAC5C7E2C795DE000C1FE31 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = BEAC5C7D2C795DE000C1FE31 /* RevenueCatUI */; };
 		BEAC5C802C795E0600C1FE31 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEAC5C7F2C795E0600C1FE31 /* StoreKit.framework */; };
+		BEAC5C842C7AB8E100C1FE31 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C832C7AB8E100C1FE31 /* ChatManager.swift */; };
+		BEAC5C862C7BC94100C1FE31 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEAC5C852C7BC94100C1FE31 /* ChatView.swift */; };
 		BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */; };
 		BEE0CE692C3C864E00542876 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE0CE682C3C864E00542876 /* AppViewModel.swift */; };
 		BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEE502512C33394B00B6175B /* PhoneAuthView.swift */; };
@@ -158,6 +160,8 @@
 		BEAC5C762C74147C00C1FE31 /* testfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testfile.swift; sourceTree = "<group>"; };
 		BEAC5C782C77EB7A00C1FE31 /* ProfileShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileShare.swift; sourceTree = "<group>"; };
 		BEAC5C7F2C795E0600C1FE31 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		BEAC5C832C7AB8E100C1FE31 /* ChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
+		BEAC5C852C7BC94100C1FE31 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		BEE0CE662C3C4C4600542876 /* ReauthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReauthenticationView.swift; sourceTree = "<group>"; };
 		BEE0CE682C3C864E00542876 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		BEE502512C33394B00B6175B /* PhoneAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneAuthView.swift; sourceTree = "<group>"; };
@@ -359,6 +363,7 @@
 				BE6029DA2C1396F300B3C080 /* MessagesView.swift */,
 				BE6029DC2C13970100B3C080 /* Profile */,
 				BE0A08942C51B6E800D5D102 /* LocationView.swift */,
+				BEAC5C852C7BC94100C1FE31 /* ChatView.swift */,
 			);
 			path = "Main Pages";
 			sourceTree = "<group>";
@@ -418,6 +423,7 @@
 				BEE0CE682C3C864E00542876 /* AppViewModel.swift */,
 				BEFCA0262C432F0900A6C120 /* ProfileUpdater.swift */,
 				BEFCA0282C485DCF00A6C120 /* ProfileUpdaterEmployer.swift */,
+				BEAC5C832C7AB8E100C1FE31 /* ChatManager.swift */,
 			);
 			path = FireStore;
 			sourceTree = "<group>";
@@ -603,6 +609,7 @@
 				BE5E4FF42C1E441E00D36578 /* HonestyStatement.swift in Sources */,
 				BE6029922C13603B00B3C080 /* ContentView.swift in Sources */,
 				BE5E500A2C26093200D36578 /* honestyemployer.swift in Sources */,
+				BEAC5C842C7AB8E100C1FE31 /* ChatManager.swift in Sources */,
 				BEE502782C3B2C8400B6175B /* SignInWithPhoneHelper.swift in Sources */,
 				BEFCA0272C432F0900A6C120 /* ProfileUpdater.swift in Sources */,
 				BE6029DE2C13971400B3C080 /* ProfileViewEmployer.swift in Sources */,
@@ -650,6 +657,7 @@
 				BEE0CE672C3C4C4600542876 /* ReauthenticationView.swift in Sources */,
 				BE6029DB2C1396F300B3C080 /* MessagesView.swift in Sources */,
 				BE5E4FF82C1E4F4E00D36578 /* welcomeView.swift in Sources */,
+				BEAC5C862C7BC94100C1FE31 /* ChatView.swift in Sources */,
 				BE5E4FFE2C24A73800D36578 /* ProfileConfirmation.swift in Sources */,
 				BE6029902C13603B00B3C080 /* PeekingApp.swift in Sources */,
 				BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */,

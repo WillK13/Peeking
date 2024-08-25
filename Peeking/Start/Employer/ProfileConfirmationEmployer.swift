@@ -15,7 +15,7 @@ struct ProfileConfirmationEmployer: View {
     @State private var navigateToMainView = false
     @State private var showLoadingIndicator = false
     @State private var userId: String = Auth.auth().currentUser?.uid ?? ""
-    @State private var buttons = true
+    @State private var buttons = false
 
     var body: some View {
         NavigationStack {
@@ -53,7 +53,22 @@ struct ProfileConfirmationEmployer: View {
                     .padding(.bottom, 20)
                     
                     ProfileCardViewEmployer(currentStep: $currentStep, userId: $userId, needsButtons: $buttons)
-
+                    if (buttons == false) {
+                        HStack {
+                            Spacer()
+                            ForEach(0..<5) { index in
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(index == currentStep ? Color("SelectColor") : Color("NotSelectedColor"))
+                                    .frame(width: 65, height: 15)
+                                    .onTapGesture {
+                                        currentStep = index
+                                    }
+                                Spacer()
+                            }
+                            Spacer()
+                        }
+                        .padding(.top, 20)
+                    }
                     Text("Tap through to continue")
                         .font(.callout)
                         .foregroundColor(.gray)
