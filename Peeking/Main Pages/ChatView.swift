@@ -14,6 +14,7 @@ struct ChatView: View {
     @State private var messageText: String = ""
     @State private var messages: [Message] = []
     @EnvironmentObject var appViewModel: AppViewModel
+    @State private var lastMessageTimestamp: Timestamp? = nil
 
     var body: some View {
         VStack {
@@ -91,12 +92,18 @@ struct ChatView: View {
             switch result {
             case .success(let messages):
                 self.messages = messages
+                self.lastMessageTimestamp = messages.last?.timestamp // Track the last message timestamp
+                startListeningForNewMessages()
             case .failure(let error):
                 print("Failed to fetch messages: \(error.localizedDescription)")
             }
         }
+    }
+    
+    private func startListeningForNewMessages() {
+        guard let lastTimestamp = lastMessageTimestamp else { return }
         
-        ChatManager.shared.listenForNewMessages(chatId: chatId) { result in
+        ChatManager.shared.listenForNewMessages(chatId: chatId, since: lastTimestamp) { result in
             switch result {
             case .success(let message):
                 self.messages.append(message)
@@ -106,6 +113,7 @@ struct ChatView: View {
         }
     }
 }
+
 
 #Preview {
     ChatView(chatId: "example_chat_id")

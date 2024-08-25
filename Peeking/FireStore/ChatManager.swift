@@ -102,11 +102,11 @@ final class ChatManager: ObservableObject {
             }
     }
     
-    // Function to listen for new messages in a chat
-    func listenForNewMessages(chatId: String, completion: @escaping (Result<Message, Error>) -> Void) {
+    // Function to listen for new messages in a chat after a certain timestamp
+    func listenForNewMessages(chatId: String, since lastTimestamp: Timestamp, completion: @escaping (Result<Message, Error>) -> Void) {
         messagesCollection(chatId: chatId)
+            .whereField("timestamp", isGreaterThan: lastTimestamp)
             .order(by: "timestamp", descending: false)
-            .limit(toLast: 1)
             .addSnapshotListener { snapshot, error in
                 if let error = error {
                     completion(.failure(error))
@@ -118,6 +118,7 @@ final class ChatManager: ObservableObject {
                 }
             }
     }
+
     func fetchChat(chatId: String, completion: @escaping (Result<Chat, Error>) -> Void) {
             chatDocument(chatId: chatId).getDocument { document, error in
                 if let document = document, document.exists {
