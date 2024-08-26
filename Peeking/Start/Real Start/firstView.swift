@@ -15,8 +15,8 @@ struct firstView: View {
     @State private var showPhoneAuthView = false
     @State private var showWelcomeView = false
     @State private var showContentView = false
-    let urlTerms = URL(string: "https://www.google.com")!
-    let urlPrivacyPolicy = URL(string: "https://www.stackoverflow.com")!
+    let urlTerms = URL(string: "https://peeking.ai/terms-and-conditions")!
+    let urlPrivacyPolicy = URL(string: "https://peeking.ai/privacy-policy")!
     
     var body: some View {
         ZStack {
@@ -121,7 +121,7 @@ struct firstView: View {
                 
                 Text("Support?")
                     .onTapGesture {
-                        UIApplication.shared.open(URL(string: "https://google.com")!)
+                        UIApplication.shared.open(URL(string: "https://peeking.ai/contact")!)
                     }
                     .fontWeight(.semibold)
                     .opacity(0.8)

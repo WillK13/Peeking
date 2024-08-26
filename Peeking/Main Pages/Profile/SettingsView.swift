@@ -81,11 +81,11 @@ struct SettingsView: View {
                             SettingsButton(im: "rocket", title: "Tips for Success")
                         }
 
-                        Link(destination: URL(string: "https://www.example.com/how-does-it-work")!) {
+                        Link(destination: URL(string: "https://peeking.ai/privacy-policy")!) {
                             SettingsButton(im: "privacy", title: "Privacy Policy")
                         }
 
-                        Link(destination: URL(string: "https://www.example.com/terms-of-use")!) {
+                        Link(destination: URL(string: "https://peeking.ai/terms-and-conditions")!) {
                             SettingsButton(im: "terms", title: "Terms of Use")
                         }
 
