@@ -199,17 +199,17 @@ struct EmployeeTierView: View {
                             .padding()
                     }
 
-                    Button(action: {
-                        // Handle button action
-                    }) {
-                        Text(getButtonText())
-                            .font(.title2)
-                            .foregroundColor(Color.black)
-                            .padding()
-                            .background(getButtonBackgroundColor())
-                            .cornerRadius(100)
-                    }
-                    .padding(.top, 10)
+//                    Button(action: {
+//                        // Handle button action
+//                    }) {
+//                        Text(getButtonText())
+//                            .font(.title2)
+//                            .foregroundColor(Color.black)
+//                            .padding()
+//                            .background(getButtonBackgroundColor())
+//                            .cornerRadius(100)
+//                    }
+//                    .padding(.top, 10)
                     //Exit
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()

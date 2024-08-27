@@ -57,6 +57,7 @@
 		BE77FACF2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FACE2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift */; };
 		BE77FAD12C4B077900D7F3D0 /* ProfileActionButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FAD02C4B077900D7F3D0 /* ProfileActionButtons.swift */; };
 		BE77FAD52C4C6A7000D7F3D0 /* ProfileCardViewEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FAD42C4C6A7000D7F3D0 /* ProfileCardViewEmployer.swift */; };
+		BE8761EE2C7D4F2500A4C2D3 /* BookmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8761ED2C7D4F2500A4C2D3 /* BookmarkView.swift */; };
 		BE8AF5812C4D919800C1D59B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = BE8AF5802C4D919800C1D59B /* FirebaseStorage */; };
 		BE8AF5842C4DC14000C1D59B /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8AF5832C4DC14000C1D59B /* StorageManager.swift */; };
 		BEAC5C732C6AD54700C1FE31 /* SwiftUIPager in Frameworks */ = {isa = PBXBuildFile; productRef = BEAC5C722C6AD54700C1FE31 /* SwiftUIPager */; };
@@ -155,6 +156,7 @@
 		BE77FACE2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileConfirmationEmployer.swift; sourceTree = "<group>"; };
 		BE77FAD02C4B077900D7F3D0 /* ProfileActionButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionButtons.swift; sourceTree = "<group>"; };
 		BE77FAD42C4C6A7000D7F3D0 /* ProfileCardViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCardViewEmployer.swift; sourceTree = "<group>"; };
+		BE8761ED2C7D4F2500A4C2D3 /* BookmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkView.swift; sourceTree = "<group>"; };
 		BE8AF5832C4DC14000C1D59B /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		BEAC5C742C71572F00C1FE31 /* LikeHistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeHistoryItemView.swift; sourceTree = "<group>"; };
 		BEAC5C762C74147C00C1FE31 /* testfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testfile.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 				BE6029DC2C13970100B3C080 /* Profile */,
 				BE0A08942C51B6E800D5D102 /* LocationView.swift */,
 				BEAC5C852C7BC94100C1FE31 /* ChatView.swift */,
+				BE8761ED2C7D4F2500A4C2D3 /* BookmarkView.swift */,
 			);
 			path = "Main Pages";
 			sourceTree = "<group>";
@@ -662,6 +665,7 @@
 				BE6029902C13603B00B3C080 /* PeekingApp.swift in Sources */,
 				BE6029E52C16363D00B3C080 /* SettingsView.swift in Sources */,
 				BE77FACF2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift in Sources */,
+				BE8761EE2C7D4F2500A4C2D3 /* BookmarkView.swift in Sources */,
 				BE5E50122C2644FA00D36578 /* EditProfile.swift in Sources */,
 				BE5E4FF62C1E485200D36578 /* SoftSkills.swift in Sources */,
 				BEE502522C33394B00B6175B /* PhoneAuthView.swift in Sources */,

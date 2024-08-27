@@ -166,19 +166,38 @@ struct MainView: View {
     private func fetchUserDetails() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
-        let docRef = db.collection("users").document(userId)
 
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                let data = document.data()
-                self.likesRemaining = data?["likes_remaining"] as? Int ?? 0
-                self.recommendationUserIds = data?["recommendations"] as? [String] ?? []
-                self.currentIndex = 0
-            } else {
-                print("Document does not exist")
+        if appViewModel.userType == 0 {
+            // For users of type 0 (Employee), data is in the main user document
+            let docRef = db.collection("users").document(userId)
+
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    let data = document.data()
+                    self.likesRemaining = data?["likes_remaining"] as? Int ?? 0
+                    self.recommendationUserIds = data?["recommendations"] as? [String] ?? []
+                    self.currentIndex = 0
+                } else {
+                    print("Document does not exist")
+                }
+            }
+        } else if appViewModel.userType == 1 {
+            // For users of type 1 (Employer), data is in the profile subcollection
+            let profileRef = db.collection("users").document(userId).collection("profile").document("profile_data")
+
+            profileRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    let data = document.data()
+                    self.likesRemaining = data?["likes_remaining"] as? Int ?? 0
+                    self.recommendationUserIds = data?["recommendations"] as? [String] ?? []
+                    self.currentIndex = 0
+                } else {
+                    print("Document does not exist")
+                }
             }
         }
     }
+
 
     private func fetchMoreRecommendations() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
@@ -197,25 +216,46 @@ struct MainView: View {
 
     private func fetchUpdatedRecommendations(for userId: String) {
         let db = Firestore.firestore()
-        let docRef = db.collection("users").document(userId)
 
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let data = document.data() {
-                    let newRecommendations = data["recommendations"] as? [String] ?? []
+        if appViewModel.userType == 0 {
+            // Employee, data is in the main user document
+            let docRef = db.collection("users").document(userId)
+
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    let newRecommendations = document.data()?["recommendations"] as? [String] ?? []
                     if newRecommendations.isEmpty {
                         self.showNoMatchesMessage = true
                     } else {
                         self.recommendationUserIds.append(contentsOf: newRecommendations)
                         self.showNoMatchesMessage = false
                     }
+                } else {
+                    print("Document does not exist")
+                    self.showNoMatchesMessage = true
                 }
-            } else {
-                print("Document does not exist")
-                self.showNoMatchesMessage = true
+            }
+        } else if appViewModel.userType == 1 {
+            // Employer, data is in the profile subcollection
+            let profileRef = db.collection("users").document(userId).collection("profile").document("profile_data")
+
+            profileRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    let newRecommendations = document.data()?["recommendations"] as? [String] ?? []
+                    if newRecommendations.isEmpty {
+                        self.showNoMatchesMessage = true
+                    } else {
+                        self.recommendationUserIds.append(contentsOf: newRecommendations)
+                        self.showNoMatchesMessage = false
+                    }
+                } else {
+                    print("Document does not exist")
+                    self.showNoMatchesMessage = true
+                }
             }
         }
     }
+
 
 
 

@@ -4,11 +4,9 @@
 //
 //  Created by Will kaminski on 6/7/24.
 //
-
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
-
 struct MessagesView: View {
     @State private var showAlert = false
     @State private var chats: [ChatWithUserName] = []
@@ -55,38 +53,83 @@ struct MessagesView: View {
                         ProgressView()
                             .foregroundColor(.white)
                     } else if chats.isEmpty {
-                        Text("No matches")
-                            .foregroundColor(.white)
-                            .font(.title)
+                        VStack {
+                            HStack {
+                                Spacer()
+                                Text("No matches")
+                                    .foregroundColor(.white)
+                                    .font(.title)
+                                Spacer()
+                            }
+                            HStack {
+                                Spacer()
+                                Image("Duck_Body")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 150)
+                                Spacer()
+                            }
+                            HStack {
+                                Spacer()
+                                Link(destination: URL(string: "https://peeking.ai/Tips")!) {
+                                    SettingsButton(im: "rocket", title: "Get some tips here!")
+                                }
+                                Spacer()
+                            }
+                        }
                     } else {
                         List {
                             ForEach(chats, id: \.chat.id) { chatWithUserName in
                                 Button(action: {
                                     selectedChatId = chatWithUserName.chat.id
                                 }) {
-                                    VStack(alignment: .leading) {
-                                        Text(chatWithUserName.userName)
-                                            .font(.headline)
-                                            .fontWeight(.regular)
-                                            .padding(.bottom, 8)
-                                        if let lastMessage = chatWithUserName.lastMessage {
-                                            Text(truncatedMessage(lastMessage.text))
-                                                .font(.footnote)
-                                                .fontWeight(lastMessage.senderId == Auth.auth().currentUser?.uid ? .regular : .bold)
-                                                .foregroundColor(.black)
+                                    HStack {
+                                        // Profile Image
+                                        AsyncImage(url: URL(string: chatWithUserName.profileImageURL)) { image in
+                                            image
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 60, height: 85)
+                                                .cornerRadius(10)
+                                                .padding(.leading, 20)
+                                        } placeholder: {
+                                            Circle()
+                                                .fill(Color.gray)
+                                                .frame(width: 60, height: 85)
+                                                .padding(.leading, 20)
                                         }
+                                        VStack(alignment: .leading) {
+                                            HStack {
+                                                Text(chatWithUserName.userName)
+                                                    .font(.headline)
+                                                    .fontWeight(.regular)
+                                                Spacer()
+                                                if let lastMessage = chatWithUserName.lastMessage {
+                                                    Text(formattedTimestamp(lastMessage.timestamp))
+                                                        .font(.subheadline)
+                                                        .foregroundColor(.gray)
+                                                }
+                                            }
+                                            .padding(.bottom, 10)
+                                            if let lastMessage = chatWithUserName.lastMessage {
+                                                Text(truncatedMessage(lastMessage.text))
+                                                    .font(.footnote)
+                                                    .fontWeight(lastMessage.senderId == Auth.auth().currentUser?.uid ? .regular : .bold)
+                                                    .foregroundColor(.black)
+                                            }
+                                        }.padding()
+                                            .background(Color.white)
+                                            .cornerRadius(10)
                                     }
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(10) // Add corner radius
-                                    .shadow(color: .gray, radius: 3, x: 0, y: 2) // Add shadow for better visibility
+                                     // Add corner radius
                                 }
                                 .listRowBackground(Color.clear) // Ensure list row background is transparent
                             }
                         }
                         .listStyle(PlainListStyle())
                         .background(Color.clear) // Remove the white background of the entire list
-                        .padding(.horizontal, 20) // Adjust horizontal padding
+                        .padding(.leading, 20)
+                        .padding(.horizontal, 10) // Adjust horizontal padding
                     }
                     
                     Spacer()
@@ -98,14 +141,15 @@ struct MessagesView: View {
             .navigationTitle("Messages")
             .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(item: $selectedChatId) { chatId in
-                ChatView(chatId: chatId)
+                if let chatWithUserName = chats.first(where: { $0.chat.id == chatId }) {
+                    ChatView(chatId: chatId, profileImageURL: .constant(chatWithUserName.profileImageURL), userName: .constant(chatWithUserName.userName))
+                }
             }
+
         }
     }
-
     private func fetchChats() {
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
-
         let db = Firestore.firestore()
         db.collection("users").document(currentUserId).getDocument { document, error in
             if let document = document, document.exists {
@@ -128,56 +172,61 @@ struct MessagesView: View {
             }
         }
     }
-
     private func fetchChatsDetails(chatIds: [String]) {
-        let dispatchGroup = DispatchGroup()
         var fetchedChats: [ChatWithUserName] = []
-
         for chatId in chatIds {
-            dispatchGroup.enter()
             ChatManager.shared.fetchChat(chatId: chatId) { result in
                 switch result {
                 case .success(let chat):
                     if let otherUserId = chat.users.first(where: { $0 != Auth.auth().currentUser?.uid }) {
                         fetchUserNameAndLastMessage(userId: otherUserId, chat: chat) { chatWithUserName in
-                            fetchedChats.append(chatWithUserName)
-                            dispatchGroup.leave()
+                            DispatchQueue.main.async {
+                                fetchedChats.append(chatWithUserName)
+                                if fetchedChats.count == chatIds.count {
+                                    self.chats = fetchedChats
+                                    self.loading = false
+                                }
+                            }
                         }
-                    } else {
-                        dispatchGroup.leave()
                     }
                 case .failure(let error):
                     print("Failed to fetch chat: \(error.localizedDescription)")
-                    dispatchGroup.leave()
                 }
             }
         }
-
-        dispatchGroup.notify(queue: .main) {
-            self.chats = fetchedChats
-            self.loading = false
-        }
     }
+
 
     private func fetchUserNameAndLastMessage(userId: String, chat: Chat, completion: @escaping (ChatWithUserName) -> Void) {
         let db = Firestore.firestore()
-
         db.collection("users").document(userId).getDocument { document, error in
             let userName = document?.data()?["name"] as? String ?? "Unknown"
-
+            let profileImageURL = document?.data()?["pfp"] as? String ?? document?.data()?["logo"] as? String ?? ""
             ChatManager.shared.fetchMessages(chatId: chat.id!) { result in
                 switch result {
                 case .success(let messages):
                     let lastMessage = messages.last
-                    completion(ChatWithUserName(chat: chat, userName: userName, lastMessage: lastMessage))
+                    completion(ChatWithUserName(chat: chat, userName: userName, lastMessage: lastMessage, profileImageURL: profileImageURL))
                 case .failure(let error):
                     print("Failed to fetch messages: \(error.localizedDescription)")
-                    completion(ChatWithUserName(chat: chat, userName: userName, lastMessage: nil))
+                    completion(ChatWithUserName(chat: chat, userName: userName, lastMessage: nil, profileImageURL: profileImageURL))
                 }
             }
         }
     }
-
+    private func formattedTimestamp(_ timestamp: Timestamp) -> String {
+        let date = timestamp.dateValue()
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "h:mm a"
+            return formatter.string(from: date)
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d"
+            return formatter.string(from: date)
+        }
+    }
     // Helper function to truncate the message
     private func truncatedMessage(_ message: String) -> String {
         if message.count > 20 {
@@ -186,14 +235,13 @@ struct MessagesView: View {
         return message
     }
 }
-
 struct ChatWithUserName: Identifiable {
     var id: String { chat.id ?? UUID().uuidString }
     var chat: Chat
     var userName: String
     var lastMessage: Message?
+    var profileImageURL: String // URL for profile image or logo
 }
-
 #Preview {
     MessagesView()
 }
