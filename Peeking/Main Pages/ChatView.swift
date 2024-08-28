@@ -14,6 +14,8 @@ struct ChatView: View {
     @State private var messageText: String = ""
     @State private var messages: [Message] = []
     @Environment(\.presentationMode) var presentationMode // Used to dismiss the current view
+    @State private var isFlagRed: Bool = false
+    @State private var isStarYellow: Bool = false
     @State private var lastMessageTimestamp: Timestamp? = nil
     var body: some View {
         VStack {
@@ -48,8 +50,25 @@ struct ChatView: View {
                         .foregroundColor(.black)
                 }
                 Spacer()
-                Image(systemName: "star").font(.system(size: 25)).foregroundColor(.black).padding(.horizontal)
-                Image(systemName: "flag").font(.system(size: 25)).foregroundColor(.red).padding(.horizontal)
+                // Star Button
+                                Button(action: {
+                                    isStarYellow.toggle() // Toggle the star's color
+                                }) {
+                                    Image(systemName: "star")
+                                        .font(.system(size: 25))
+                                        .foregroundColor(isStarYellow ? .yellow : .black) // Change color based on state
+                                }
+                                .padding(.horizontal)
+
+                                // Flag Button
+                                Button(action: {
+                                    isFlagRed.toggle() // Toggle the flag's color
+                                }) {
+                                    Image(systemName: "flag")
+                                        .font(.system(size: 25))
+                                        .foregroundColor(isFlagRed ? .red : .black) // Change color based on state
+                                }
+                                .padding(.horizontal)
             }.padding()
             // Messages List
             ScrollViewReader { scrollViewProxy in

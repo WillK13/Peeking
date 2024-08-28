@@ -10,7 +10,10 @@ import FirebaseAuth
 import FirebaseFirestore
 
 struct Welcome: View {
-    
+    @State private var searchQuery: String = ""
+    @State private var showProfileShare = false
+    @State private var foundUserId: String? = nil
+
     var gradientBackground: LinearGradient {
         LinearGradient(gradient: Gradient(colors: [Color.orange, Color.yellow]), startPoint: .topLeading, endPoint: .bottomTrailing)
     }
@@ -21,7 +24,6 @@ struct Welcome: View {
                 BackgroundView()
                 VStack {
                     Spacer()
-                    
                     
                     Text("Choose Your Route")
                         .italic()
@@ -49,7 +51,7 @@ struct Welcome: View {
                             .padding(30)
                             .background(Color.white)
                             .cornerRadius(15)
-                        }.padding(.bottom, 50)
+                        }
                         .simultaneousGesture(TapGesture().onEnded {
                             Task {
                                 do {
@@ -135,40 +137,76 @@ struct Welcome: View {
                         })
 
                     }
-                    HStack {
-                        Spacer()
-                    Button(action: {
-                        // Action for invite code
-                    }) {
-                        Text("I have an invite code")
-                            .font(.subheadline)
-                            .foregroundColor(.black)
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 50)
-                            .background(Color.white)
-                            .cornerRadius(15)
-                    }
-                    .padding(.top, 15)
-                        Spacer()
-                }
+//                    HStack {
+//                        Spacer()
+//                    Button(action: {
+//                        // Action for invite code
+//                    }) {
+//                        Text("I have an invite code")
+//                            .font(.subheadline)
+//                            .foregroundColor(.black)
+//                            .padding(.vertical, 10)
+//                            .padding(.horizontal, 50)
+//                            .background(Color.white)
+//                            .cornerRadius(15)
+//                    }
+//                    .padding(.top, 15)
+//                        Spacer()
+//                }
                     Spacer()
-                    Text("Guest?")
-                        .italic()
-                        .font(.title)
-                        .padding(.vertical, 20)
-                    Text("Search Peeking Tag")
-                        .font(.subheadline)
-                        .foregroundColor(.black)
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 50)
-                        .background(Color.white)
-                        .cornerRadius(15)
+//                    Text("Guest?")
+//                        .italic()
+//                        .font(.title)
+//                        .padding(.vertical, 20)
+
+                    // Search Bar
+//                    HStack {
+//                        TextField("Search Peeking Tag", text: $searchQuery, onCommit: {
+//                            searchShareID()
+//                        })
+//                        .padding()
+//                        .background(Color.white)
+//                        .cornerRadius(15)
+//
+//                        Button(action: {
+//                            searchShareID()
+//                        }) {
+//                            Text("Search")
+//                                .font(.subheadline)
+//                                .foregroundColor(.white)
+//                                .padding(.vertical, 10)
+//                                .padding(.horizontal, 20)
+//                                .background(Color.blue)
+//                                .cornerRadius(15)
+//                        }
+//                    }
+//                    .padding(.bottom, 20)
+
                     Spacer()
                 }
                 .padding()
             }
+//            .navigationDestination(isPresented: $showProfileShare) {
+//                if let foundUserId = foundUserId {
+//                    ProfileShare(userId: .constant(foundUserId), needsButtons: .constant(false))
+//                }
+//            }
         }
         .navigationBarBackButtonHidden(true)
+    }
+
+    private func searchShareID() {
+        let db = Firestore.firestore()
+
+        db.collection("users").whereField("share_id", isEqualTo: searchQuery).getDocuments { snapshot, error in
+            if let snapshot = snapshot, let document = snapshot.documents.first {
+                self.foundUserId = document.documentID
+                self.showProfileShare = true
+            } else {
+                // Handle error or show a message that no user was found
+                print("No user found with the provided share ID.")
+            }
+        }
     }
 }
 
