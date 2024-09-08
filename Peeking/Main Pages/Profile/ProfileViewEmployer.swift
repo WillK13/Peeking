@@ -24,6 +24,10 @@ struct ProfileViewEmployer: View {
     @State private var logoURL: String? = nil
     @State private var companyName: String = "Name"
     @State private var shareId: String = "..."
+    @State private var isVisible = true
+    @State private var showShareSheet = false
+
+
 
     var body: some View {
         // Background
@@ -76,7 +80,7 @@ struct ProfileViewEmployer: View {
                             loadShareId()
                             loadLogo()
                         }
-                    }.padding(.leading, 20)
+                    }.padding(.leading, 50)
                     
                     Spacer()
                     Spacer()
@@ -181,11 +185,12 @@ struct ProfileViewEmployer: View {
                         .foregroundColor(Color.white)
                     Spacer()
                     Button(action: {
-                        //Nothing for now
+                        isVisible.toggle()
                     }) {
-                        Image("openeye")
+                        Image(isVisible ? "openeye" : "tgeye")
                             .shadow(radius: 2)
                     }
+
                     
                     Button(action: {
                         showEditProfile.toggle()
@@ -195,12 +200,16 @@ struct ProfileViewEmployer: View {
                             .shadow(radius: 2)
                     }
                     Button(action: {
-                        //Nothing yet
+                        showShareSheet.toggle()
                     }) {
                         Image("share")
                             .padding(.bottom, -10)
                             .shadow(radius: 2)
                     }
+                    .sheet(isPresented: $showShareSheet) {
+                        ShareSheet(items: ["Check out my profile on Peeking! https://peeking.ai"])
+                    }
+
                 }
                 .padding(.bottom, 90).padding(.top, 10).padding(.trailing, 60)
             }

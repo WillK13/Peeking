@@ -8,9 +8,12 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
+import UIKit
+
 
 struct ProfileViewEmployee: View {
     @State private var showSettings = false
+    @State private var showShareSheet = false
     @State private var showTips = false
     @State private var showProfileDetail = false
     @State private var showEditProfile = false
@@ -21,6 +24,8 @@ struct ProfileViewEmployee: View {
     @State private var shareId: String = "..."
     @State private var personalityPhotoURL: String? = nil
     @State private var profilePictureURL: String? = nil
+    @State private var isVisible = true
+
     
     var body: some View {
         // Background
@@ -116,11 +121,12 @@ struct ProfileViewEmployee: View {
                         .foregroundColor(Color.white)
                     Spacer()
                     Button(action: {
-                        //Nothing for now
+                        isVisible.toggle()
                     }) {
-                        Image("openeye")
+                        Image(isVisible ? "openeye" : "tgeye")
                             .shadow(radius: 2)
                     }
+
                     
                     Button(action: {
                         showEditProfile.toggle()
@@ -130,12 +136,16 @@ struct ProfileViewEmployee: View {
                             .shadow(radius: 2)
                     }
                     Button(action: {
-                        //Nothing yet
+                        showShareSheet.toggle()
                     }) {
                         Image("share")
                             .padding(.bottom, -10)
                             .shadow(radius: 2)
                     }
+                    .sheet(isPresented: $showShareSheet) {
+                        ShareSheet(items: ["Check out my profile on Peeking! https://peeking.ai"])
+                    }
+
                 }
                 .padding(.bottom, 90).padding(.top, 10).padding(.trailing, 60)
             }
@@ -175,4 +185,17 @@ struct ProfileViewEmployee: View {
 
 #Preview {
     ProfileViewEmployee()
+}
+
+struct ShareSheet: UIViewControllerRepresentable {
+    var items: [Any]
+    
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
+        // No need to update anything here
+    }
 }

@@ -145,6 +145,10 @@ struct MessagesView: View {
                     ChatView(chatId: chatId, profileImageURL: .constant(chatWithUserName.profileImageURL), userName: .constant(chatWithUserName.userName))
                 }
             }
+            .sheet(isPresented: $showAlert) {
+                TipsView()
+            }
+
 
         }
     }
