@@ -33,6 +33,7 @@ struct MainView: View {
     @State private var recommendationUserIds: [String] = []
     @State private var currentIndex = 0
     @State private var buttons = true
+    @State private var showShareSheet = false
 
     @State private var page: Page = .first()
     @State private var showNoMatchesMessage = false
@@ -44,7 +45,12 @@ struct MainView: View {
                 VStack {
                     // Top Area
                     HStack {
-                        Image("share").shadow(radius: 2)
+                        Button(action: {
+                            showShareSheet.toggle()
+                        }) {
+                            Image("share")
+                                .shadow(radius: 2)
+                        }
                         ZStack {
                             Image(systemName: "heart.fill").shadow(radius: 2)
                                 .foregroundColor(.white)
@@ -141,6 +147,8 @@ struct MainView: View {
                         Spacer()
                     }
                 }
+            }.sheet(isPresented: $showShareSheet) {
+                ShareSheet(items: ["Check out my profile on Peeking! https://peeking.ai"])
             }
             .navigationBarHidden(true)
             .fullScreenCover(isPresented: $showTierView) {
