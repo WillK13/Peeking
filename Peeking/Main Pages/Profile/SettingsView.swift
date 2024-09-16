@@ -75,9 +75,7 @@ struct SettingsView: View {
                             SettingsButton(im: "report", title: "Report a Problem")
                         }
                         
-                        Button(action: {
-                            // none
-                        }) {
+                        Link(destination: URL(string: "https://peeking.ai/privacy-policy")!) {
                             SettingsButton(im: "rocket", title: "Tips for Success")
                         }
 
@@ -300,15 +298,18 @@ struct ReportProblemView: View {
                 .frame(height: 150)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.black, lineWidth: 1)
-                )
+                .scrollContentBackground(.hidden)
+
+            
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 10)
+//                        .stroke(Color.black, lineWidth: 1)
+//                )
                 .placeholder(when: details.isEmpty) {
                     Text("Type details here...")
                         .foregroundColor(.gray)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 12)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 2)
                 }
 
             Button(action: {
