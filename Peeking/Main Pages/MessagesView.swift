@@ -7,6 +7,7 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
+
 struct MessagesView: View {
     @State private var showAlert = false
     @State private var chats: [ChatWithUserName] = []
@@ -28,7 +29,7 @@ struct MessagesView: View {
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 200)
                                 .padding(.top, -40)
-                            
+
                             Text("\(chats.count)")
                                 .foregroundColor(.black)
                                 .font(.title3)
@@ -46,9 +47,9 @@ struct MessagesView: View {
                                 .padding(.trailing, 20)
                         }.padding(.top, -40)
                     }
-                    
+
                     Spacer()
-                    
+
                     if loading {
                         ProgressView()
                             .foregroundColor(.white)
@@ -56,7 +57,7 @@ struct MessagesView: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                Text("No matches")
+                                Text("No matches right now")
                                     .foregroundColor(.white)
                                     .font(.title)
                                 Spacer()
@@ -65,8 +66,8 @@ struct MessagesView: View {
                                 Spacer()
                                 Image("Duck_Body")
                                     .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 150)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 40)
                                 Spacer()
                             }
                             HStack {
@@ -74,6 +75,7 @@ struct MessagesView: View {
                                 Link(destination: URL(string: "https://peeking.ai/Tips")!) {
                                     SettingsButton(im: "rocket", title: "Get some tips here!")
                                 }
+                                .padding(.horizontal, 25.0)
                                 Spacer()
                             }
                         }
@@ -121,7 +123,7 @@ struct MessagesView: View {
                                             .background(Color.white)
                                             .cornerRadius(10)
                                     }
-                                     // Add corner radius
+                                    // Add corner radius
                                 }
                                 .listRowBackground(Color.clear) // Ensure list row background is transparent
                             }
@@ -131,7 +133,7 @@ struct MessagesView: View {
                         .padding(.leading, 20)
                         .padding(.horizontal, 10) // Adjust horizontal padding
                     }
-                    
+
                     Spacer()
                 }
             }
@@ -148,34 +150,47 @@ struct MessagesView: View {
             .sheet(isPresented: $showAlert) {
                 TipsView()
             }
-
-
         }
     }
+
     private func fetchChats() {
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
         let db = Firestore.firestore()
+        
         db.collection("users").document(currentUserId).getDocument { document, error in
             if let document = document, document.exists {
                 if let userType = document.data()?["user_type"] as? Int, userType == 1 {
+                    // Employer users (userType == 1)
                     let profileRef = db.collection("users").document(currentUserId).collection("profile").document("profile_data")
                     profileRef.getDocument { profileDocument, profileError in
                         if let profileDocument = profileDocument, profileDocument.exists {
                             let chatIds = profileDocument.data()?["chats"] as? [String] ?? []
-                            fetchChatsDetails(chatIds: chatIds)
+                            if chatIds.isEmpty {
+                                // No chats for employer, set loading to false
+                                self.loading = false
+                            } else {
+                                fetchChatsDetails(chatIds: chatIds)
+                            }
                         } else {
-                            loading = false
+                            self.loading = false
                         }
                     }
                 } else {
+                    // Employee users (userType == 0)
                     let chatIds = document.data()?["chats"] as? [String] ?? []
-                    fetchChatsDetails(chatIds: chatIds)
+                    if chatIds.isEmpty {
+                        // No chats for employee, set loading to false
+                        self.loading = false
+                    } else {
+                        fetchChatsDetails(chatIds: chatIds)
+                    }
                 }
             } else {
-                loading = false
+                self.loading = false
             }
         }
     }
+
     private func fetchChatsDetails(chatIds: [String]) {
         var fetchedChats: [ChatWithUserName] = []
         for chatId in chatIds {
@@ -199,6 +214,8 @@ struct MessagesView: View {
             }
         }
     }
+}
+
 
 
     private func fetchUserNameAndLastMessage(userId: String, chat: Chat, completion: @escaping (ChatWithUserName) -> Void) {
@@ -238,7 +255,7 @@ struct MessagesView: View {
         }
         return message
     }
-}
+
 struct ChatWithUserName: Identifiable {
     var id: String { chat.id ?? UUID().uuidString }
     var chat: Chat

@@ -73,18 +73,30 @@ struct LikedView: View {
         ]
         
         return ScrollView {
-            LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(likedYou, id: \.self) { userId in
-                    if let photoURL = profiles[userId] {
-                        Button(action: {
-                            selectedUserId = userId // Set the selected user ID when an image is clicked
-                        }) {
-                            ProfileImageView(photoURL: photoURL)
+            if likedYou.isEmpty {
+                        VStack {
+                            Spacer()
+                            Text("No ones liked you yet! Come back soon")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .padding()
+                            Spacer()
+                        }
+                    }
+            else {
+                LazyVGrid(columns: columns, spacing: 15) {
+                    ForEach(likedYou, id: \.self) { userId in
+                        if let photoURL = profiles[userId] {
+                            Button(action: {
+                                selectedUserId = userId // Set the selected user ID when an image is clicked
+                            }) {
+                                ProfileImageView(photoURL: photoURL)
+                            }
                         }
                     }
                 }
+                .padding(.horizontal, 15)
             }
-            .padding(.horizontal, 15)
         }
     }
 

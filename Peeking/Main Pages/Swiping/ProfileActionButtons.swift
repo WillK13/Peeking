@@ -154,7 +154,9 @@ struct ProfileActionButtons: View {
                         let userRef = db.collection("users").document(currentUserId).collection("likes_sent").document(user_id)
                         userRef.setData(likeData)
                     }
-                    
+                    // Inside addLike function, after checking likes_remaining and sending the like
+                    addToLikesYou(currentUserId: currentUserId, likedUserId: user_id)
+
                     // Continue with mutual like check...
                     checkMutualLike(currentUserId: currentUserId, likedUserId: user_id)
                 } else {
@@ -233,7 +235,6 @@ struct ProfileActionButtons: View {
 
 
     private func checkMutualLike(currentUserId: String, likedUserId: String) {
-        print("IN THE MUTUAL FUNCY")
         let db = Firestore.firestore()
 
         // Fetch the liked user's document to determine their user type
@@ -254,29 +255,10 @@ struct ProfileActionButtons: View {
                     // Now fetch the likes_you array from the correct location
                     checkLikesYouPath.getDocument { document, error in
                         if let document = document, document.exists {
-                            print("doc exist")
-                            
-                            // Debugging: Print the contents of likes_you array
-                            if let likesYouArray = document.data()?["likes_you"] as? [String] {
-                                print("likes_you array:", likesYouArray)
-                                print("currentUserId:", currentUserId)
-                                
-                                if likesYouArray.contains(currentUserId) {
-                                    print("Calling createChat")
-                                    // Mutual like found, create chat
-                                    createChatBetweenUsers(currentUserId: currentUserId, likedUserId: likedUserId)
-                                    
-                                    // Change the heart color to green
-                                    withAnimation(.easeInOut(duration: 0.5)) {
-                                        heartAnimationAmount = 1.3
-                                        isHeartClicked = true
-                                        // Set the heart color to green
-                                    }
-                                } else {
-                                    print("currentUserId not found in likes_you array.")
-                                }
-                            } else {
-                                print("likes_you array is nil or not an array of strings.")
+                            if let likesYouArray = document.data()?["likes_you"] as? [String], likesYouArray.contains(currentUserId) {
+                                // Mutual like found, update status to 2 and create chat
+                                updateLikeStatus(currentUserId: currentUserId, likedUserId: likedUserId, status: 2)
+                                createChatBetweenUsers(currentUserId: currentUserId, likedUserId: likedUserId)
                             }
                         } else if let error = error {
                             print("Error checking mutual like: \(error.localizedDescription)")
@@ -290,6 +272,89 @@ struct ProfileActionButtons: View {
             }
         }
     }
+
+    // Function to update the like status in the likes_sent subcollection
+    private func updateLikeStatus(currentUserId: String, likedUserId: String, status: Int) {
+        _ = Firestore.firestore()
+        
+        // Update status for the current user
+        updateStatusInSubcollection(userId: currentUserId, targetUserId: likedUserId, status: status)
+        
+        // Update status for the liked user
+        updateStatusInSubcollection(userId: likedUserId, targetUserId: currentUserId, status: status)
+    }
+    private func addToLikesYou(currentUserId: String, likedUserId: String) {
+        let db = Firestore.firestore()
+
+        // Fetch the liked user's document to determine their user type
+        db.collection("users").document(likedUserId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let likedUserType = document.data()?["user_type"] as? Int {
+                    let likesSentCollectionRef: CollectionReference
+                    
+                    // Determine the correct path to the likes_sent subcollection
+                    if likedUserType == 1 {
+                        // Employer: in the profile subcollection
+                        likesSentCollectionRef = db.collection("users").document(likedUserId).collection("profile").document("profile_data").collection("likes_sent")
+                    } else {
+                        // Employee: in the main document's subcollection
+                        likesSentCollectionRef = db.collection("users").document(likedUserId).collection("likes_sent")
+                    }
+
+                    // Check if the likes_sent subcollection has documents
+                    likesSentCollectionRef.getDocuments { querySnapshot, error in
+                        if let querySnapshot = querySnapshot, !querySnapshot.isEmpty {
+                            // Only add to likes_you if there are existing likes_sent documents
+                            let likesYouRef: DocumentReference
+                            
+                            if likedUserType == 1 {
+                                likesYouRef = db.collection("users").document(likedUserId).collection("profile").document("profile_data")
+                            } else {
+                                likesYouRef = db.collection("users").document(likedUserId)
+                            }
+                            
+                            // Update the likes_you array with the current user's ID
+                            likesYouRef.updateData(["likes_you": FieldValue.arrayUnion([currentUserId])]) { error in
+                                if let error = error {
+                                    print("Error updating likes_you array: \(error.localizedDescription)")
+                                } else {
+                                    print("Successfully added currentUserId to likes_you array.")
+                                }
+                            }
+                        } else {
+                            print("likes_sent subcollection is empty or does not exist for likedUserId: \(likedUserId)")
+                        }
+                    }
+                }
+            } else if let error = error {
+                print("Error fetching liked user's document: \(error.localizedDescription)")
+            }
+        }
+    }
+
+
+    
+    // Helper function to update the status in the likes_sent subcollection
+    private func updateStatusInSubcollection(userId: String, targetUserId: String, status: Int) {
+        let db = Firestore.firestore()
+        
+        db.collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let userType = document.data()?["user_type"] as? Int, userType == 1 {
+                    // Employer: update in profile subcollection
+                    let profileRef = db.collection("users").document(userId).collection("profile").document("profile_data").collection("likes_sent").document(targetUserId)
+                    profileRef.updateData(["status": status])
+                } else {
+                    // Employee: update in main document's subcollection
+                    let likesSentRef = db.collection("users").document(userId).collection("likes_sent").document(targetUserId)
+                    likesSentRef.updateData(["status": status])
+                }
+            } else if let error = error {
+                print("Error fetching user document: \(error.localizedDescription)")
+            }
+        }
+    }
+
 
 
 

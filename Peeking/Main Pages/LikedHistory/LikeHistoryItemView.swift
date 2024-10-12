@@ -40,9 +40,9 @@ struct LikeHistoryItemView: View {
     private var statusText: String {
         switch status {
         case 0:
-            return "Pending"
-        case 1:
             return "Not seen"
+        case 1:
+            return "Seen"
         case 2:
             return "Match"
         default:

@@ -284,6 +284,9 @@ struct MainView: View {
 
                     seenProfiles.append(userId)
                     userRef.updateData(["seen_profiles": seenProfiles])
+                    
+                    // Update the status to 1 in the likes_sent subcollection
+                    updateLikeStatus(userId: currentUserId, targetUserId: userId, status: 1)
                 }
             }
         } else {
@@ -299,10 +302,34 @@ struct MainView: View {
 
                     seenProfiles.append(userId)
                     profileRef.updateData(["seen_profiles": seenProfiles])
+                    
+                    // Update the status to 1 in the likes_sent subcollection
+                    updateLikeStatus(userId: currentUserId, targetUserId: userId, status: 1)
                 }
             }
         }
     }
+
+    private func updateLikeStatus(userId: String, targetUserId: String, status: Int) {
+        let db = Firestore.firestore()
+        
+        db.collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let userType = document.data()?["user_type"] as? Int, userType == 1 {
+                    // Employer: update in profile subcollection
+                    let profileRef = db.collection("users").document(userId).collection("profile").document("profile_data").collection("likes_sent").document(targetUserId)
+                    profileRef.updateData(["status": status])
+                } else {
+                    // Employee: update in main document's subcollection
+                    let likesSentRef = db.collection("users").document(userId).collection("likes_sent").document(targetUserId)
+                    likesSentRef.updateData(["status": status])
+                }
+            } else if let error = error {
+                print("Error fetching user document: \(error.localizedDescription)")
+            }
+        }
+    }
+
 }
 
 #Preview {

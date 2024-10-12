@@ -84,18 +84,30 @@ struct HistoryView: View {
         ]
         
         return ScrollView {
-            LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(likesSent, id: \.user_id) { like in
-                    if let photoURL = profiles[like.user_id] {
-                        Button(action: {
-                            selectedUserId = like.user_id // Set the selected user ID when an image is clicked
-                        }) {
-                            LikeHistoryItemView(photoURL: photoURL, status: like.status)
+            if likesSent.isEmpty {
+                        VStack {
+                            Spacer()
+                            Text("No like history! Go like some people")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .padding()
+                            Spacer()
+                        }
+                    }
+            else {
+                LazyVGrid(columns: columns, spacing: 15) {
+                    ForEach(likesSent, id: \.user_id) { like in
+                        if let photoURL = profiles[like.user_id] {
+                            Button(action: {
+                                selectedUserId = like.user_id // Set the selected user ID when an image is clicked
+                            }) {
+                                LikeHistoryItemView(photoURL: photoURL, status: like.status)
+                            }
                         }
                     }
                 }
+                .padding(.horizontal, 15)
             }
-            .padding(.horizontal, 15)
         }
     }
 
