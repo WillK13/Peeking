@@ -25,7 +25,7 @@ struct BookmarkView: View {
 
             // Popup content
             if let url = photoURL, let userId = bookmarkedUserId {
-                VStack(spacing: 0) {
+                VStack(spacing: 30) {
                     HStack {
                         Button(action: {
                             showBookmarkView = false // Close the popup

@@ -18,6 +18,7 @@ struct ProfileActionButtons: View {
     @State private var heartOffset: CGSize = .zero
     @State private var isBookmarked = false // Track the bookmark state
     @State private var showBookmarkView = false // State to manage BookmarkView display
+    @State private var showReportSheet = false
 
     var body: some View {
         ZStack {
@@ -80,7 +81,7 @@ struct ProfileActionButtons: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        // Ellipsis action
+                        showReportSheet = true
                     }) {
                         Image(systemName: "ellipsis")
                             .resizable()
@@ -112,6 +113,11 @@ struct ProfileActionButtons: View {
                     .transition(.move(edge: .bottom))
                     .zIndex(1)
             }
+            if showReportSheet {
+                            ReportActionSheet(showReportSheet: $showReportSheet)
+                                .transition(.move(edge: .bottom))
+                                .zIndex(2) // Ensure it's above other views
+                        }
         }
     }
 

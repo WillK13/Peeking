@@ -64,7 +64,7 @@ struct SettingsView: View {
                             .font(.system(size: 70))
 
                         Button(action: {
-                            // Handle push notifications action
+                            openAppSettings()
                         }) {
                             SettingsButton(im: "pushnoti", title: "Push Notifications")
                         }
@@ -93,9 +93,7 @@ struct SettingsView: View {
                             SettingsButton(im: "tiers", title: "Subscription Settings")
                         }
 
-                        Button(action: {
-                            // none
-                        }) {
+                        Link(destination: URL(string: "https://peeking.ai/contact")!) {
                             SettingsButton(im: "profilesetting", title: "Contact a Founder")
                         }
                     }
@@ -231,6 +229,14 @@ struct SettingsView: View {
                 }
             }
         }
+    func openAppSettings() {
+        if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(appSettings) {
+                UIApplication.shared.open(appSettings)
+            }
+        }
+    }
+
 }
 
 // View for pop ups
@@ -343,20 +349,21 @@ struct SubscriptionSettingsView: View {
 
             // This info needs to change as well.
             HStack {
-                Text(selectedPlan)
-                    .foregroundColor(.black)
-                    .padding()
-                    .background(Color.blue.opacity(0.2))
-                    .cornerRadius(10)
-
-                VStack(alignment: .leading) {
-                    Text("6 Month - $39.95")
-                        .font(.headline)
-                    Text("Renews December 11")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
-                Spacer()
+//                Text(selectedPlan)
+//                    .foregroundColor(.black)
+//                    .padding()
+//                    .background(Color.blue.opacity(0.2))
+//                    .cornerRadius(10)
+//
+//                VStack(alignment: .leading) {
+//                    Text("6 Month - $39.95")
+//                        .font(.headline)
+//                    Text("Renews December 11")
+//                        .font(.subheadline)
+//                        .foregroundColor(.gray)
+//                }
+//                Spacer()
+                Text("No Subscriptions available")
             }
             .padding()
             .background(Color.white)
@@ -366,28 +373,28 @@ struct SubscriptionSettingsView: View {
                     .stroke(Color.black, lineWidth: 1)
             )
             // Needs to be greyed out if action is not possible, also then cant click.
-            HStack {
-                Button(action: {
-                    // Handle restore action
-                }) {
-                    Text("Restore")
-                        .foregroundColor(.gray)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                }
+//            HStack {
+//                Button(action: {
+//                    // Handle restore action
+//                }) {
+//                    Text("Restore")
+//                        .foregroundColor(.gray)
+//                        .padding()
+//                        .background(Color.white)
+//                        .cornerRadius(10)
+//                }
 
-                Button(action: {
-                    // Handle cancel subscription action
-                }) {
-                    Text("Cancel Active Subscription")
-                        .font(.caption)
-                        .foregroundColor(.red)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(10)
-                }
-            }
+//                Button(action: {
+//                    // Handle cancel subscription action
+//                }) {
+//                    Text("Cancel Active Subscription")
+//                        .font(.caption)
+//                        .foregroundColor(.red)
+//                        .padding()
+//                        .background(Color.white)
+////                        .cornerRadius(10)
+//                }
+//            }
         }
         .padding()
         .background(Color.white)
