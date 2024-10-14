@@ -75,13 +75,24 @@ struct LikedView: View {
         return ScrollView {
             if likedYou.isEmpty {
                         VStack {
+                            Image("duckheart")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 100)
+                                .padding(.top, 20)
                             Spacer()
-                            Text("No ones liked you yet! Come back soon")
-                                .font(.title)
-                                .foregroundColor(.white)
-                                .padding()
+                            Text("You haven’t liked anyone yet")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .padding(.all)
+                            Text("Send likes to get started!")
+                                .font(.title3)
+                                .foregroundColor(.black)
+                                .padding([.leading, .bottom, .trailing])
+                                .bold()
                             Spacer()
-                        }
+                        }.background(Color.white)
+                    .cornerRadius(10).padding(.top, 40)
                     }
             else {
                 LazyVGrid(columns: columns, spacing: 15) {
