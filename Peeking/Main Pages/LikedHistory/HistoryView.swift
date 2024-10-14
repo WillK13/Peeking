@@ -32,10 +32,6 @@ struct HistoryView: View {
             VStack(alignment: .center) {
                 headerView
 
-                Text("Likes Sent")
-                    .font(.largeTitle)
-                    .padding(.bottom, 10.0)
-
                 historyList
 
                 Spacer()
@@ -57,13 +53,22 @@ struct HistoryView: View {
 
     private var headerView: some View {
         HStack {
+//            Spacer()
+//            Image("tgheartmain")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .padding(.leading, 45)
+//                .frame(width: 150)
+//                .foregroundColor(.white)
             Spacer()
-            Image("tgheartmain")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .padding(.leading, 45)
-                .frame(width: 150)
+            Text("Likes Sent")
+                .font(.largeTitle)
+                .padding(.bottom, 10.0)
                 .foregroundColor(.white)
+                .bold()
+            Spacer()
+            Spacer()
+            Spacer()
             Spacer()
             Button(action: {
                 showAlert = true

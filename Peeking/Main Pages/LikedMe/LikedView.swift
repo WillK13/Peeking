@@ -35,10 +35,7 @@ struct LikedView: View {
             VStack(alignment: .center) {
                 headerView
                 
-                Text("Liked You")
-                    .font(.largeTitle)
-                    .padding(.bottom, 10.0)
-                    .foregroundColor(.white)
+                
 
                 likedList
 
@@ -56,12 +53,35 @@ struct LikedView: View {
 
     private var headerView: some View {
         HStack {
-            Spacer()
-            Image(systemName: "eye.slash")
-                .resizable()
-                .frame(width: 120, height: 100)
-                .foregroundColor(.white)
-                .padding(.top, 30)
+            VStack {
+                HStack {
+                    Image(systemName: "heart.fill")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                        .foregroundColor(.red)
+                        .padding(.leading, 20.0)
+                    
+                    Text("\(likedYou.count)")
+                        .font(.title2)
+                                        .foregroundColor(.white)
+                                        .bold()
+                                        .padding(.leading, 5)
+                    Spacer()
+                }
+                //            Image(systemName: "eye.slash")
+                //                .resizable()
+                //                .frame(width: 120, height: 100)
+                //                .foregroundColor(.white)
+                //                .padding(.top, 30)
+                HStack {
+                Text("Liked You")
+                    .font(.largeTitle)
+                    .padding(.leading, 20.0)
+                    .foregroundColor(.white)
+                    .bold()
+                    Spacer()
+                }
+            }
             Spacer()
         }
     }
@@ -75,7 +95,7 @@ struct LikedView: View {
         return ScrollView {
             if likedYou.isEmpty {
                         VStack {
-                            Image("duckheart")
+                            Image("duckheart2")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 100)
