@@ -49,7 +49,7 @@ struct ProfileShare: View {
                             UIPasteboard.general.string = shareId
                         }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 20).padding(.bottom, 20)
                 
                 Spacer()
                 
@@ -89,7 +89,7 @@ struct ProfileShare: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(Color.white)
-                    .padding(.bottom, 20.0)
+//                    .padding(.bottom, 20.0)
             }
         }
         .onAppear {

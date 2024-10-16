@@ -22,40 +22,47 @@ struct BookmarkView: View {
                 .onTapGesture {
                     showBookmarkView = false // Close the popup when background is tapped
                 }
+                .padding(.top, -10).padding(.bottom, -15)
 
             // Popup content
             if let url = photoURL, let userId = bookmarkedUserId {
-                VStack(spacing: 30) {
+                VStack(spacing: 10) {
                     HStack {
                         Button(action: {
                             showBookmarkView = false // Close the popup
                         }) {
                             Text("X")
-                                .font(.title)
+                                .font(.title3)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
-                                .padding()
+                                .padding([.top, .leading, .trailing])
                         }
                         Spacer()
                     }
+                    
+                    Text("Bookmark:")
+                        .font(.title)
+                        .foregroundColor(.white)
                     
                     NavigationLink(destination: ProfileShare(userId: .constant(userId), needsButtons: .constant(true)).navigationBarBackButtonHidden()) {
                         AsyncImage(url: url) { image in
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 100, height: 100)
+                                .frame(width: 100, height: 150)
                         } placeholder: {
                             ProgressView()
                                 .frame(width: 100, height: 100)
                                 .background(Color.white)
                         }
-                    }
+                    }.padding(20)
+                    .cornerRadius(5)
                 }
                 .background(Color.gray)
                 .cornerRadius(25)
                 .shadow(radius: 10)
-                .padding()
+                .padding(.horizontal, 50)
+                .padding(.vertical, 15)
             } else {
                 Text("No Bookmark Found")
                     .foregroundColor(.white)

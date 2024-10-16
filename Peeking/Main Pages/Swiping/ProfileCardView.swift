@@ -22,7 +22,7 @@ struct ProfileCardView: View {
         ZStack {
             Rectangle()
                 .fill(Color.white)
-                .frame(width: 395, height: 545)
+                .frame(width: 410, height: 646)
                 .cornerRadius(10)
                 
             if let personalityPhotoURL = personalityPhotoURL {
