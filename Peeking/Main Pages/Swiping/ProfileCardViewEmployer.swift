@@ -33,7 +33,7 @@ struct ProfileCardViewEmployer: View {
                     image
                         .resizable()
                         .scaledToFill()  // Ensures the image fills the space
-                        .frame(width: 395, height: 545)  // Matches the white box dimensions
+                        .frame(width: 410, height: 646)  // Matches the white box dimensions
                         .clipped()  // Clips any overflowing parts
                         .cornerRadius(10)
                         .opacity(currentStep == 4 ? 1.0 : 0.2)

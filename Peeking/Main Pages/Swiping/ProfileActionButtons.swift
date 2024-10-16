@@ -34,7 +34,7 @@ struct ProfileActionButtons: View {
                             .foregroundColor(.black)
                     }
                     .padding(.top)
-                    .padding(.trailing, 10)
+                    .padding(.trailing, 25)
                     .onAppear {
                         checkIfBookmarked() // Check if the profile is already bookmarked
                     }
@@ -48,7 +48,7 @@ struct ProfileActionButtons: View {
                             .padding(5)
                     })
                 }
-                .padding(.trailing, 10)
+                .padding(.trailing, 25)
                 
                 Spacer()
                 HStack {
@@ -77,7 +77,7 @@ struct ProfileActionButtons: View {
                             .offset(heartOffset)
                     }
                     .padding(.bottom, 25)
-                }.padding(.trailing, 10)
+                }.padding(.trailing, 25)
                 HStack {
                     Spacer()
                     Button(action: {
@@ -89,7 +89,7 @@ struct ProfileActionButtons: View {
                             .foregroundColor(.black)
                     }
                     .padding(.bottom, 30)
-                }.padding(.trailing, 10)
+                }.padding(.trailing, 25)
                 // Add slider buttons here
                 HStack {
                     Spacer()
