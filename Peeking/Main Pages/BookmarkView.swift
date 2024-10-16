@@ -44,7 +44,7 @@ struct BookmarkView: View {
                         .font(.title)
                         .foregroundColor(.white)
                     
-                    NavigationLink(destination: ProfileShare(userId: .constant(userId), needsButtons: .constant(true)).navigationBarBackButtonHidden()) {
+                    NavigationLink(destination: ProfileShare(userId: .constant(userId), needsButtons: .constant(true)).navigationBarBackButtonHidden().toolbar(.hidden, for: .tabBar)) {
                         AsyncImage(url: url) { image in
                             image
                                 .resizable()

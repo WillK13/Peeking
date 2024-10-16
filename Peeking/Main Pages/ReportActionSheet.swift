@@ -49,11 +49,12 @@ struct ReportActionSheet: View {
 //                .padding(.top, 20)
                 .background(Color.white)
                 .cornerRadius(10)
+                .padding(.bottom, -15)
             }
             .edgesIgnoringSafeArea(.bottom)
             .background(Color.black.opacity(0.4).onTapGesture {
                 showReportSheet = false  // Close the sheet when the background is tapped
-            })
+            }).padding(.top, -10)
         }
 }
 
