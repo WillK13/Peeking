@@ -34,6 +34,7 @@ struct MainView: View {
     @State private var currentIndex = 0
     @State private var buttons = true
     @State private var showShareSheet = false
+    
 
     @State private var page: Page = .first()
     @State private var showNoMatchesMessage = false
@@ -48,7 +49,7 @@ struct MainView: View {
                         Button(action: {
                             showShareSheet.toggle()
                         }) {
-                            Image("share")
+                            Image("magnify")
                                 .shadow(radius: 2)
                         }
                         ZStack {
@@ -147,9 +148,15 @@ struct MainView: View {
                         Spacer()
                     }
                 }
-            }.sheet(isPresented: $showShareSheet) {
-                ShareSheet(items: ["Check out my profile on Peeking! https://peeking.ai"])
+            }.fullScreenCover(isPresented: $showShareSheet) {
+                searchView() // Full-screen cover for searchView
             }
+//            .sheet(isPresented: $showShareSheet) {
+////                ShareSheet(items: ["Check out my profile on Peeking! https://peeking.ai"])
+//                searchView()
+//            }.fullScreenCover(isPresented: $showShareSheet) {
+//                searchView() // Full-screen cover for searchView
+//            }
             .navigationBarHidden(true)
             .fullScreenCover(isPresented: $showTierView) {
                 if appViewModel.userType == 1 {

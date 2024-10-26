@@ -53,6 +53,7 @@
 		BE6029E72C16364400B3C080 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E62C16364400B3C080 /* TipsView.swift */; };
 		BE6029E92C17648500B3C080 /* ProfileViewEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */; };
 		BE6029EB2C19069700B3C080 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6029EA2C19069700B3C080 /* ToggleView.swift */; };
+		BE7503E92CCD606100F71872 /* searchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7503E82CCD606100F71872 /* searchView.swift */; };
 		BE77FACD2C498A8900D7F3D0 /* ProfileCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FACC2C498A8900D7F3D0 /* ProfileCardView.swift */; };
 		BE77FACF2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FACE2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift */; };
 		BE77FAD12C4B077900D7F3D0 /* ProfileActionButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE77FAD02C4B077900D7F3D0 /* ProfileActionButtons.swift */; };
@@ -153,6 +154,7 @@
 		BE6029E62C16364400B3C080 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
 		BE6029E82C17648400B3C080 /* ProfileViewEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewEmployee.swift; sourceTree = "<group>"; };
 		BE6029EA2C19069700B3C080 /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
+		BE7503E82CCD606100F71872 /* searchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchView.swift; sourceTree = "<group>"; };
 		BE77FACC2C498A8900D7F3D0 /* ProfileCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCardView.swift; sourceTree = "<group>"; };
 		BE77FACE2C498B5F00D7F3D0 /* ProfileConfirmationEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileConfirmationEmployer.swift; sourceTree = "<group>"; };
 		BE77FAD02C4B077900D7F3D0 /* ProfileActionButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionButtons.swift; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				BEAC5C852C7BC94100C1FE31 /* ChatView.swift */,
 				BE8761ED2C7D4F2500A4C2D3 /* BookmarkView.swift */,
 				BEE8EB032CBC7F9500DDA5F1 /* ReportActionSheet.swift */,
+				BE7503E82CCD606100F71872 /* searchView.swift */,
 			);
 			path = "Main Pages";
 			sourceTree = "<group>";
@@ -625,6 +628,7 @@
 				BEE0CE692C3C864E00542876 /* AppViewModel.swift in Sources */,
 				BE5E50002C24D17000D36578 /* newposition.swift in Sources */,
 				BE6029D92C1396D800B3C080 /* CustomAlertView.swift in Sources */,
+				BE7503E92CCD606100F71872 /* searchView.swift in Sources */,
 				BE5E4FFC2C24A41600D36578 /* Hobbies.swift in Sources */,
 				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
 				BE5E50042C26071100D36578 /* searchsettings.swift in Sources */,

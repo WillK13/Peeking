@@ -56,10 +56,10 @@ struct ProfileShare: View {
                 if let userType = userType {
                     if userType == 0 {
                         ProfileCardView(currentStep: $currentStep, userId: $userId, needsButtons: $needsButtons)
-                            .frame(width: 350, height: 500)
+                            .frame(width: 395, height: 545)
                     } else if userType == 1 {
                         ProfileCardViewEmployer(currentStep: $currentStep, userId: $userId, needsButtons: $needsButtons)
-                            .frame(width: 350, height: 500)
+                            .frame(width: 395, height: 545)
                     }
                 } else {
                     Text("Loading profile...")

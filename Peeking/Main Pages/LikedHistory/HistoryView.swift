@@ -61,7 +61,7 @@ struct HistoryView: View {
 //                .frame(width: 150)
 //                .foregroundColor(.white)
             Spacer()
-            Text("Likes Sent")
+            Text("Likes Status")
                 .font(.largeTitle)
                 .padding(.bottom, 10.0)
                 .foregroundColor(.white)
