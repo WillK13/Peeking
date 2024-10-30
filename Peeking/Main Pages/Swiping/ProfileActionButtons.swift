@@ -114,7 +114,7 @@ struct ProfileActionButtons: View {
                     .zIndex(1)
             }
             if showReportSheet {
-                            ReportActionSheet(showReportSheet: $showReportSheet)
+                ReportActionSheet(showReportSheet: $showReportSheet)
                                 .transition(.move(edge: .bottom))
                                 .zIndex(2) // Ensure it's above other views
                         }

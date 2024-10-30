@@ -18,7 +18,13 @@ struct MessagesView: View {
         NavigationView {
             ZStack {
                 BackgroundView() // Your custom background view
-                    .edgesIgnoringSafeArea(.all) // Ensure the background covers the whole screen
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.05)]),
+                    startPoint: .center,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea([.leading, .trailing])
+                .padding(.bottom) // Ensure the background covers the whole screen
                 VStack {
                     HStack {
                         Spacer()
@@ -140,8 +146,6 @@ struct MessagesView: View {
             .onAppear {
                 fetchChats()
             }
-            .navigationTitle("Messages")
-            .navigationBarTitleDisplayMode(.inline)
             .fullScreenCover(item: $selectedChatId) { chatId in
                 if let chatWithUserName = chats.first(where: { $0.chat.id == chatId }) {
                     ChatView(chatId: chatId, profileImageURL: .constant(chatWithUserName.profileImageURL), userName: .constant(chatWithUserName.userName))

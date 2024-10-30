@@ -31,7 +31,13 @@ struct ProfileViewEmployee: View {
         // Background
         ZStack {
             BackgroundView()
-                .edgesIgnoringSafeArea(.all)
+            LinearGradient(
+                gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.05)]),
+                startPoint: .center,
+                endPoint: .bottom
+            )
+            .edgesIgnoringSafeArea([.leading, .trailing])
+            .padding(.bottom)
             // Content
             VStack {
                 // Top section with settings and tips buttons

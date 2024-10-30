@@ -102,7 +102,6 @@ struct ProfileCardViewEmployer: View {
                         .onTapGesture {
                             showMission = false
                         }
-                        .padding(.bottom, 10)
                         .padding(.top, -10)
 
                     VStack {
@@ -118,13 +117,13 @@ struct ProfileCardViewEmployer: View {
                                     .italic()
                             }
                             .background(Color.white)
-                            .cornerRadius(50)
+                            .cornerRadius(30)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 50)
+                                RoundedRectangle(cornerRadius: 30)
                                     .stroke(Color.black, lineWidth: 1)
                             )
                             .padding(.leading)
-                            .padding(.top, 55)
+                            .padding(.top, 75)
                             Spacer()
                         }
                         Spacer()
