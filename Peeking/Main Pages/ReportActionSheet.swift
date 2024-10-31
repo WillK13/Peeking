@@ -33,7 +33,7 @@ struct ReportActionSheet: View {
                         }
                             .background(Color.white)
                             
-                            .cornerRadius(10)
+                            .cornerRadius(20)
                             .padding(.vertical, 20)
                             .shadow(radius: 1)
                     }
