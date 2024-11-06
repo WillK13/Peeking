@@ -23,7 +23,7 @@ struct PeekingApp: App {
         WindowGroup {
             ZStack {
                 if appViewModel.isLoading {
-                    LoadingView()
+                    FirstLoadView()
                 } else {
                     if Auth.auth().currentUser == nil {
                         firstView()

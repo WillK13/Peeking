@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BE0A08952C51B6E800D5D102 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0A08942C51B6E800D5D102 /* LocationView.swift */; };
+		BE0D41DD2CDBCFBB003ACFE5 /* FirstLoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0D41DC2CDBCFBB003ACFE5 /* FirstLoadView.swift */; };
 		BE5E4FE12C1B769600D36578 /* ToggleViewEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FE02C1B769500D36578 /* ToggleViewEmployer.swift */; };
 		BE5E4FEC2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FEB2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift */; };
 		BE5E4FEE2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FED2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift */; };
@@ -107,6 +108,7 @@
 
 /* Begin PBXFileReference section */
 		BE0A08942C51B6E800D5D102 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
+		BE0D41DC2CDBCFBB003ACFE5 /* FirstLoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLoadView.swift; sourceTree = "<group>"; };
 		BE5E4FE02C1B769500D36578 /* ToggleViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleViewEmployer.swift; sourceTree = "<group>"; };
 		BE5E4FEB2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupViewEmployer.swift; sourceTree = "<group>"; };
 		BE5E4FED2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupViewEmployee.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				BEE502752C3B2A8F00B6175B /* Utilities.swift */,
 				BEAC5C762C74147C00C1FE31 /* testfile.swift */,
 				BEAC5C782C77EB7A00C1FE31 /* ProfileShare.swift */,
+				BE0D41DC2CDBCFBB003ACFE5 /* FirstLoadView.swift */,
 			);
 			path = Peeking;
 			sourceTree = "<group>";
@@ -631,6 +634,7 @@
 				BE7503E92CCD606100F71872 /* searchView.swift in Sources */,
 				BE5E4FFC2C24A41600D36578 /* Hobbies.swift in Sources */,
 				BE6029E72C16364400B3C080 /* TipsView.swift in Sources */,
+				BE0D41DD2CDBCFBB003ACFE5 /* FirstLoadView.swift in Sources */,
 				BE5E50042C26071100D36578 /* searchsettings.swift in Sources */,
 				BE0A08952C51B6E800D5D102 /* LocationView.swift in Sources */,
 				BEAC5C792C77EB7A00C1FE31 /* ProfileShare.swift in Sources */,
