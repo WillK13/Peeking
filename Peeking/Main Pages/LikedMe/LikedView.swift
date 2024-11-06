@@ -94,25 +94,29 @@ struct LikedView: View {
         
         return ScrollView {
             if likedYou.isEmpty {
-                        VStack {
-                            Image("duckheart2")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 100)
-                                .padding(.top, 20)
-                            Spacer()
-                            Text("You haven’t liked anyone yet")
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .padding(.all)
-                            Text("Send likes to get started!")
-                                .font(.title3)
-                                .foregroundColor(.black)
-                                .padding([.leading, .bottom, .trailing])
-                                .bold()
-                            Spacer()
-                        }.background(Color.white)
-                    .cornerRadius(10).padding(.top, 40)
+                VStack {
+                    Image("feet")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 100)
+                        .padding(.top, 40).padding(.bottom, 20)
+                    Spacer()
+                    Text("No Likes Yet")
+                        .font(.title2)
+                        .foregroundColor(.black)
+                        .padding(.all)
+                        .bold()
+                    Text("Users that like your profile will appear here.")
+                        .font(.title3)
+                        .fontWeight(.thin)
+                        .foregroundColor(.black)
+                        .padding([.leading, .bottom, .trailing]).padding(.leading, 5).padding(.trailing, 5)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                    Spacer()
+                }.background(Color.white)
+                    .cornerRadius(20).padding(.top, 40).padding(.horizontal, 15).padding(.bottom).padding(.leading, 5).padding(.trailing, 5).shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        
                     }
             else {
                 LazyVGrid(columns: columns, spacing: 15) {

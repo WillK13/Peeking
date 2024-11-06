@@ -302,5 +302,5 @@ struct BookmarkView: View {
 }
 
 #Preview {
-    BookmarkView(showBookmarkView: .constant(true))
+    BookmarkView(showBookmarkView: .constant(true)).environmentObject(AppViewModel())
 }

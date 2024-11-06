@@ -63,9 +63,10 @@ struct MessagesView: View {
                         VStack {
                             HStack {
                                 Spacer()
-                                Text("No matches right now")
+                                Text("1 Match = 1 Chat")
+                                    .fontWeight(.semibold)
                                     .foregroundColor(.white)
-                                    .font(.title)
+                                    .font(.title).padding(.bottom, 10)
                                 Spacer()
                             }
                             HStack {
@@ -73,17 +74,18 @@ struct MessagesView: View {
                                 Image("Duck_Body")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(width: 40)
+                                    .frame(width: 120)
                                 Spacer()
-                            }
+                            }.padding(.bottom, 20).padding(.trailing, 10)
                             HStack {
                                 Spacer()
                                 Link(destination: URL(string: "https://peeking.ai/Tips")!) {
                                     SettingsButton(im: "rocket", title: "Get some tips here!")
                                 }
-                                .padding(.horizontal, 25.0)
+                                .padding(.horizontal, 50)
                                 Spacer()
                             }
+                            Spacer()
                         }
                     } else {
                         List {

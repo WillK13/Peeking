@@ -91,26 +91,25 @@ struct HistoryView: View {
         return ScrollView {
             if likesSent.isEmpty {
                 VStack {
-                    Image("feet")
+                    Image("duckheart2")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100)
-                        .padding(.top, 20)
+                        .padding(.top, 40)
                     Spacer()
-                    Text("No Likes Yet")
-                        .font(.title3)
+                    Text("You haven’t liked anyone yet")
+                        .font(.footnote)
+                        .fontWeight(.medium)
                         .foregroundColor(.black)
                         .padding(.all)
-                        .bold()
-                    Text("Users that like your profile will appear here.")
-                        .font(.headline)
+                    Text("Send likes to get started!")
+                        .font(.title3)
                         .foregroundColor(.black)
-                        .padding([.leading, .bottom, .trailing])
-                        .multilineTextAlignment(.center)
-                        .lineLimit(nil)
+                        .padding([.leading, .bottom, .trailing]).padding(.bottom).padding(.leading, 5).padding(.trailing, 5)
+                        .bold()
                     Spacer()
                 }.background(Color.white)
-                    .cornerRadius(10).padding(.top, 40).padding(.horizontal, 15)
+                    .cornerRadius(20).padding(.top, 40).shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                     }
             else {
                 LazyVGrid(columns: columns, spacing: 15) {

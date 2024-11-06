@@ -39,7 +39,47 @@ struct ToggleView: View {
 
     @State private var isLoading = true
 
-    var fieldOptions = ["Consulting", "IT Consulting", "Management Consulting"]
+    var fieldOptions = [
+        "Architecture",
+        "Arts and Entertainment",
+        "Automotive",
+        "Beauty and Cosmetics",
+        "Construction",
+        "Consulting",
+        "Creative and Design",
+        "Cybersecurity",
+        "E-commerce",
+        "Education",
+        "Energy and Utilities",
+        "Engineering",
+        "Environmental and Agriculture",
+        "Event Planning and Management",
+        "Fashion",
+        "Finance",
+        "Food and Beverage",
+        "Government and Public Administration",
+        "Health and Wellness",
+        "Healthcare",
+        "Home Improvement",
+        "Hospitality and Tourism",
+        "Human Resources",
+        "IT Services and Consulting",
+        "Legal",
+        "Manufacturing and Production",
+        "Media and Communications",
+        "Non-Profit and Social Services",
+        "Operations and Logistics",
+        "Pharmaceuticals",
+        "Real Estate",
+        "Restaurant",
+        "Retail",
+        "Sales and Customer Service",
+        "Science and Research",
+        "Software and Development",
+        "Sports and Recreation",
+        "Telecommunications",
+        "Transportation"
+    ]
     var employerOptions = ["Startup", "Small Business", "Independent Client", "Corporate"]
     var workSettingOptions = ["Remote", "In-Person", "Hybrid"]
     var employmentStatusOptions = ["Part-time", "Full-Time", "Temporary", "Internship"]
@@ -100,6 +140,26 @@ struct ToggleView: View {
                             Text("Up to \(Int(distance)) miles")
                         }
                         .padding(.horizontal)
+                        
+
+                        Divider().background(Color.gray)
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Work Setting")
+                            HStack {
+                                Text("1st Choice").foregroundColor(.gray).padding(.leading)
+                                Spacer()
+                                Text("2nd Choice").foregroundColor(.gray)
+                                Spacer()
+                                Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
+                            }
+                            HStack(spacing: 10) {
+                                DropdownMenuButton(title: $selectedSetting1, options: workSettingOptions)
+                                DropdownMenuButton(title: $selectedSetting2, options: workSettingOptions)
+                                DropdownMenuButton(title: $selectedSetting3, options: workSettingOptions)
+                            }
+                        }
+                        .padding()
 
                         Divider().background(Color.gray)
 
@@ -141,24 +201,7 @@ struct ToggleView: View {
 
                         Divider().background(Color.gray)
 
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Work Setting")
-                            HStack {
-                                Text("1st Choice").foregroundColor(.gray).padding(.leading)
-                                Spacer()
-                                Text("2nd Choice").foregroundColor(.gray)
-                                Spacer()
-                                Text("3rd Choice").foregroundColor(.gray).padding(.trailing)
-                            }
-                            HStack(spacing: 10) {
-                                DropdownMenuButton(title: $selectedSetting1, options: workSettingOptions)
-                                DropdownMenuButton(title: $selectedSetting2, options: workSettingOptions)
-                                DropdownMenuButton(title: $selectedSetting3, options: workSettingOptions)
-                            }
-                        }
-                        .padding()
-
-                        Divider().background(Color.gray)
+                        
 
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Employment Status")

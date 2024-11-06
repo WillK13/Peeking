@@ -110,6 +110,7 @@ struct ProfileActionButtons: View {
             // Popup Overlay
             if showBookmarkView {
                 BookmarkView(showBookmarkView: $showBookmarkView)
+                    .environmentObject(AppViewModel())
                     .transition(.move(edge: .bottom))
                     .zIndex(1)
             }
