@@ -26,18 +26,23 @@ struct searchView: View {
                             presentationMode.wrappedValue.dismiss()
                         }) {
                             Image(systemName: "arrow.left")
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                         }
 
                         Spacer()
                         VStack {
+                            ZStack {
                             Image("tgduck") // Replace with the actual duck icon asset name
                                 .resizable()
-                                .frame(width: 50, height: 40)
+                                .frame(width: 70, height: 60)
                             
-                            Text("Peeking Tag")
-                                .font(.title)
-                                .padding(.horizontal)
+                                
+                                Image(systemName: "magnifyingglass.circle.fill")
+                                    .font(.system(size: 30))
+                                    .foregroundStyle(.yellow, .white)
+                                    .padding(.leading, 45)
+                                    .padding(.top, 40)
+                            }
                         }
                         Spacer()
                     }
@@ -49,11 +54,16 @@ struct searchView: View {
                             searchUser()
                         })
                         .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
+                        .background(Color.white)
+                        .cornerRadius(40)
                         .padding(.horizontal)
-                    }
-                    
+                    }.padding(.bottom)
+                    if recentUsers.isEmpty {
+                                        Text("Search for a person!")
+                                            .foregroundColor(.white)
+                                            .font(.headline)
+                                            .padding(.top)
+                                    }
                     // Results list area
                     List(recentUsers, id: \.id) { user in
                         HStack {
@@ -61,8 +71,8 @@ struct searchView: View {
                             AsyncImage(url: URL(string: user.personalityPhoto)) { image in
                                 image.resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
+                                    .frame(width: 55, height: 80)
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
                             } placeholder: {
                                 Circle()
                                     .fill(Color.gray)
@@ -89,8 +99,8 @@ struct searchView: View {
                         }
                         .onTapGesture {
                             selectedUser = user
-                        }
-                    }
+                        }.listRowBackground(Color.white)
+                    }.scrollContentBackground(.hidden)
                     .background(Color.white).cornerRadius(20).padding(.top, 10) // White background for the results list
                 }
                 .cornerRadius(20)
