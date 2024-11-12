@@ -39,7 +39,7 @@ struct ProfileViewEmployer: View {
                 endPoint: .bottom
             )
             .edgesIgnoringSafeArea([.leading, .trailing])
-            .padding(.bottom)
+            .padding(.bottom).padding(.bottom).padding(.bottom, 4)
             // Content
             VStack {
                 

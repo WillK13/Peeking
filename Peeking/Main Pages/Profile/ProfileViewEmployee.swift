@@ -37,7 +37,7 @@ struct ProfileViewEmployee: View {
                 endPoint: .bottom
             )
             .edgesIgnoringSafeArea([.leading, .trailing])
-            .padding(.bottom)
+            .padding(.bottom).padding(.bottom).padding(.bottom, 4)
             // Content
             VStack {
                 // Top section with settings and tips buttons
