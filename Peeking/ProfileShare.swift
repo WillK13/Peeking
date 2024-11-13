@@ -17,6 +17,7 @@ struct ProfileShare: View {
     @State private var currentStep: Int = 0
     @EnvironmentObject var appViewModel: AppViewModel
     @State private var goBack = false
+    @State private var isCopied = false
     
     var body: some View {
         ZStack {
@@ -31,6 +32,9 @@ struct ProfileShare: View {
                             goBack.toggle()
                         }
                     Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
                     Image("Duck_Head")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -44,10 +48,17 @@ struct ProfileShare: View {
                             .fontWeight(.light)
                             .foregroundColor(Color.white)
                     }
-                    Image("copy")
-                        .onTapGesture {
-                            UIPasteboard.general.string = shareId
-                        }
+                    Image(isCopied ? "checkmark" : "copy")
+                                            .resizable()
+                                            .frame(width: 25, height: 30)
+//                                            .foregroundColor(isCopied ? .green : .white)
+                                            .onTapGesture {
+                                                UIPasteboard.general.string = shareId
+                                                isCopied = true
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                                    isCopied = false
+                                                }
+                                            }
                 }
                 .padding(.horizontal, 20).padding(.bottom, 20)
                 
