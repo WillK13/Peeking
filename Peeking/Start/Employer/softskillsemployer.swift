@@ -30,6 +30,23 @@ struct softskillsemployer: View {
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack(alignment: .leading) {
+                        HStack() {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                        }
                         // Custom back arrow
                         HStack {
                             Button(action: {
@@ -57,12 +74,13 @@ struct softskillsemployer: View {
                                         .cornerRadius(5)
                                 }
                             }
+                            Image("feather")
                         }
                         .padding(.leading)
                         
                         HStack {
                             Spacer()
-                            Text("Let’s Understand Your Desired Soft-Skills")
+                            Text("Let’s Formulate Your Ideal Traits")
                                 .font(.largeTitle)
                                 .multilineTextAlignment(.center)
                                 .padding(.top)

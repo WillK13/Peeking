@@ -29,6 +29,23 @@ struct SoftSkills: View {
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack(alignment: .leading) {
+                        HStack() {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                        }
                         // Custom back arrow
                         HStack {
                             Button(action: {
@@ -56,13 +73,15 @@ struct SoftSkills: View {
                                         .cornerRadius(5)
                                 }
                             }
+                            Image("feather")
                         }
                         .padding(.leading)
                         
                         HStack {
                             Spacer()
-                            Text("Let’s Understand Your Soft-Skills")
+                            Text("Show Off Your \n Feathers")
                                 .font(.largeTitle)
+                                .multilineTextAlignment(.center)
                                 .padding(.top)
                             Spacer()
                         }
@@ -160,7 +179,7 @@ struct CustomTextField: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(title)
-                .padding()
+                .padding().padding(.trailing, 30)
                 .background(Color.white)
                 .cornerRadius(10)
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))

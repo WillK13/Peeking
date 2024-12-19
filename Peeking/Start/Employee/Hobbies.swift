@@ -17,6 +17,7 @@ struct Hobbies: View {
     @State private var showingImagePicker = false
     @State private var navigateToNextView: Bool = false
     @State private var isSaving: Bool = false // Add a state for the saving process
+    @State private var hobbiestext: String = ""
     var fromEditProfile: Bool // Flag to indicate if opened from EditProfile
 
     let characterLimit = 50
@@ -28,6 +29,23 @@ struct Hobbies: View {
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack(alignment: .leading) {
+                        HStack() {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                        }
                         // Custom back arrow
                         HStack {
                             Button(action: {
@@ -77,54 +95,28 @@ struct Hobbies: View {
                         // Hobbies
                         VStack(alignment: .leading, spacing: 20) {
                             VStack(alignment: .leading) {
-                                Text("List any notable hobbies.")
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
-                                    .fixedSize(horizontal: false, vertical: true)
-                                Text("(ie: DJ-ing, origami, gardening)")
-                                    .foregroundColor(.gray)
-                                    .italic()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                CustomTextField3(title: "List any notable hobbies or fun facts.", text: $hobbiestext, characterLimit: characterLimit)
                             }
-                            ZStack(alignment: .leading) {
-                                if hobbies.isEmpty {
-                                    Text("Type here...")
-                                        .foregroundColor(.gray)
-                                        .padding(.leading, 5)
-                                }
-                                TextEditor(text: $hobbies)
-                                    .onChange(of: hobbies) { oldValue, newValue in
-                                        if newValue.count > characterLimit {
-                                            hobbies = String(newValue.prefix(characterLimit))
-                                        }
-                                    }
-                                    .frame(height: 100)
-                                    .cornerRadius(10)
-                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
-                            }
-                            Text("\(hobbies.count)/\(characterLimit) characters")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                                .padding(.trailing)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
+                           
                         }
                         .padding(.bottom, 20)
                         
                         // Photo
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Upload a photo that represents you.")
+                                .font(.headline)
+                                .fontWeight(.regular)
                                 .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
+                                .padding(.leading, -10)
+//                                .background(Color.white)
+//                                .cornerRadius(10)
+//                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
                                 .fixedSize(horizontal: false, vertical: true)
                             
                             Text("NOT A PHOTO OF YOU")
-                                .foregroundColor(.black)
+                                .foregroundColor(.gray)
                                 .italic()
-                                .padding(.horizontal)
+                                .padding(.horizontal).padding(.top, -10)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             VStack {
@@ -202,7 +194,7 @@ struct Hobbies: View {
 
     
     func isFormComplete() -> Bool {
-        return !hobbies.isEmpty && profileImage != nil
+        return !hobbiestext.isEmpty && profileImage != nil
     }
     
     func loadImage() {
@@ -221,7 +213,7 @@ struct Hobbies: View {
             case .success(let photoURL):
                 Task {
                     do {
-                        try await ProfileUpdater.shared.updateHobbies(userId: userId, hobbies: hobbies, photoURL: photoURL)
+                        try await ProfileUpdater.shared.updateHobbies(userId: userId, hobbies: hobbiestext, photoURL: photoURL)
                         
                         // Perform analysis after updating hobbies
                         APIClient.shared.performAnalysis(userId: userId, userType: 0) { result in
@@ -256,6 +248,61 @@ struct Hobbies: View {
         }
     }
 
+}
+
+struct CustomTextField3: View {
+    var title: String
+    @Binding var text: String
+    var characterLimit: Int
+    
+    @State private var isEditing = false
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            VStack {
+                Text(title)
+                    
+                
+                VStack(alignment: .leading) {
+                    Text("(ie: Dj-ing, origami, gardening, professional tennis player, etc)")
+                        .font(.body).padding(.leading,-20)
+                }
+                .foregroundColor(.gray)
+                .padding(.trailing, 30)
+                .italic()
+            }.padding().padding(.trailing, 50)
+                .background(Color.white)
+                .cornerRadius(10)
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
+                .fixedSize(horizontal: false, vertical: true)
+            
+            ZStack(alignment: .leading) {
+                if text.isEmpty && !isEditing {
+                    Text("Type here...")
+                        .foregroundColor(.gray)
+                        .padding(.leading, 5)
+                }
+                TextEditor(text: $text)
+                    .onChange(of: text) { oldValue, newValue in
+                        if newValue.count > characterLimit {
+                            text = String(newValue.prefix(characterLimit))
+                        }
+                    }
+                    .onTapGesture {
+                        isEditing = true
+                    }
+                    .frame(height: 100)
+                    .cornerRadius(10)
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+            }
+            
+            Text("\(text.count)/\(characterLimit) characters")
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding(.trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+    }
 }
 
 struct Hobbies_Previews: PreviewProvider {

@@ -2,90 +2,112 @@
 //  newposition.swift
 //  Peeking
 //
-//  Created by Will kaminski on 6/20/24.
+//  Created by Will Kaminski on 6/20/24.
 //
 
 import SwiftUI
 
 struct newposition: View {
-    
-    var gradientBackground: LinearGradient {
-        LinearGradient(gradient: Gradient(colors: [Color.orange, Color.yellow]), startPoint: .topLeading, endPoint: .bottomTrailing)
-    }
-
     var body: some View {
         NavigationStack {
             ZStack {
+                // Use your BackgroundView
+                BackgroundView()
+                    .edgesIgnoringSafeArea(.all)
                 
-                VStack {
+                VStack(spacing: 30) {
+                    // Navigation Back Button
                     HStack {
                         NavigationLink(destination: Welcome()) {
                             Image(systemName: "chevron.left")
-                                .foregroundColor(.black)
                                 .font(.system(size: 25))
+                                .foregroundColor(.white)
                                 .padding()
                         }
                         Spacer()
                     }
-                    .padding(.top)
+                    .padding(.top, 40)
+                    
                     Spacer()
+
+                    // Title
+//                    Text("Create Your Position")
+//                        .font(.largeTitle)
+//                        .fontWeight(.bold)
+//                        .foregroundColor(.black)
+//                        .padding(.bottom, 20)
+
+                    // Buttons Section
                     VStack(spacing: 20) {
-                        Spacer()
+                        // Main Button
                         NavigationLink(destination: ProfileSetupViewEmployer(fromEditProfile: false)) {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("Create New position")
-                                        .font(.title2)
-                                        .foregroundColor(.black)
-                                        .padding(.vertical)
-                                }
-                            }
-                            .padding(30)
-                            .background(gradientBackground)
-                            .cornerRadius(15) // Increased corner radius
+                            Text("Create New Position")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.black)
+                                .padding(.vertical, 50)
+                                .frame(maxWidth: .infinity)
+                                .background(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color.orange, Color.yellow]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .cornerRadius(15)
+                                .shadow(color: Color.black.opacity(0.5), radius: 10, x: 0, y: 10)
                         }
-                        Spacer()
-                        //Maybe get rid of
-                        NavigationLink(destination: ProfileSetupViewEmployer(fromEditProfile: false)) {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("Create New position")
-                                        .font(.title2)
-                                        .foregroundColor(.black)
-                                        .padding(.vertical)
-                                }
+
+                        // Disabled Buttons
+                        ForEach(1..<3) { _ in
+                            Button(action: {}) {
+                                Text("Create New Position")
+                                    .font(.headline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.gray)
+                                    .padding(.vertical, 50)
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [Color.gray.opacity(0.3), Color.gray.opacity(0.1)]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .cornerRadius(15)
                             }
-                            .padding(30)
-                            .background(gradientBackground)
-                            .cornerRadius(15).opacity(0.4)
-                            // Increased corner radius
+                            .disabled(true)
                         }
-                        
+                    }
+                    .padding(.horizontal, 30)
+
+                    Spacer()
+
+                    // Duck-Themed Bottom Decoration
+                    HStack {
                         Spacer()
-                        //Maybe get rid of
-                        NavigationLink(destination: ProfileSetupViewEmployer(fromEditProfile: false)) {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("Create New position")
-                                        .font(.title2)
-                                        .foregroundColor(.black)
-                                        .padding(.vertical)
-                                }
-                            }
-                            .padding(30)
-                            .background(gradientBackground)
-                            .cornerRadius(15).opacity(0.4) // Increased corner radius
+                        VStack {
+                            Text("Peeking")
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.8))
+                                .italic()
+                            Image("Duck_Head") // Replace with your duck image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                                .opacity(0.8)
+                                .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 5)
                         }
                         Spacer()
                     }
-                    Spacer()
-                    Spacer()
+                    .padding(.bottom, 40)
                 }
-                .padding()
             }
-        }.navigationBarBackButtonHidden(true)
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
+
 
 #Preview {
     newposition()

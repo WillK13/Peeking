@@ -90,6 +90,7 @@ struct ProfileSearchSettings: View {
         NavigationStack {
             VStack(spacing: 20) {
                 VStack {
+                    
                     HStack {
                         Button(action: {
                             presentationMode.wrappedValue.dismiss()

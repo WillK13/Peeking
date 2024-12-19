@@ -150,7 +150,23 @@ struct ProfileSetupViewEmployee: View {
                         .edgesIgnoringSafeArea(.all)
                     ScrollView {
                     VStack(alignment: .leading) {
-                        
+                        HStack() {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                        }
                         HStack {
                             Button(action: {
                                 if fromEditProfile {
@@ -189,7 +205,7 @@ struct ProfileSetupViewEmployee: View {
                             Spacer()
                             Text("The Basics")
                                 .font(.largeTitle)
-                                .padding(.top)
+                                .padding(.top, -10)
                                 .padding(.bottom, 20)
                             Spacer()
                         }

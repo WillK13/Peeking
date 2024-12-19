@@ -92,7 +92,7 @@ struct searchsettings: View {
                     .font(.title)
                     .fontWeight(.bold)
                     .padding(.bottom)
-            }.background(Color.gray.opacity(0.2)).cornerRadius(10)
+            }.background(Color("TopOrange")).cornerRadius(10)
             // The main view area
             ScrollView {
                 VStack(spacing: 20) {

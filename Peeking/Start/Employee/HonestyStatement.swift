@@ -10,6 +10,23 @@ struct HonestyStatement: View {
                 BackgroundView()
                     .edgesIgnoringSafeArea(.all)
                 VStack(alignment: .leading) {
+                    HStack() {
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                        Spacer()
+                    }
                     // Custom back arrow
                     HStack {
                         Button(action: {

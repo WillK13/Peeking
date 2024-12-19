@@ -151,6 +151,23 @@ struct ProfileSetupViewEmployer: View {
                         .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack(alignment: .leading) {
+                        HStack() {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                        }
                         // Custom back button
                         HStack {
                             Button(action: {
@@ -185,7 +202,7 @@ struct ProfileSetupViewEmployer: View {
                             Spacer()
                             Text("The Basics")
                                 .font(.largeTitle)
-                                .multilineTextAlignment(.center)
+                                .multilineTextAlignment(.center).padding(.top,-10)
                             Spacer()
                         }
                         

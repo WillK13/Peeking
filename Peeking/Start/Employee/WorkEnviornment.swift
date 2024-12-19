@@ -28,6 +28,23 @@ struct WorkEnviornment: View {
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack(alignment: .leading) {
+                        HStack() {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                        }
                         // Custom back arrow
                         HStack {
                             Button(action: {
@@ -55,13 +72,15 @@ struct WorkEnviornment: View {
                                         .cornerRadius(5)
                                 }
                             }
+                            Image("ecosystem")
                         }
                         .padding(.leading)
                         
                         HStack {
                             Spacer()
-                            Text("Tell Us Your Desired Work Environment")
+                            Text("Craft Your Ideal Ecosystem")
                                 .font(.largeTitle)
+                                .multilineTextAlignment(.center)
                                 .padding(.top)
                             Spacer()
                         }

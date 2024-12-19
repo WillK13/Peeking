@@ -18,6 +18,7 @@ struct hobbiesemployer: View {
     @State private var showingImagePicker = false
     @State private var isSaving: Bool = false
     @State private var navigateToNextView: Bool = false
+    @State private var hobbiestext: String = ""
 
     let characterLimit = 50
 
@@ -28,6 +29,23 @@ struct hobbiesemployer: View {
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack(alignment: .leading) {
+                        HStack() {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                        }
                         // Custom back arrow
                         HStack {
                             Button(action: {
@@ -77,55 +95,27 @@ struct hobbiesemployer: View {
                         // Hobbies
                         VStack(alignment: .leading, spacing: 20) {
                             VStack(alignment: .leading) {
-                                Text("What are some hobbies of your employees?")
-                                    .padding()
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
-                                    .fixedSize(horizontal: false, vertical: true)
-                                Text("Ex: Camping, family time, team dinners")
-                                    .foregroundColor(.gray)
-                                    .italic()
-                                    .padding([.horizontal])
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                CustomTextField3(title: "List any notable hobbies or fun facts.", text: $hobbiestext, characterLimit: characterLimit)
                             }
-                            ZStack(alignment: .leading) {
-                                if hobbies.isEmpty {
-                                    Text("Type here...")
-                                        .foregroundColor(.gray)
-                                        .padding(.leading, 5)
-                                }
-                                TextEditor(text: $hobbies)
-                                    .onChange(of: hobbies) { oldValue, newValue in
-                                        if newValue.count > characterLimit {
-                                            hobbies = String(newValue.prefix(characterLimit))
-                                        }
-                                    }
-                                    .frame(height: 100)
-                                    .cornerRadius(10)
-                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
-                            }
-                            Text("\(hobbies.count)/\(characterLimit) characters")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                                .padding(.trailing)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
                         }
                         .padding(.bottom, 20)
                         
                         // Photo
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Upload a photo of your workplace.")
+                                .font(.headline)
+                                .fontWeight(.regular)
                                 .padding()
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
+                                .padding(.leading, -10)
+//                                .background(Color.white)
+//                                .cornerRadius(10)
+//                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black))
                                 .fixedSize(horizontal: false, vertical: true)
                             
-                            Text("If Applicable")
+                            Text("Or something that represents your workplace.")
                                 .foregroundColor(.gray)
                                 .italic()
-                                .padding(.horizontal)
+                                .padding(.horizontal).padding(.top, -10)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             VStack {
@@ -192,7 +182,7 @@ struct hobbiesemployer: View {
     }
     
     func isFormComplete() -> Bool {
-        return !hobbies.isEmpty && profileImage != nil
+        return !hobbiestext.isEmpty && profileImage != nil
     }
     
     func loadImage() {
@@ -213,7 +203,7 @@ struct hobbiesemployer: View {
                     do {
                         try await ProfileUpdaterEmployer.shared.updateHobbiesAndPhoto(
                             userId: userId,
-                            hobbies: hobbies,
+                            hobbies: hobbiestext,
                             photoURL: photoURL
                         )
 

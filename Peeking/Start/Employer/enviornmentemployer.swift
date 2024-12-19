@@ -29,6 +29,23 @@ struct enviornmentemployer: View {
                     .edgesIgnoringSafeArea(.all)
                 ScrollView {
                     VStack(alignment: .leading) {
+                        HStack() {
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color.white)
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                            RoundedRectangle(cornerRadius: 10).frame(width: 35, height: 12).foregroundColor(Color("UnimportantText"))
+                            Spacer()
+                        }
                         // Custom back arrow
                         HStack {
                             Button(action: {
@@ -56,13 +73,15 @@ struct enviornmentemployer: View {
                                         .cornerRadius(5)
                                 }
                             }
+                            Image("ecosystem")
                         }
                         .padding(.leading)
                         
                         HStack {
                             Spacer()
-                            Text("Tell Us About Your Work Environment")
+                            Text("Paint a Picture of Your Ecosystem")
                                 .font(.largeTitle)
+                                .multilineTextAlignment(.center)
                                 .padding(.top)
                             Spacer()
                         }
