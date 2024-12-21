@@ -39,7 +39,7 @@ struct ProfileViewEmployer: View {
                 endPoint: .bottom
             )
             .edgesIgnoringSafeArea([.leading, .trailing])
-            .padding(.bottom).padding(.bottom).padding(.bottom, 4)
+            .padding(.bottom).padding(.bottom, 4).padding(.bottom, 4)
             // Content
             VStack {
                 
@@ -234,7 +234,7 @@ struct ProfileViewEmployer: View {
         }
         .fullScreenCover(isPresented: $showProfileShare) {
             ProfileShare(userId: .constant(Auth.auth().currentUser?.uid ?? ""), needsButtons: .constant(false))
-                .environmentObject(AppViewModel())
+//                .environmentObject(AppViewModel())
         }
     }
     

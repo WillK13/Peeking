@@ -37,7 +37,7 @@ struct ProfileViewEmployee: View {
                 endPoint: .bottom
             )
             .edgesIgnoringSafeArea([.leading, .trailing])
-            .padding(.bottom).padding(.bottom).padding(.bottom, 4)
+            .padding(.bottom).padding(.bottom, 4).padding(.bottom, 4)
             // Content
             VStack {
                 // Top section with settings and tips buttons
@@ -123,8 +123,8 @@ struct ProfileViewEmployee: View {
                 HStack(spacing: 20) {
                     Spacer()
                     Text(shareId)
-                        .font(.title)
                         .foregroundColor(Color.white)
+//                        .font(.title)
                     Spacer()
                     Button(action: {
                         isVisible.toggle()
@@ -167,7 +167,7 @@ struct ProfileViewEmployee: View {
         }
         .fullScreenCover(isPresented: $showProfileShare) {
             ProfileShare(userId: .constant(Auth.auth().currentUser?.uid ?? ""), needsButtons: .constant(false))
-                .environmentObject(AppViewModel())
+//                .environmentObject(AppViewModel())
         }
     }
     

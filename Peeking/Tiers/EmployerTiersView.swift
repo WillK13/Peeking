@@ -58,10 +58,6 @@ struct EmployerTiersView: View {
                 .padding(.top, 120)
             //Main content
             VStack {
-                Spacer()
-                Spacer()
-                Spacer()
-                Spacer()
                 //Disclaimer
                 Text("Billing disclaimer")
                     .font(.title2)
@@ -203,17 +199,16 @@ struct EmployerTiersView: View {
                             .padding()
                     }
 
-//                    Button(action: {
-//                        // Handle button action
-//                    }) {
-//                        Text(getButtonText())
-//                            .font(.title2)
-//                            .foregroundColor(Color.black)
-//                            .padding()
-//                            .background(getButtonBackgroundColor())
-//                            .cornerRadius(100)
-//                    }
-//                    .padding(.top, 10)
+                    Button(action: {
+                        // Handle button action
+                    }) {
+                        Text(getButtonText())
+                            .font(.title3)
+                            .foregroundColor(Color.black)
+                            .padding()
+                            .background(getButtonBackgroundColor())
+                            .cornerRadius(100)
+                    }
                     //Exit
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
@@ -306,20 +301,20 @@ struct EmployerTiersView: View {
     private func getButtonText() -> String {
         switch selectedPlan {
         case "with Glider":
-            return "Buy Glider"
+            return "Coming soon"
         case "with Diver":
-            return "Buy Diver"
+            return "Coming soon"
         default:
-            return "All users get full access"
+            return "Free"
         }
     }
     //Custom buttons per plan
     private func getButtonBackgroundColor() -> Color {
         switch selectedPlan {
         case "with Glider":
-            return Color("TopOrange")
+            return Color("FadedTopOrange")
         case "with Diver":
-            return Color("TopOrange")
+            return Color("FadedTopOrange")
         default:
             return Color("FadedTopOrange")
         }
@@ -409,7 +404,6 @@ struct PaymentOptionsViewEmployers: View {
                 //Month
                 Text("")
                     .font(.caption)
-                    .padding(.top, -20.0)
                 VStack {
                     Text("1")
                         .font(.title)
