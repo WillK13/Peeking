@@ -34,7 +34,9 @@ struct MainView: View {
     @State private var currentIndex = 0
     @State private var buttons = true
     @State private var showShareSheet = false
-    
+    @State private var showShareSheet1 = false
+
+
 
     @State private var page: Page = .first()
     @State private var showNoMatchesMessage = false
@@ -87,11 +89,49 @@ struct MainView: View {
                     .padding(.horizontal, 20.0)
 
                     // Main Area
-                    if showNoMatchesMessage {
-                        Text("No potential matches, come back later")
-                            .font(.title)
-                            .foregroundColor(.white)
-                            .padding()
+                    if (showNoMatchesMessage || recommendationUserIds.isEmpty) {
+                        ZStack {
+                            Color.white
+                            VStack {
+                                Text("Adjust your search settings")
+                                    .font(.title)
+                                    .foregroundColor(.black)
+                                    .padding()
+                                    .bold()
+                                Text("to explore other available options")
+                                    .font(.caption)
+                                    .foregroundColor(.black)
+                                    .padding()
+                                Spacer()
+                                Text("Help us")
+                                    .font(.largeTitle)
+                                    .foregroundColor(Color("TopOrange"))
+                                    .padding()
+                                Text("Get you")
+                                    .font(.largeTitle)
+                                    .foregroundColor(Color("TopOrange"))
+                                    .padding()
+                                Text("More users")
+                                    .font(.largeTitle)
+                                    .foregroundColor(Color("TopOrange"))
+                                    .padding()
+                                Text("To choose from")
+                                    .font(.largeTitle)
+                                    .foregroundColor(Color("TopOrange"))
+                                    .padding()
+                                Button(action: {
+                                    showShareSheet1.toggle()
+                                }) {
+                                    Image("share")
+                                        .padding(.bottom, -10)
+                                        .shadow(radius: 2)
+                                }
+                                .sheet(isPresented: $showShareSheet1) {
+                                    ShareSheet(items: ["Check out my profile on Peeking! https://peeking.ai"])
+                                }
+                                Spacer()
+                            }
+                        }
                     } else {
                         Pager(page: page, data: recommendationUserIds.indices, id: \.self) { index in
                             VStack {
@@ -218,7 +258,7 @@ struct MainView: View {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
         // Call the match API
-        APIClient.shared.match(userId: userId, userType: appViewModel.userType ?? 0) { result in
+        APIClient.shared.simpleMatch(userId: userId, userType: appViewModel.userType ?? 0) { result in
             switch result {
             case .success:
                 // If the API call was successful, fetch the updated recommendations from Firestore

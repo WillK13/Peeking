@@ -87,7 +87,7 @@ struct ProfileConfirmation: View {
                                             APIClient.shared.performAnalysis(userId: userId, userType: 0) { result in
                                                 switch result {
                                                 case .success:
-                                                    APIClient.shared.match(userId: userId, userType: 0) { matchResult in
+                                                    APIClient.shared.simpleMatch(userId: userId, userType: 0) { matchResult in
                                                         showLoadingIndicator = false
                                                         switch matchResult {
                                                         case .success:
