@@ -93,38 +93,74 @@ struct MainView: View {
                         ZStack {
                             Color.white
                             VStack {
-                                Text("Adjust your search settings")
-                                    .font(.title)
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .bold()
-                                Text("to explore other available options")
-                                    .font(.caption)
-                                    .foregroundColor(.black)
-                                    .padding()
+                                HStack {
+                                    Text("Adjust your search settings")
+                                        .font(.title2)
+                                        .foregroundColor(.black)
+                                        .multilineTextAlignment(.leading)
+                                        .padding([.top, .leading, .trailing])
+                                        .bold()
+                                        .padding(.top, 30)
+                                    Spacer()
+                                }
+                                HStack {
+                                    Text("to explore other available options")
+                                        .font(.title3)
+                                        .foregroundColor(.black)
+                                        .multilineTextAlignment(.leading)
+                                        .padding([.leading, .bottom, .trailing])
+                                    Spacer()
+                                }
                                 Spacer()
-                                Text("Help us")
-                                    .font(.largeTitle)
-                                    .foregroundColor(Color("TopOrange"))
-                                    .padding()
-                                Text("Get you")
-                                    .font(.largeTitle)
-                                    .foregroundColor(Color("TopOrange"))
-                                    .padding()
-                                Text("More users")
-                                    .font(.largeTitle)
-                                    .foregroundColor(Color("TopOrange"))
-                                    .padding()
-                                Text("To choose from")
-                                    .font(.largeTitle)
-                                    .foregroundColor(Color("TopOrange"))
-                                    .padding()
+                                HStack {
+                                    Text("Help us")
+                                        .font(.largeTitle)
+                                        .fontWeight(.heavy)
+                                        .foregroundColor(Color("BottomOrange"))
+                                        .multilineTextAlignment(.leading)
+                                        .padding()
+                                        .padding(.top, -60)
+                                    Spacer()
+                                }
+                                HStack {
+                                    Text("Get you")
+                                        .font(.largeTitle)
+                                        .fontWeight(.heavy)
+                                        .foregroundColor(Color("BottomOrange"))
+                                        .multilineTextAlignment(.leading)
+                                        .padding()
+                                    Spacer()
+                                }
+                                HStack {
+                                    Text("More users")
+                                        .font(.largeTitle)
+                                        .fontWeight(.heavy)
+                                        .foregroundColor(Color("BottomOrange"))
+                                        .multilineTextAlignment(.leading)
+                                        .padding()
+                                    Spacer()
+                                }
+                                HStack {
+                                    Text("To choose from")
+                                        .font(.largeTitle)
+                                        .fontWeight(.heavy)
+                                        .foregroundColor(Color("BottomOrange"))
+                                        .multilineTextAlignment(.leading)
+                                        .padding()
+                                    Spacer()
+                                }
                                 Button(action: {
                                     showShareSheet1.toggle()
                                 }) {
-                                    Image("share")
-                                        .padding(.bottom, -10)
-                                        .shadow(radius: 2)
+                                    HStack {
+                                        Image("Duck_Head").resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 50, height: 50)
+                                            .shadow(radius: 2)
+                                        Text("#SharePeeking")
+                                            .font(.title).foregroundColor(Color.white).padding()
+                                    }.padding(.horizontal, 20).padding(.vertical, 8).background(Color("BottomOrange")).cornerRadius(50)
+                                    
                                 }
                                 .sheet(isPresented: $showShareSheet1) {
                                     ShareSheet(items: ["Check out my profile on Peeking! https://peeking.ai"])
