@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BE0A08952C51B6E800D5D102 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0A08942C51B6E800D5D102 /* LocationView.swift */; };
 		BE0D41DD2CDBCFBB003ACFE5 /* FirstLoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE0D41DC2CDBCFBB003ACFE5 /* FirstLoadView.swift */; };
+		BE18B3832E3ED6D90056DEC8 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = BE18B3822E3ED6D40056DEC8 /* .gitignore */; };
 		BE5E4FE12C1B769600D36578 /* ToggleViewEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FE02C1B769500D36578 /* ToggleViewEmployer.swift */; };
 		BE5E4FEC2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FEB2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift */; };
 		BE5E4FEE2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E4FED2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift */; };
@@ -109,6 +110,7 @@
 /* Begin PBXFileReference section */
 		BE0A08942C51B6E800D5D102 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		BE0D41DC2CDBCFBB003ACFE5 /* FirstLoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLoadView.swift; sourceTree = "<group>"; };
+		BE18B3822E3ED6D40056DEC8 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		BE5E4FE02C1B769500D36578 /* ToggleViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleViewEmployer.swift; sourceTree = "<group>"; };
 		BE5E4FEB2C1CAF4100D36578 /* ProfileSetupViewEmployer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupViewEmployer.swift; sourceTree = "<group>"; };
 		BE5E4FED2C1CAF5900D36578 /* ProfileSetupViewEmployee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupViewEmployee.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 		BE60298E2C13603B00B3C080 /* Peeking */ = {
 			isa = PBXGroup;
 			children = (
+				BE18B3822E3ED6D40056DEC8 /* .gitignore */,
 				BE5E50272C33218500D36578 /* Info.plist */,
 				BE5E50262C331DAC00D36578 /* Peeking.entitlements */,
 				BE60298F2C13603B00B3C080 /* PeekingApp.swift */,
@@ -590,6 +593,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE18B3832E3ED6D90056DEC8 /* .gitignore in Resources */,
 				BE6029972C13603C00B3C080 /* Preview Assets.xcassets in Resources */,
 				BE6029942C13603C00B3C080 /* Assets.xcassets in Resources */,
 				BE5E501D2C2E1FD800D36578 /* GoogleService-Info.plist in Resources */,

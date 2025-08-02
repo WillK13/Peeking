@@ -54,10 +54,10 @@ struct PeekingApp: App {
     }
 //    init() {
 //        if let firebaseUserId = Auth.auth().currentUser?.uid {
-//                Purchases.configure(withAPIKey: "appl_EePRhZXbbVCmTtRVCaBozxePmke", appUserID: firebaseUserId)
+//                Purchases.configure(withAPIKey: "API_KEY_REVENUECAT", appUserID: firebaseUserId)
 //        }
 //        else {
-//                Purchases.configure(withAPIKey: "appl_EePRhZXbbVCmTtRVCaBozxePmke", appUserID: nil)
+//                Purchases.configure(withAPIKey: "API_KEY_REVENUECAT", appUserID: nil)
 //        }
 //                Purchases.logLevel = .debug
 //    }

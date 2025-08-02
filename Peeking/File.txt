@@ -1,0 +1,44 @@
+# MARK: - Xcode
+DerivedData/
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcuserstate
+
+# MARK: - Swift Package Manager
+/.build/
+Package.resolved
+
+# MARK: - CocoaPods
+Pods/
+Podfile.lock
+
+# MARK: - Carthage
+Carthage/Build/
+
+# MARK: - RevenueCat, Firebase, and Secrets
+GoogleService-Info.plist
+Secrets.xcconfig
+Secrets.xcconfig.example
+*.p8
+*.pem
+*.cer
+
+# MARK: - Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+
+# MARK: - macOS
+.DS_Store
+
+# MARK: - Xcode Preview canvas data
+*.preview-thumbnails
