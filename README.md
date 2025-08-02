@@ -56,3 +56,18 @@ Privacy Policy: https://peeking.ai/privacy-policy
 Terms of Use: https://peeking.ai/terms-and-conditions
 
 Feedback? Contact us at admin@peeking.ai
+
+---
+
+### Preview Screens
+
+<p align="center">
+  <img src="preview_images/1match.png" width="160" style="margin: 8px;" />
+  <img src="preview_images/2swipe.jpg" width="160" style="margin: 8px;" />
+  <img src="preview_images/3chat.jpg" width="160" style="margin: 8px;" />
+  <img src="preview_images/4relationships.jpg" width="160" style="margin: 8px;" />
+  <img src="preview_images/5beyond.jpg" width="160" style="margin: 8px;" />
+  <img src="preview_images/6status.jpg" width="160" style="margin: 8px;" />
+  <img src="preview_images/7swiping.jpg" width="160" style="margin: 8px;" />
+  <img src="preview_images/8share.jpg" width="160" style="margin: 8px;" />
+</p>
